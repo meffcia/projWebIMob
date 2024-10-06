@@ -1,0 +1,37 @@
+@page
+@model FormModel
+
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ankieta</title>
+</head>
+<body>
+    <h2>Wprowadź dane:</h2>
+
+    <form asp-action="Submit" method="post">
+        <div>
+            <label for="Name">Imię:</label>
+            <input type="text" id="Name" name="Name" />
+        </div>
+        <div>
+            <label for="Email">Adres email:</label>
+            <input type="email" id="Email" name="Email" />
+        </div>
+        <div>
+            <label for="Message">Wiadomość:</label>
+            <textarea id="Message" name="Message"></textarea>
+        </div>
+        <button type="submit">Wyślij</button>
+    </form>
+
+    @if (Model != null)
+    {
+        <h3>Dane wprowadzone przez użytkownika:</h3>
+        <p><strong>Imię:</strong> @Model.Name</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Wiadomość:</strong> @Model.Message</p>
+    }
+</body>
+</html>
