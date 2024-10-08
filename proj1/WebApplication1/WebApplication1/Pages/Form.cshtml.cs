@@ -1,40 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Pages
 {
     public class FormModel : PageModel
     {
-        private readonly ILogger<KotkiModel> _logger;
+        private readonly ILogger<FormModel> _logger;
 
-        public FormModel(ILogger<KotkiModel> logger)
+        public FormModel(ILogger<FormModel> logger)
         {
             _logger = logger;
         }
 
+        // Właściwości powiązane z formularzem
         [BindProperty]
-        public string? Name { get; set; }
+        [Required(ErrorMessage = "Imię jest wymagane.")]
+        public string Name { get; set; }
 
         [BindProperty]
-        public string? Email { get; set; }
+        [Required(ErrorMessage = "Adres email jest wymagany.")]
+        [EmailAddress(ErrorMessage = "Niepoprawny adres email.")]
+        public string Email { get; set; }
 
         [BindProperty]
-        public string? Message { get; set; }
+        [Required(ErrorMessage = "Wiadomość jest wymagana.")]
+        public string Message { get; set; }
 
+        // Akcja dla żądań GET
         public void OnGet()
         {
         }
 
+        // Akcja dla żądań POST
         public IActionResult OnPost()
         {
-            // Przetwarzanie danych
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) // Sprawdzenie walidacji modelu
             {
-                return Page();
+                return Page(); // Zwrócenie formularza z błędami
             }
 
-            // Można tutaj dodać logikę np. zapis danych lub wysłanie wiadomości
-            return RedirectToPage("Success"); // Przekierowanie na stronę sukcesu
+            // Po pomyślnym przesłaniu formularza nie musisz nic robić tutaj,
+            // ponieważ dane będą wyświetlane poniżej formularza w widoku.
+            return Page(); // Pozwól na pozostanie na tej samej stronie
         }
     }
 

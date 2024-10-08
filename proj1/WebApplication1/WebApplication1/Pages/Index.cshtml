@@ -7,6 +7,7 @@
     <title>Start</title>
     <style>
         .button {
+            display: inline-block; /* Zmiana z block na inline-block */
             padding: 10px 20px;
             font-size: 16px;
             color: white;
@@ -15,11 +16,17 @@
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none; /* Usuwa podkreślenie z linku */
+            margin: 20px auto; /* Dodaje przestrzeń powyżej i wyśrodkowuje przycisk */
+            max-width: 200px; /* Maksymalna szerokość przycisku */
         }
 
             .button:hover {
                 background-color: #0056b3; /* Ciemniejszy kolor przy hover */
             }
+
+        h2 {
+            margin: 20px 0 30px; /* Zwiększenie marginesu poniżej nagłówka */
+        }
     </style>
 </head>
 
@@ -28,5 +35,4 @@
     <p>Zapraszamy do eksplorowania naszej przepięknej strony.</p>
     <h2 class="display-4">Zachęcamy do wzięcia udziału w ankiecie:</h2>
     <a asp-page="/Form" class="button">Kliknij tutaj!</a>
-
 </div>

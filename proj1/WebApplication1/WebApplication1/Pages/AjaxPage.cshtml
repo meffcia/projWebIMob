@@ -1,0 +1,89 @@
+﻿@page
+@model WebApplication1.Pages.AjaxPageModel
+@{
+    ViewData["Title"] = "Ajax Page";
+}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .response {
+            margin-top: 20px;
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Wprowadź dane:</h2>
+
+    <form id="myForm">
+        <div class="form-group">
+            <label for="name">Imię:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <button type="submit">Wyślij</button>
+    </form>
+
+    <div class="response" id="response"></div>
+
+    <script>
+        // Krok 2: Przechwycenie formularza przy użyciu JavaScript
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Zapobieganie przeładowaniu strony
+
+            // Pobieranie wartości z formularza
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+
+            // Tworzenie obiektu XMLHttpRequest
+            const xhr = new XMLHttpRequest();
+
+            // Konfiguracja żądania (metoda POST i adres URL do obsługi)
+            xhr.open('POST', '/AjaxPage', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            // Krok 3: Obsługa odpowiedzi z serwera
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Wyświetlenie odpowiedzi serwera na stronie
+                    document.getElementById('response').innerHTML = 'Serwer odpowiedział: ' + xhr.responseText;
+                } else {
+                    document.getElementById('response').innerHTML = '<span class="error">Wystąpił błąd przy wysyłaniu danych: ' + xhr.status + ' ' + xhr.statusText + '</span>';
+                    console.error('Błąd:', xhr.status, xhr.statusText, xhr.responseText);
+                }
+            };
+
+            // Obsługa błędów połączenia
+            xhr.onerror = function () {
+                document.getElementById('response').innerHTML = '<span class="error">Błąd sieci.</span>';
+                console.error('Błąd sieci.');
+            };
+
+            // Krok 4: Wysłanie danych jako JSON
+            const data = JSON.stringify({
+                name: name,
+                email: email
+            });
+
+            console.log('Wysyłane dane:', data); // Logowanie danych przed wysłaniem
+            xhr.send(data); // Wysłanie danych na serwer
+        });
+    </script>
+</body>
+</html>
