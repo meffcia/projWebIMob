@@ -36,3 +36,8 @@ TestResults/
 
 # Ignorowanie katalogów z artefaktami buildów
 publish/
+
+# Ignorowanie plików systemu MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
