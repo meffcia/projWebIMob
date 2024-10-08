@@ -1,0 +1,38 @@
+# Ignorowanie plików i katalogów wynikowych
+bin/
+obj/
+
+# Ignorowanie plików konfiguracyjnych użytkownika
+*.user
+*.suo
+*.sln.ide
+
+# Ignorowanie folderów narzędzi i IDE
+.vscode/
+.idea/
+
+# Ignorowanie plików logów i tymczasowych
+*.log
+*.tmp
+*.bak
+
+# Ignorowanie pakietów NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Ignorowanie plików tymczasowych systemu
+*.swp
+*.swo
+
+# Ignorowanie plików środowiskowych
+.env
+.env.local
+.env.*.local
+
+# Ignorowanie wyników testów
+TestResults/
+*.trx
+
+# Ignorowanie katalogów z artefaktami buildów
+publish/
