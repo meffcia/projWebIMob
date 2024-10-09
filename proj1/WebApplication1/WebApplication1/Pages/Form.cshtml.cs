@@ -11,39 +11,43 @@ namespace WebApplication1.Pages
         public FormModel(ILogger<FormModel> logger)
         {
             _logger = logger;
+            IsFormSubmitted = false;
         }
 
-        // Właściwości powiązane z formularzem
         [BindProperty]
         [Required(ErrorMessage = "Imię jest wymagane.")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Adres email jest wymagany.")]
         [EmailAddress(ErrorMessage = "Niepoprawny adres email.")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Wiadomość jest wymagana.")]
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
-        // Akcja dla żądań GET
+        public bool IsFormSubmitted { get; set; }
+
         public void OnGet()
         {
         }
 
-        // Akcja dla żądań POST
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid) // Sprawdzenie walidacji modelu
+            if (!ModelState.IsValid)
             {
-                return Page(); // Zwrócenie formularza z błędami
+                return Page();
             }
 
-            // Po pomyślnym przesłaniu formularza nie musisz nic robić tutaj,
-            // ponieważ dane będą wyświetlane poniżej formularza w widoku.
-            return Page(); // Pozwól na pozostanie na tej samej stronie
+            IsFormSubmitted = true;
+
+            return Page();
+        }
+
+        public IActionResult OnPostConfirm()
+        {
+            return RedirectToPage("FormSuccess");
         }
     }
-
 }

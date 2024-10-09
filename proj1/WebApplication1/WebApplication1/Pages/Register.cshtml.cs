@@ -7,23 +7,23 @@ namespace WebApplication1.Pages
     public class RegisterModel : PageModel
     {
         [BindProperty]
-        [Required(ErrorMessage = "Imiê jest wymagane.")]
-        public string FirstName { get; set; }
+        [Required(ErrorMessage = "ImiÄ™ jest wymagane.")]
+        public string? FirstName { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Nazwisko jest wymagane.")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         [BindProperty]
         [Required(ErrorMessage = "Adres e-mail jest wymagany.")]
-        [EmailAddress(ErrorMessage = "Nieprawid³owy format adresu e-mail.")]
-        public string Email { get; set; }
+        [EmailAddress(ErrorMessage = "Niepoprawny format adresu e-mail.")]
+        public string? Email { get; set; }
 
         [BindProperty]
-        [Required(ErrorMessage = "Has³o jest wymagane.")]
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Has³o musi mieæ co najmniej 6 znaków.")]
-        public string Password { get; set; }
-
+        [Required(ErrorMessage = "HasÅ‚o jest wymagane.")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "HasÅ‚o musi mieÄ‡ co najmniej 6 znakÃ³w.")]
+        public string? Password { get; set; }
+        
         public void OnGet()
         {
         }
@@ -35,9 +35,7 @@ namespace WebApplication1.Pages
                 return Page();
             }
 
-            // Logika rejestracji u¿ytkownika (np. zapis do bazy danych) mo¿e byæ dodana tutaj
-
-            return RedirectToPage("/Success"); // Przekierowanie po udanej rejestracji
+            return RedirectToPage("/Success");
         }
     }
 }

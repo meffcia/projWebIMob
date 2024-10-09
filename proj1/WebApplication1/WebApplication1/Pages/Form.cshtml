@@ -7,71 +7,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ankieta</title>
     <style>
-        .error {
-            color: red;
-            font-size: 0.9em;
-        }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-            .button:hover {
-                background-color: #0056b3;
-            }
     </style>
 </head>
 <body>
-    <h2>Wprowadź dane:</h2>
+    <h2>Ankieta dotycząca kotów</h2>
 
-    <form asp-action="Submit" method="post">
+    <form method="post">
         <div class="form-group">
             <label for="Name">Imię</label>
-            <input type="text" id="Name" name="Name" class="form-control" />
+            <input type="text" id="Name" name="Name" class="form-control" asp-for="Name" />
             <span class="error" asp-validation-for="Name"></span>
         </div>
         <div class="form-group">
             <label for="Email">Adres email</label>
-            <input type="email" id="Email" name="Email" class="form-control" />
+            <input type="email" id="Email" name="Email" class="form-control" asp-for="Email" />
             <span class="error" asp-validation-for="Email"></span>
         </div>
         <div class="form-group">
-            <label for="Message">Wiadomość</label>
-            <textarea id="Message" name="Message" class="form-control"></textarea>
+            <label for="Message">Dlaczego lubisz koty?</label>
+            <textarea id="Message" name="Message" class="form-control" asp-for="Message"></textarea>
             <span class="error" asp-validation-for="Message"></span>
         </div>
         <button type="submit" class="button">Wyślij</button>
     </form>
 
-    @if (Model != null)
+    @if (Model.IsFormSubmitted && Model != null)
     {
-        <div>
+        <div class="preview">
             <h3>Dane wprowadzone przez użytkownika:</h3>
             <p><strong>Imię:</strong> @Model.Name</p>
             <p><strong>Email:</strong> @Model.Email</p>
             <p><strong>Wiadomość:</strong> @Model.Message</p>
+
+            <form method="post" asp-page-handler="Confirm">
+                <button type="submit" class="button">Zatwierdź</button>
+            </form>
         </div>
     }
-
-  
 </body>
 </html>

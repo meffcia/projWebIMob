@@ -1,15 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication1.Pages
 {
     public class AjaxPageModel : PageModel
     {
         [BindProperty]
-        public string Name { get; set; }
+        [Required(ErrorMessage = "ImiÄ™ jest wymagane.")]
+        public string? Name { get; set; }
 
         [BindProperty]
-        public string Email { get; set; }
+        [Required(ErrorMessage = "Adres e-mail jest wymagany.")]
+        [EmailAddress(ErrorMessage = "Niepoprawny format adresu e-mail.")]
+        public string? Email { get; set; }
 
         public void OnGet()
         {
@@ -17,17 +21,17 @@ namespace WebApplication1.Pages
 
         public IActionResult OnPost()
         {
-            // Debugging: Sprawdzenie, czy dane s¹ dostêpne
+            // Debugging: Sprawdzenie, czy dane sï¿½ dostï¿½pne
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Email))
             {
-                return BadRequest("Dane nie mog¹ byæ puste.");
+                return BadRequest("Dane nie mogï¿½ byï¿½ puste.");
             }
 
             // Logika przetwarzania danych
-            // Mo¿esz tutaj dodaæ zapis do bazy danych lub inne operacje
+            // Moï¿½esz tutaj dodaï¿½ zapis do bazy danych lub inne operacje
 
-            // Wys³anie odpowiedzi
-            return new JsonResult($"Dane odebrane poprawnie! Imiê: {Name}, Email: {Email}");
+            // Wysï¿½anie odpowiedzi
+            return new JsonResult($"Dane odebrane poprawnie! Imiï¿½: {Name}, Email: {Email}");
         }
     }
 }
