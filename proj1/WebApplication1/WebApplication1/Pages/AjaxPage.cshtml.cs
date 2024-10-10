@@ -15,23 +15,19 @@ namespace WebApplication1.Pages
         [EmailAddress(ErrorMessage = "Niepoprawny format adresu e-mail.")]
         public string? Email { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            return Page();
         }
 
         public IActionResult OnPost()
         {
-            // Debugging: Sprawdzenie, czy dane s� dost�pne
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Email))
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Dane nie mog� by� puste.");
+                return new JsonResult(new { error = $"Model state is not valid" });
             }
 
-            // Logika przetwarzania danych
-            // Mo�esz tutaj doda� zapis do bazy danych lub inne operacje
-
-            // Wys�anie odpowiedzi
-            return new JsonResult($"Dane odebrane poprawnie! Imi�: {Name}, Email: {Email}");
+            return new JsonResult(new { message = $"Dane odebrane poprawnie!" });
         }
     }
 }

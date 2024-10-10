@@ -28,61 +28,44 @@
 <body>
     <h2>Wprowadź dane:</h2>
 
-    <form id="myForm">
+    <form id="myForm" method="post">
         <div class="form-group">
-            <label for="name">Imię:</label>
-            <input type="text" id="name" name="name" required>
+            <label for="Name">Imię:</label>
+            <input type="text" id="name" name="name" required />
         </div>
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="Name">Email:</label>
+            <input type="email" id="email" name="email" required />
         </div>
         <button type="submit">Wyślij</button>
     </form>
 
     <div class="response" id="response"></div>
+    <div class="post-data" id="postData"></div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Krok 2: Przechwycenie formularza przy użyciu JavaScript
-        document.getElementById('myForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Zapobieganie przeładowaniu strony
+        $(document).ready(function () {
+            $('#myForm').on('submit', function (event) {
+                event.preventDefault(); // Zapobieganie przeładowaniu strony
 
-            // Pobieranie wartości z formularza
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
+                // Tworzenie obiektu FormData
+                const formData = $(this).serialize(); // serializowanie danych formularza
 
-            // Tworzenie obiektu XMLHttpRequest
-            const xhr = new XMLHttpRequest();
-
-            // Konfiguracja żądania (metoda POST i adres URL do obsługi)
-            xhr.open('POST', '/AjaxPage', true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-
-            // Krok 3: Obsługa odpowiedzi z serwera
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // Wyświetlenie odpowiedzi serwera na stronie
-                    document.getElementById('response').innerHTML = 'Serwer odpowiedział: ' + xhr.responseText;
-                } else {
-                    document.getElementById('response').innerHTML = '<span class="error">Wystąpił błąd przy wysyłaniu danych: ' + xhr.status + ' ' + xhr.statusText + '</span>';
-                    console.error('Błąd:', xhr.status, xhr.statusText, xhr.responseText);
-                }
-            };
-
-            // Obsługa błędów połączenia
-            xhr.onerror = function () {
-                document.getElementById('response').innerHTML = '<span class="error">Błąd sieci.</span>';
-                console.error('Błąd sieci.');
-            };
-
-            // Krok 4: Wysłanie danych jako JSON
-            const data = JSON.stringify({
-                name: name,
-                email: email
+                // Wysyłanie danych za pomocą AJAX
+                $.ajax({
+                    url: window.location.pathname, // Adres URL do obsługi
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        $('#response').html('Serwer odpowiedział: ' + response.message);
+                        $('#postData').html('Przesłane dane:<br> Imię: ' + $('#name').val() + '<br> Email: ' + $('#email').val());
+                    },
+                    error: function (xhr) {
+                        $('#response').html('<span class="error">Wystąpił błąd: ' + xhr.status + ' ' + xhr.statusText + '</span>');
+                    }
+                });
             });
-
-            console.log('Wysyłane dane:', data); // Logowanie danych przed wysłaniem
-            xhr.send(data); // Wysłanie danych na serwer
         });
     </script>
 </body>

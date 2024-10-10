@@ -41,3 +41,14 @@ publish/
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# Ignorowanie plików Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignorowanie plików tymczasowych i automatycznie generowanych
+project.lock.json
+project.nuget.cache
