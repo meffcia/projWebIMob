@@ -12,6 +12,47 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+.form-group {
+    margin-bottom: 10px;
+}
+
+.response {
+    margin-top: 20px;
+    color: green;
+}
+
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.button {
+    display: inline-block; /* Zmiana z block na inline-block */
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none; /* Usuwa podkreœlenie z linku */
+    margin: 20px auto; /* Dodaje przestrzeñ powy¿ej i wyœrodkowuje przycisk */
+    max-width: 200px; /* Maksymalna szerokoœæ przycisku */
+}
+
+    .button:hover {
+        background-color: #0056b3; /* Ciemniejszy kolor przy hover */
+    }
+
+h2 {
+    margin: 20px 0 30px; /* Zwiêkszenie marginesu poni¿ej nag³ówka */
+}
+
 html {
   position: relative;
   min-height: 100%;
