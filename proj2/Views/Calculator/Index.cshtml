@@ -1,0 +1,24 @@
+﻿@model proj2.Models.CalculatorModel
+
+<h2>Kalkulator</h2>
+
+<form asp-action="Index" method="post">
+    <div>
+        <label for="number1">Liczba 1:</label>
+        <input type="number" step="any" name="Number1" value="@Model?.Number1" />
+    </div>
+    <div>
+        <label for="number2">Liczba 2:</label>
+        <input type="number" step="any" name="Number2" value="@Model?.Number2" />
+    </div>
+    <div>
+        <button type="submit">Dodaj</button>
+    </div>
+</form>
+
+@if (Model?.Result != null)
+{
+    <div>
+        <h3>Wynik: @Model.Result</h3>
+    </div>
+}
