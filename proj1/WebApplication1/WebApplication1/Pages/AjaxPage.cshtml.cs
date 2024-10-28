@@ -22,6 +22,7 @@ namespace WebApplication1.Pages
 
         public IActionResult OnPost()
         {
+            Console.Write("TUtaj");
             if (!ModelState.IsValid)
             {
                 return new JsonResult(new { error = $"Model state is not valid" });
