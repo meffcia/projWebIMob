@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Ulubione Cytaty";
+    Layout = "_Layout"; // Użycie wspólnego układu
+}
+
+<h2>Ulubione Cytaty</h2>
+
+<div>
+    <input type="text" id="quoteInput" placeholder="Wpisz cytat..." />
+    <button id="addQuoteBtn">Dodaj Cytat</button>
+</div>
+
+<ul id="quotesList">
+    <!-- Cytaty będą dodawane tutaj -->
+</ul>
+
+<script>
+    // Funkcja do załadowania cytatów z Local Storage
+    function loadQuotes() {
+        const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+        const quotesList = document.getElementById('quotesList');
+        quotesList.innerHTML = '';
+
+        quotes.forEach((quote, index) => {
+            const li = document.createElement('li');
+            li.textContent = quote;
+            li.appendChild(createEditButton(index));
+            li.appendChild(createDeleteButton(index));
+            quotesList.appendChild(li);
+        });
+    }
+
+    // Funkcja do tworzenia przycisku edytowania
+    function createEditButton(index) {
+        const button = document.createElement('button');
+        button.textContent = 'Edytuj';
+        button.onclick = function () {
+            const newQuote = prompt('Edytuj cytat:', localStorage.getItem('quotes').split(',')[index]);
+            if (newQuote) {
+                const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+                quotes[index] = newQuote;
+                localStorage.setItem('quotes', JSON.stringify(quotes));
+                loadQuotes();
+            }
+        };
+        return button;
+    }
+
+    // Funkcja do tworzenia przycisku usuwania
+    function createDeleteButton(index) {
+        const button = document.createElement('button');
+        button.textContent = 'Usuń';
+        button.onclick = function () {
+            const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+            quotes.splice(index, 1);
+            localStorage.setItem('quotes', JSON.stringify(quotes));
+            loadQuotes();
+        };
+        return button;
+    }
+
+    // Funkcja do dodawania cytatu
+    document.getElementById('addQuoteBtn').addEventListener('click', function () {
+        const quoteInput = document.getElementById('quoteInput');
+        const quote = quoteInput.value.trim();
+        if (quote) {
+            const quotes = JSON.parse(localStorage.getItem('quotes')) || [];
+            quotes.push(quote);
+            localStorage.setItem('quotes', JSON.stringify(quotes));
+            quoteInput.value = '';
+            loadQuotes();
+        }
+    });
+
+    // Załaduj cytaty po załadowaniu strony
+    window.onload = loadQuotes;
+</script>
