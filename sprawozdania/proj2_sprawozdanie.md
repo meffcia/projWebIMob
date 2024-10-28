@@ -1,5 +1,5 @@
 ﻿# Sprawozdanie z realizacji projektów w technologii MVC
-**Autorzy:**  Patrycja Falkowska 325462, Wiktoria Jeleniewicz 
+**Autorzy:**  Patrycja Falkowska 325462, Wiktoria Jeleniewicz 325477
 
 ---
 
