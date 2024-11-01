@@ -1,0 +1,42 @@
+@model IEnumerable<proj3.Models.BookModel>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Lista Książek";
+}
+
+<h1>Lista Książek</h1>
+<form asp-controller="Book" asp-action="Create" method="get">
+    <button type="submit" class="btn btn-primary">Dodaj Książkę</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>Tytuł</th>
+            <th>Autor</th>
+            <th>Cena</th>
+            <th>Akcje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Price</td>
+                <td>
+                    <form asp-controller="Book" asp-action="Edit" method="get" style="display: inline;">
+                        <input type="hidden" name="id" value="@book.Id" />
+                        <button type="submit" class="btn btn-link">Edytuj</button>
+                    </form>
+
+                    <form asp-controller="Book" asp-action="Delete" method="post" style="display: inline;" onsubmit="return confirm('Czy na pewno chcesz usunąć tę książkę?');">
+                        <input type="hidden" name="id" value="@book.Id" />
+                        <button type="submit" class="btn btn-link text-danger">Usuń</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

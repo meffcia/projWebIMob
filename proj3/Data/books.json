@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1,
+    "Title": "Example Book",
+    "Author": "Author Name",
+    "Price": 19.99
+  },
+  {
+    "Id": 4,
+    "Title": "Mały Książę",
+    "Author": "Antoine de Saint-Exupéry",
+    "Price": 25.0
+  },
+  {
+    "Id": 5,
+    "Title": "Hobbit",
+    "Author": "Tolkien",
+    "Price": 78.0
+  }
+]
