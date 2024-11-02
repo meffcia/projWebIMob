@@ -16,35 +16,36 @@ namespace proj3.Controllers
         }
 
         [HttpGet("Book/sort/{sortOrder?}")]
-        public IActionResult Index(string sortOrder)
+        public IActionResult Index(string sortOrder, string? searchString = null, string? authorFilter = null, int? price = null)
         {
-            var books = GetBooks();
+            var allBooks = GetBooks();
+            var books = allBooks.AsQueryable();
 
-            ViewData["TitleSortParm"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
-            ViewData["AuthorSortParm"] = sortOrder == "Author" ? "author_desc" : "Author";
-
-            var sortedBooks = books.AsQueryable();
-
-            switch (sortOrder)
+            if (!string.IsNullOrEmpty(authorFilter))
             {
-                case "Title":
-                    sortedBooks = sortedBooks.OrderBy(b => b.Title);
-                    break;
-                case "title_desc":
-                    sortedBooks = sortedBooks.OrderByDescending(b => b.Title);
-                    break;
-                case "Author":
-                    sortedBooks = sortedBooks.OrderBy(b => b.Author);
-                    break;
-                case "author_desc":
-                    sortedBooks = sortedBooks.OrderByDescending(b => b.Author);
-                    break;
-                default:
-                    sortedBooks = sortedBooks.OrderBy(b => b.Id);
-                    break;
+                books = books.Where(b => b.Author == authorFilter);
             }
 
-            return View(sortedBooks.ToList());
+            if (price.HasValue)
+            {
+                books = books.Where(b => b.Price == price.Value);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(b => b.Title.Contains(searchString) || b.Id.ToString().Contains(searchString));
+            }
+
+            books = sortOrder switch
+            {
+                "title_asc" => books.OrderBy(b => b.Title),
+                "title_desc" => books.OrderByDescending(b => b.Title),
+                "price_asc" => books.OrderBy(b => b.Price),
+                "price_desc" => books.OrderByDescending(b => b.Price),
+                _ => books.OrderBy(b => b.Id)
+            };
+
+            return View(books.ToList());
         }
 
         public IActionResult Create()

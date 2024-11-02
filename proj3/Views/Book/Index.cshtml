@@ -1,4 +1,4 @@
-@model IEnumerable<proj3.Models.BookModel>
+@model List<proj3.Models.BookModel>
 
 @{
     Layout = "_Layout";
@@ -11,26 +11,44 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Lista Książek</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Index" method="get" class="mb-3">
+                        <div class="form-group">
+                            <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Wyszukaj książki" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="authorFilter" value="@ViewData["CurrentAuthorFilter"]" class="form-control" placeholder="Filtruj po autorze" />
+                        </div>
+                        <div class="form-group">
+                            <input type="number" name="price" value="@ViewData["CurrentPriceFilter"]" class="form-control" placeholder="Filtruj po cenie" />
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Filtruj</button>
+                    </form>
+
                     <form asp-controller="Book" asp-action="Create" method="get" style="display: inline;">
                         <button type="submit" class="btn btn-primary">Dodaj Książkę</button>
                     </form>
-                </div>
-                <div class="card-body">
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="text-primary">
                                 <tr>
                                     <th>
-                                        <a asp-controller="Book" asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]">
+                                        <a asp-controller="Book" asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-authorFilter="@ViewData["CurrentAuthorFilter"]" asp-route-price="@ViewData["CurrentPriceFilter"]">
                                             Tytuł
                                         </a>
                                     </th>
                                     <th>
-                                        <a asp-controller="Book" asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]">
+                                        <a asp-controller="Book" asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-authorFilter="@ViewData["CurrentAuthorFilter"]" asp-route-price="@ViewData["CurrentPriceFilter"]">
                                             Autor
                                         </a>
                                     </th>
-                                    <th class="text-right">Cena</th>
+                                    <th class="text-right">
+                                        <a asp-controller="Book" asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-authorFilter="@ViewData["CurrentAuthorFilter"]" asp-route-price="@ViewData["CurrentPriceFilter"]">
+                                            Cena
+                                        </a>
+                                    </th>
                                     <th class="text-right">Akcje</th>
                                 </tr>
                             </thead>
