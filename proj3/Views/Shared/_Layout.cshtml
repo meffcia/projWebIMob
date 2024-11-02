@@ -4,47 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - proj3</title>
-    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/proj3.styles.css" asp-append-version="true" /> *@
+    <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/now-ui-dashboard.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/assets/css/now-ui-dashboard.min.css" asp-append-version="true" />
-    <style>
-        .main-panel {
-            background-color: #ffffff !important;
-        }
-        .container {
-            background-color: #ffffff !important;
-        }
-    </style>
 </head>
 <body>
-    <header>
-        @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Projekt 3</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Lista książek</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav> *@
-        
-    </header>
-        
     <div class="wrapper">
         <div class="sidebar" data-color="orange">
         <div class="logo">
-            <a href="https://www.creative-tim.com" class="simple-text logo-mini">CT</a>
-            <a href="https://www.creative-tim.com" class="simple-text logo-normal">Creative Tim</a>
+            <a asp-controller="Home" asp-action="Index" class="simple-text logo-mini">CT</a>
+            <a asp-controller="Home" asp-action="Index" class="simple-text logo-normal">Creative Tim</a>
         </div>
-        <div class="sidebar-wrapper">
+        <div class="sidebar-wrapper" id="sidebar-wrapper">
             <ul class="nav">
                 <li>
                     <a asp-area="" asp-controller="Book" asp-action="Index">

@@ -15,6 +15,38 @@ namespace proj3.Controllers
             return View(books);
         }
 
+        [HttpGet("Book/sort/{sortOrder?}")]
+        public IActionResult Index(string sortOrder)
+        {
+            var books = GetBooks();
+
+            ViewData["TitleSortParm"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["AuthorSortParm"] = sortOrder == "Author" ? "author_desc" : "Author";
+
+            var sortedBooks = books.AsQueryable();
+
+            switch (sortOrder)
+            {
+                case "Title":
+                    sortedBooks = sortedBooks.OrderBy(b => b.Title);
+                    break;
+                case "title_desc":
+                    sortedBooks = sortedBooks.OrderByDescending(b => b.Title);
+                    break;
+                case "Author":
+                    sortedBooks = sortedBooks.OrderBy(b => b.Author);
+                    break;
+                case "author_desc":
+                    sortedBooks = sortedBooks.OrderByDescending(b => b.Author);
+                    break;
+                default:
+                    sortedBooks = sortedBooks.OrderBy(b => b.Id);
+                    break;
+            }
+
+            return View(sortedBooks.ToList());
+        }
+
         public IActionResult Create()
         {
             return View();
