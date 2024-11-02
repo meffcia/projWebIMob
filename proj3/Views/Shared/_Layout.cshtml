@@ -4,13 +4,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - proj3</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/proj3.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/proj3.styles.css" asp-append-version="true" /> *@
+    <link rel="stylesheet" href="~/assets/css/now-ui-dashboard.min.css" asp-append-version="true" />
+    <style>
+        .main-panel {
+            background-color: #ffffff !important;
+        }
+        .container {
+            background-color: #ffffff !important;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Projekt 3</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -25,19 +34,37 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav> *@
+        
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        
+    <div class="wrapper">
+        <div class="sidebar" data-color="orange">
+        <div class="logo">
+            <a href="https://www.creative-tim.com" class="simple-text logo-mini">CT</a>
+            <a href="https://www.creative-tim.com" class="simple-text logo-normal">Creative Tim</a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li>
+                    <a asp-area="" asp-controller="Book" asp-action="Index">
+                        <i class="now-ui-icons education_agenda-bookmark"></i>
+                        <p>Lista książek</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        </div>
+
+        <div class="main-panel">
+            <div class="container" >
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - proj3 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

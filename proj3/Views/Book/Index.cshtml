@@ -1,4 +1,4 @@
-@model IEnumerable<proj3.Models.BookModel>
+@* @model IEnumerable<proj3.Models.BookModel>
 
 @{
     Layout = "_Layout";
@@ -39,4 +39,61 @@
             </tr>
         }
     </tbody>
-</table>
+</table> *@
+
+@model IEnumerable<proj3.Models.BookModel>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Lista Książek";
+}
+
+<div class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Lista Książek</h4>
+                    <form asp-controller="Book" asp-action="Create" method="get" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">Dodaj Książkę</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th>Tytuł</th>
+                                    <th>Autor</th>
+                                    <th class="text-right">Cena</th>
+                                    <th class="text-right">Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var book in Model)
+                                {
+                                    <tr>
+                                        <td>@book.Title</td>
+                                        <td>@book.Author</td>
+                                        <td class="text-right">@string.Format("{0:C}", book.Price)</td>
+                                        <td class="text-right">
+                                            <form asp-controller="Book" asp-action="Edit" method="get" style="display: inline;">
+                                                <input type="hidden" name="id" value="@book.Id" />
+                                                <button type="submit" class="btn btn-link">Edytuj</button>
+                                            </form>
+                                            
+                                            <form asp-controller="Book" asp-action="Delete" method="post" style="display: inline;" onsubmit="return confirm('Czy na pewno chcesz usunąć tę książkę?');">
+                                                <input type="hidden" name="id" value="@book.Id" />
+                                                <button type="submit" class="btn btn-link text-danger">Usuń</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
