@@ -20,5 +20,6 @@ namespace proj3.Models
         [Required(ErrorMessage = "Ilość jest wymagana.")]
         [Range(1, 10000, ErrorMessage = "Ilość musi być większa niż 0.")]
         public int Quantity { get; set; }
+
     }
 }

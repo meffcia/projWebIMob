@@ -7,23 +7,27 @@
 
 <h1>Edytuj Książkę</h1>
 
-<form asp-action="Edit">
+<form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
-    <div>
+
+    <div class="form-group">
         <label>Tytuł</label>
-        <input asp-for="Title" />
-        <span asp-validation-for="Title"></span>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
-    <div>
+
+    <div class="form-group">
         <label>Autor</label>
-        <input asp-for="Author" />
-        <span asp-validation-for="Author"></span>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
     </div>
-    <div>
+
+    <div class="form-group">
         <label>Cena</label>
-        <input asp-for="Price" />
-        <span asp-validation-for="Price"></span>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
     </div>
-    <button type="submit">Zapisz</button>
-    <a asp-action="Index">Powrót do listy</a>
+
+    <button type="submit" class="btn btn-primary">Zapisz</button>
+    <a asp-action="Index" class="btn btn-secondary">Powrót do listy</a>
 </form>
