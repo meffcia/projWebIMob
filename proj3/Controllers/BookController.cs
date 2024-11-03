@@ -16,8 +16,7 @@ namespace proj3.Controllers
         }
 
         [HttpGet("Book/sort/{sortOrder?}")]
-        public IActionResult Index(string sortOrder, string? searchString = null, string? authorFilter = null, int? price = null)
-        {
+        public IActionResult Index(string sortOrder, string? searchString = null, string? authorFilter = null, int? minPrice = null, int? maxPrice = null)        {
             var allBooks = GetBooks();
             var books = allBooks.AsQueryable();
 
@@ -26,9 +25,14 @@ namespace proj3.Controllers
                 books = books.Where(b => b.Author == authorFilter);
             }
 
-            if (price.HasValue)
+            if (minPrice.HasValue)
             {
-                books = books.Where(b => b.Price == price.Value);
+                books = books.Where(b => b.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                books = books.Where(b => b.Price <= maxPrice.Value);
             }
 
             if (!string.IsNullOrEmpty(searchString))
@@ -44,6 +48,12 @@ namespace proj3.Controllers
                 "price_desc" => books.OrderByDescending(b => b.Price),
                 _ => books.OrderBy(b => b.Id)
             };
+
+            ViewData["CurrentSortOrder"] = sortOrder;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentAuthorFilter"] = authorFilter;
+            ViewData["CurrentMinPrice"] = minPrice;
+            ViewData["CurrentMaxPrice"] = maxPrice;
 
             return View(books.ToList());
         }

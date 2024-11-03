@@ -21,7 +21,10 @@
                             <input type="text" name="authorFilter" value="@ViewData["CurrentAuthorFilter"]" class="form-control" placeholder="Filtruj po autorze" />
                         </div>
                         <div class="form-group">
-                            <input type="number" name="price" value="@ViewData["CurrentPriceFilter"]" class="form-control" placeholder="Filtruj po cenie" />
+                            <input type="number" name="minPrice" value="@ViewData["CurrentMinPrice"]" class="form-control" placeholder="Minimalna cena" />
+                        </div>
+                        <div class="form-group">
+                            <input type="number" name="maxPrice" value="@ViewData["CurrentMaxPrice"]" class="form-control" placeholder="Maksymalna cena" />
                         </div>
                         <button type="submit" class="btn btn-secondary">Filtruj</button>
                     </form>
