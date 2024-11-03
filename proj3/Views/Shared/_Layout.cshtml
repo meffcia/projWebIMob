@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,24 +12,36 @@
 <body>
     <div class="wrapper">
         <div class="sidebar" data-color="orange">
-        <div class="logo">
-            <a asp-controller="Home" asp-action="Index" class="simple-text logo-mini">CT</a>
-            <a asp-controller="Home" asp-action="Index" class="simple-text logo-normal">Creative Tim</a>
-        </div>
-        <div class="sidebar-wrapper" id="sidebar-wrapper">
-            <ul class="nav">
-                <li>
-                    <a asp-area="" asp-controller="Book" asp-action="Index">
-                        <i class="now-ui-icons education_agenda-bookmark"></i>
-                        <p>Lista książek</p>
-                    </a>
-                </li>
-            </ul>
-        </div>
+            <div class="logo">
+                <a asp-controller="Home" asp-action="Index" class="simple-text logo-mini">KZ</a>
+                <a asp-controller="Home" asp-action="Index" class="simple-text logo-normal">Księgarnia Zaplecze</a>
+            </div>
+            <div class="sidebar-wrapper" id="sidebar-wrapper">
+                <ul class="nav">
+                    <li>
+                        <a asp-area="" asp-controller="Book" asp-action="Index">
+                            <i class="now-ui-icons education_agenda-bookmark"></i>
+                            <p>Lista książek</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Sales" asp-action="Index">
+                            <i class="now-ui-icons business_briefcase-24"></i>
+                            <p>Sprzedaż</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="" asp-controller="Stats" asp-action="Index">
+                            <i class="now-ui-icons business_chart-bar-32"></i>
+                            <p>Statystyki</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <div class="main-panel">
-            <div class="container" >
+            <div class="container">
                 <main role="main" class="pb-3">
                     @RenderBody()
                 </main>

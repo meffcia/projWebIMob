@@ -1,0 +1,58 @@
+﻿@model IEnumerable<proj3.Models.SaleModel>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Rejestr Sprzedaży";
+}
+
+<div class="content mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Rejestr Sprzedaży</h4>
+                    <form asp-controller="Sales" asp-action="Create" method="get" style="display: inline;">
+                        <button type="submit" class="btn btn-primary">Dodaj Sprzedaż</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th>Tytuł książki</th>
+                                    <th>Miesiąc</th>
+                                    <th>Rok</th>
+                                    <th>Ilość</th>
+                                    <th class="text-right">Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var sale in Model)
+                                {
+                                    <tr>
+                                        <td>@sale.BookTitle</td>
+                                        <td>@sale.Month</td>
+                                        <td>@sale.Year</td>
+                                        <td>@sale.Quantity</td>
+                                        <td class="text-right">
+                                            <form asp-controller="Sales" asp-action="Edit" method="get" style="display: inline;">
+                                                <input type="hidden" name="id" value="@sale.Id" />
+                                                <button type="submit" class="btn btn-link">Edytuj</button>
+                                            </form>
+
+                                            <form asp-controller="Sales" asp-action="Delete" method="post" style="display: inline;" onsubmit="return confirm('Czy na pewno chcesz usunąć tę sprzedaż?');">
+                                                <input type="hidden" name="id" value="@sale.Id" />
+                                                <button type="submit" class="btn btn-link text-danger">Usuń</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+[
+  {
+    "Id": 1,
+    "BookTitle": "Example Book",
+    "Month": 1,
+    "Year": 2020,
+    "Quantity": 22
+  },
+  {
+    "Id": 2,
+    "BookTitle": "Example Book",
+    "Month": 2,
+    "Year": 2022,
+    "Quantity": 208
+  },
+  {
+    "Id": 3,
+    "BookTitle": "Mały Książę",
+    "Month": 3,
+    "Year": 2020,
+    "Quantity": 200
+  },
+  {
+    "Id": 4,
+    "BookTitle": "Example Book",
+    "Month": 4,
+    "Year": 2022,
+    "Quantity": 39
+  },
+  {
+    "Id": 5,
+    "BookTitle": "Example Book",
+    "Month": 5,
+    "Year": 2022,
+    "Quantity": 245
+  },
+  {
+    "Id": 6,
+    "BookTitle": "Example Book",
+    "Month": 6,
+    "Year": 2022,
+    "Quantity": 230
+  },
+  {
+    "Id": 7,
+    "BookTitle": "Mały Książę",
+    "Month": 7,
+    "Year": 2022,
+    "Quantity": 280
+  },
+  {
+    "Id": 8,
+    "BookTitle": "Example Book",
+    "Month": 8,
+    "Year": 2021,
+    "Quantity": 102
+  },
+  {
+    "Id": 9,
+    "BookTitle": "Example Book",
+    "Month": 9,
+    "Year": 2022,
+    "Quantity": 302
+  },
+  {
+    "Id": 10,
+    "BookTitle": "Hobbit",
+    "Month": 10,
+    "Year": 2022,
+    "Quantity": 20
+  }
+]

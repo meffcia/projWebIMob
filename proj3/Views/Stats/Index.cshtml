@@ -1,0 +1,145 @@
+﻿@model dynamic
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Statystyki Książek</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Statystyki Książek</h1>
+
+    <h2>Całkowita liczba sprzedanych książek: @Model.TotalQuantity</h2>
+
+    <h3>Liczba sprzedanych książek według tytułu:</h3>
+    <canvas id="booksChart" width="400" height="200"></canvas>
+    <script>
+        var ctx = document.getElementById('booksChart').getContext('2d');
+        var booksData = @Html.Raw(Json.Serialize(ViewData["QuantityByBook"]));
+
+        var labels = Object.keys(booksData);
+        var data = Object.values(booksData);
+
+        var booksChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sprzedaż książek',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <h3>Statystyki miesięczne:</h3>
+    <canvas id="monthlyChart" width="400" height="200"></canvas>
+    <script>
+        var ctx2 = document.getElementById('monthlyChart').getContext('2d');
+        var monthlyStatsByYear = @Html.Raw(Json.Serialize(ViewData["MonthlyStatsByYear"]));
+
+        var monthlyLabels = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
+        var datasets = [];
+
+        // Ustawienie kolorów dla każdego roku
+        var colors = {
+            2020: 'rgba(75, 192, 192, 1)',
+            2022: 'rgba(255, 99, 132, 1)',
+            // Można dodać więcej kolorów dla innych lat
+        };
+
+        for (var year in monthlyStatsByYear) {
+            var data = [];
+            for (var month = 1; month <= 12; month++) {
+                data.push(monthlyStatsByYear[year][month] || 0); // Dodanie danych lub 0, jeśli brak danych
+            }
+
+            datasets.push({
+                label: year.toString(),
+                data: data,
+                fill: false,
+                borderColor: colors[year] || 'rgba(0, 0, 0, 1)', // Domyślny kolor, jeśli rok nie ma przypisanego koloru
+                tension: 0.1
+            });
+        }
+
+        var monthlyChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: monthlyLabels,
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+    <h3>Podsumowanie sprzedaży książek</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Tytuł książki</th>
+                @foreach (var year in ViewData["UniqueYears"] as List<int>) // Dynamically generating year columns
+                {
+                    <th>Rok @year</th>
+                }
+                <th>Ogólna suma</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var salesSummary = ViewData["SalesSummary"] as Dictionary<string, Dictionary<int, int>>;
+                foreach (var book in salesSummary)
+                {
+                    var totalSales = book.Value.Values.Sum(); // Suma wszystkich sprzedanych egzemplarzy
+                    <tr>
+                        <td>@book.Key</td>
+                        @foreach (var year in ViewData["UniqueYears"] as List<int>)
+                        {
+                            <td>@(book.Value.ContainsKey(year) ? book.Value[year].ToString() : "0")</td>
+                        }
+                        <td>@totalSales</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</body>
+</html>
