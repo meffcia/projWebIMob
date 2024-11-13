@@ -16,5 +16,11 @@
     "Title": "Hobbit",
     "Author": "Tolkien",
     "Price": 78.0
+  },
+  {
+    "Id": 6,
+    "Title": "Pan Tadeusz",
+    "Author": "Adam Mickiewicz",
+    "Price": 13.0
   }
 ]

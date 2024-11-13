@@ -4,7 +4,7 @@
     "BookTitle": "Example Book",
     "Month": 1,
     "Year": 2020,
-    "Quantity": 22
+    "Quantity": 100
   },
   {
     "Id": 2,
@@ -68,5 +68,12 @@
     "Month": 10,
     "Year": 2022,
     "Quantity": 20
+  },
+  {
+    "Id": 11,
+    "BookTitle": "Pan Tadeusz",
+    "Month": 5,
+    "Year": 2024,
+    "Quantity": 3
   }
 ]
