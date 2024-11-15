@@ -1,11 +1,12 @@
-﻿namespace proj4;
-
-public partial class App : Application
+﻿namespace proj4
 {
-	public App()
+	public partial class App : Application
 	{
-		InitializeComponent();
+		public App()
+		{
+			InitializeComponent();
 
-		MainPage = new AppShell();
+			MainPage = new AppShell();
+		}
 	}
 }
