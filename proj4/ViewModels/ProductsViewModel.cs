@@ -34,7 +34,7 @@ namespace proj4.ViewModels
             _messageDialogService = messageDialogService;
             _connectivity = connectivity;
 
-            // GetProductsAsync();
+            GetProductsAsync();
         }
 
         public async Task GetProductsAsync()
@@ -55,25 +55,25 @@ namespace proj4.ViewModels
 
        
 
-        // [RelayCommand]
-        // public async Task ShowDetails(IProduct product)
-        // {
-        //     if (_connectivity.NetworkAccess != NetworkAccess.Internet)
-        //     {
-        //         _messageDialogService.ShowMessage("Internet not avaible!");
-        //         return;
-        //     }
+        [RelayCommand]
+        public async Task ShowDetails(IProduct product)
+        {
+            if (_connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                _messageDialogService.ShowMessage("Internet not avaible!");
+                return;
+            }
 
-        //     SelectedProduct = product;
+            SelectedProduct = product;
       
 
 
-        //     await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
-        //     {
-        //         {"Product",product },
-        //         {nameof(ProductsViewModel), this }
-        //     });
-        // }
+            await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
+            {
+                {"Product",product },
+                {nameof(ProductsViewModel), this }
+            });
+        }
 
         [RelayCommand]
         public async Task New()

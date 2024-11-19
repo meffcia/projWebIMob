@@ -26,6 +26,7 @@ namespace proj4.ViewModels
             _messageDialogService = messageDialogService;
             _geolocation = geolocation;
             _map = map; 
+            product = new Book();
         }
 
         [ObservableProperty]
@@ -60,53 +61,64 @@ namespace proj4.ViewModels
         // }
 
 
-        // [RelayCommand]
-        // public async Task Save()
-        // {
-        //     if (product.Id == 0)
-        //     {
-        //         // tworzymy nowy produkt 
-        //         await CreateProductAsync();
-                
-        //     }
-        //     else
-        //     {
-        //         // aktualizujemy produkt
-        //         // await UpdateProductAsync();
-        //     }
-
-        //     await Shell.Current.GoToAsync("../", true);
-        // }
-
-        // public async Task CreateProductAsync()
-        // {
-            // var result = 
-            // await _productService.AddProductAsync(product);
-            // if (result.Success)
+        [RelayCommand]
+        public async Task Save()
+        {
+            // product = new Book
             // {
-                // await _productsViewModel.GetProductsAsync();
-            // }
-            // else
-            // {
-            //     _messageDialogService.ShowMessage(result.Message);
-            // }
+            //     Title = "Default Title",
+            //     Author = "Default Author",
+            //     Price = 0.0m,
+            //     Genre = "Default Genre",
+            //     PageCount = 0
+            // };
 
-        // }
+            if (Product == null)
+            {
+                _messageDialogService.ShowMessage("Product is null. Unable to save.");
+                return;
+            }
+
+            if (product.Id == 0)
+            {
+                await CreateProductAsync();
+            }
+            else
+            {
+                await UpdateProductAsync();
+            }
+
+            await Shell.Current.GoToAsync("../", true);
+        }
+
+        public async Task CreateProductAsync()
+        {
+            var result = 
+            await _productService.AddProductAsync(product);
+            if (result.Success)
+            {
+                await _productsViewModel.GetProductsAsync();
+            }
+            else
+            {
+                _messageDialogService.ShowMessage(result.Message);
+            }
+
+        }
 
 
-
-        // public async Task UpdateProductAsync()
-        // {
-        //     // var result = 
-        //     await _productService.UpdateProductAsync(product);
-        //     // if (result.Success)
-        //     // {
-        //         await _productsViewModel.GetProductsAsync();
-        //     // }
-        //     // else
-        //     // {
-        //     //     _messageDialogService.ShowMessage(result.Message);
-        //     // }
-        // }
+        public async Task UpdateProductAsync()
+        {
+            var result = 
+            await _productService.UpdateProductAsync(product);
+            if (result.Success)
+            {
+                await _productsViewModel.GetProductsAsync();
+            }
+            else
+            {
+                _messageDialogService.ShowMessage(result.Message);
+            }
+        }
     }
 }

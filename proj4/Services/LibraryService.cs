@@ -17,11 +17,12 @@ namespace proj4.Services
             _appSettings = appSettings.Value;
         }
 
-        // public async Task AddProductAsync(IProduct product)
-        // {
-        //     var response = await _httpClient.PostAsJsonAsync(_appSettings.ProductEndpoint.CreateProduct, product);
-        //     var result = await response.Content.ReadFromJsonAsync<ServiceReponse<IProduct>>();
-        // }
+        public async Task<ServiceReponse<IProduct>> AddProductAsync(IProduct product)
+        {
+            var response = await _httpClient.PostAsJsonAsync(_appSettings.ProductEndpoint.CreateProduct, product);
+            var result = await response.Content.ReadFromJsonAsync<ServiceReponse<IProduct>>();
+            return result;
+        }
 
         // public async Task DeleteProductAsync(int id)
         // {
@@ -38,11 +39,11 @@ namespace proj4.Services
             return result;
         }
 
-        // public async Task UpdateProductAsync(IProduct product)
-        // {
-        //     var response = await _httpClient.PutAsJsonAsync(_appSettings.ProductEndpoint.UpdateProduct, product);
-        //     var result = await response.Content.ReadFromJsonAsync<ServiceReponse<IProduct>>();
-        //     return result;
-        // }
+        public async Task<ServiceReponse<IProduct>> UpdateProductAsync(IProduct product)
+        {
+            var response = await _httpClient.PutAsJsonAsync(_appSettings.ProductEndpoint.UpdateProduct, product);
+            var result = await response.Content.ReadFromJsonAsync<ServiceReponse<IProduct>>();
+            return result;
+        }
     }
 }

@@ -5,17 +5,21 @@
              Title="Product List">
 
     <ContentPage.Content>
-        <CollectionView ItemsSource="{Binding Products}"
-                        SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout Padding="10">
-                        <Label Text="{Binding Title}" FontSize="20" />
-                        <Label Text="{Binding Author}" FontSize="16" TextColor="Gray" />
-                        <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" FontSize="16" />
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <VerticalStackLayout>
+            <Button Text="Add New Product" Command="{Binding NewCommand}" HorizontalOptions="Center" />
+
+            <CollectionView ItemsSource="{Binding Products}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10">
+                            <Label Text="{Binding Title}" FontSize="20" />
+                            <Label Text="{Binding Author}" FontSize="16" TextColor="Gray" />
+                            <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" FontSize="16" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

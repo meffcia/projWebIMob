@@ -33,7 +33,7 @@ public static class MauiProgram
 		ConfigureAppServices(services, appSettings);
 		ConfigureViewModels(services);
 		ConfigureViews(services);
-		ConfigureHttpClients(services, appSettings);
+		// ConfigureHttpClients(services, appSettings);
 	}
 
 	private static void ConfigureAppServices(IServiceCollection services, AppSettings appSettings)
@@ -42,7 +42,7 @@ public static class MauiProgram
 		services.AddSingleton<IGeolocation>(Geolocation.Default);
 		services.AddSingleton<IMap>(Map.Default);
 
-		services.AddSingleton<IProductService, LibraryService>();
+		services.AddSingleton<IProductService, FileProductService>();
 		services.AddSingleton<IMessageDialogService, MauiMessageDialogService>();
 		
 	}
