@@ -54,16 +54,11 @@ namespace proj4.ViewModels
         }
 
         [RelayCommand]
-        public async Task Delete()
+        public async Task Delete(IProduct product)
         {
-            await DeleteProduct();
-            await Shell.Current.GoToAsync("../", true);
-        }
+            if (product == null) return;
 
-        public async Task DeleteProduct()
-        {
-            await _productService.DeleteProductAsync(_selectedProduct.Id);
-
+            await _productService.DeleteProductAsync(product.Id);
             await GetProductsAsync();
         }
         
@@ -138,6 +133,8 @@ namespace proj4.ViewModels
                 {nameof(ProductsViewModel), this }  // Przekazanie ViewModelu
             });
         }
+
+
     }
 }
 

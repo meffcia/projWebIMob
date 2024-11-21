@@ -26,16 +26,20 @@
 
                                 <!-- Przycisk Edytuj -->
                                 <Button Grid.Column="1" Grid.Row="0" Text="Edit" 
-                                        Command="{Binding EditCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
+                                        CommandParameter="{Binding .}"
                                         VerticalOptions="Center" 
                                         HeightRequest="40" />
 
+
                                 <!-- Przycisk Usuń -->
                                 <Button Grid.Column="2" Grid.Row="0" Text="Delete" 
-                                        Command="{Binding DeleteCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommand}"
+                                        CommandParameter="{Binding .}"
                                         VerticalOptions="Center" 
                                         HeightRequest="40"
-                                        Margin="10,0,0,0" />
+                                        Margin="10,0,0,0" />        
+
 
                                 <!-- Linia separatora -->
                                 <BoxView Grid.ColumnSpan="3" Grid.Row="1" HeightRequest="1" 
