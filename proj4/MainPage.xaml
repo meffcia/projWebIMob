@@ -2,40 +2,49 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="proj4.MainPage"
-             Title="Product List">
+             Title="Lista książek">
 
     <ContentPage.Content>
-        <VerticalStackLayout>
-            <Button Text="Add New Product" Command="{Binding NewCommand}" HorizontalOptions="Center" />
+        <!-- ScrollView zapewni przewijanie całości zawartości -->
+        <ScrollView VerticalScrollBarVisibility="Always">
+            <VerticalStackLayout Padding="20">
+                <!-- Przycisk dodania nowego produktu -->
+                <Button Text="Add New Product" Command="{Binding NewCommand}" HorizontalOptions="Center" />
 
-            <CollectionView ItemsSource="{Binding Products}"
-                            SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="10" ColumnDefinitions="*, Auto, Auto" RowDefinitions="Auto, Auto, Auto">
-                            <StackLayout Grid.Column="0" Grid.Row="0" VerticalOptions="Center">
-                                <Label Text="{Binding Title}" FontSize="20" />
-                                <Label Text="{Binding Author}" FontSize="16" TextColor="Gray" />
-                                <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" FontSize="16" />
-                            </StackLayout>
+                <!-- CollectionView z produktami -->
+                <CollectionView ItemsSource="{Binding Products}"
+                                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="10" ColumnDefinitions="*, Auto, Auto" RowDefinitions="Auto, Auto, Auto">
+                                <!-- Informacje o produkcie -->
+                                <StackLayout Grid.Column="0" Grid.Row="0" VerticalOptions="Center">
+                                    <Label Text="{Binding Title}" FontSize="20" />
+                                    <Label Text="{Binding Author}" FontSize="16" TextColor="Gray" />
+                                    <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" FontSize="16" />
+                                </StackLayout>
 
-                            <Button Grid.Column="1" Grid.Row="0" Text="Edit" 
-                                    Command="{Binding EditCommand}"
-                                    VerticalOptions="Center" 
-                                    HeightRequest="40" />
+                                <!-- Przycisk Edytuj -->
+                                <Button Grid.Column="1" Grid.Row="0" Text="Edit" 
+                                        Command="{Binding EditCommand}"
+                                        VerticalOptions="Center" 
+                                        HeightRequest="40" />
 
-                            <Button Grid.Column="2" Grid.Row="0" Text="Delete" 
-                                    Command="{Binding DeleteCommand}"
-                                    VerticalOptions="Center" 
-                                    HeightRequest="40"
-                                    Margin="10,0,0,0" />
+                                <!-- Przycisk Usuń -->
+                                <Button Grid.Column="2" Grid.Row="0" Text="Delete" 
+                                        Command="{Binding DeleteCommand}"
+                                        VerticalOptions="Center" 
+                                        HeightRequest="40"
+                                        Margin="10,0,0,0" />
 
-                            <BoxView Grid.ColumnSpan="3" Grid.Row="1" HeightRequest="1" 
-                                     BackgroundColor="LightGray" HorizontalOptions="Fill" Margin="0,10,0,0" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
+                                <!-- Linia separatora -->
+                                <BoxView Grid.ColumnSpan="3" Grid.Row="1" HeightRequest="1" 
+                                         BackgroundColor="LightGray" HorizontalOptions="Fill" Margin="0,10,0,0" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
