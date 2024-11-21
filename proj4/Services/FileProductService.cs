@@ -1,14 +1,21 @@
 using Newtonsoft.Json;
 using proj4.Models;
+using System.IO;
 
 namespace proj4.Services
 {
     public class FileProductService : IProductService
     {
-        private readonly string _filePath = "products.json";
+        // Określamy pełną ścieżkę do pliku w katalogu głównym projektu
+        private readonly string _filePath;
 
         public FileProductService()
         {
+            // Używamy katalogu głównego projektu
+            var projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            _filePath = Path.Combine(projectDirectory, "products.json");
+
+            // Jeśli plik nie istnieje, tworzysz go z pustą listą produktów
             if (!File.Exists(_filePath))
             {
                 File.WriteAllText(_filePath, JsonConvert.SerializeObject(new List<IProduct>()));
