@@ -3,37 +3,26 @@ using CommunityToolkit.Mvvm.Input;
 using proj4.MessageBox;
 using proj4.Models;
 using proj4.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace proj4.ViewModels
 {
     [QueryProperty(nameof(IProduct), nameof(IProduct))]
     [QueryProperty(nameof(ProductsViewModel), nameof(ProductsViewModel))]
-    public partial class ProductDetailsViewModel : ObservableObject
+    public partial class EditProductViewModel : ObservableObject
     {
         private readonly IProductService _productService;
         private readonly IMessageDialogService _messageDialogService;
         private readonly IGeolocation _geolocation;
         private readonly IMap _map;
         private ProductsViewModel _productsViewModel;
-
-        public ProductDetailsViewModel(
-            IProductService productService,
-            IMessageDialogService messageDialogService,
-            IGeolocation geolocation,
-            IMap map)
+        public EditProductViewModel(IProductService productService, IMessageDialogService messageDialogService, IGeolocation geolocation, IMap map)
         {
             _productService = productService;
             _messageDialogService = messageDialogService;
             _geolocation = geolocation;
             _map = map;
-
-            // Inicjalizacja z domyślnymi wartościami
-            ResetForm();
+            product = new Book();
         }
 
         [ObservableProperty]
@@ -63,37 +52,13 @@ namespace proj4.ViewModels
                 await UpdateProductAsync();
             }
 
-            // Resetowanie formularza po zapisaniu
-            ResetForm();
-
-            // Nawigacja wstecz, jeśli to konieczne
             await Shell.Current.GoToAsync("../", true);
-        }
-
-        [RelayCommand]
-        public void Cancel()
-        {
-            // Resetowanie formularza
-            ResetForm();
-
-            // Nawigacja wstecz, jeśli to konieczne
-            Shell.Current.GoToAsync("../", true);
-        }
-
-        public void ResetForm()
-        {
-            // Tworzenie nowego obiektu produktu z domyślnymi wartościami
-            Product = new Book
-            {
-                Title = null,
-                Author = null,
-                Price = 0
-            };
         }
 
         public async Task CreateProductAsync()
         {
-            var result = await _productService.AddProductAsync(product);
+            var result =
+            await _productService.AddProductAsync(product);
             if (result.Success)
             {
                 await _productsViewModel.GetProductsAsync();
@@ -102,11 +67,13 @@ namespace proj4.ViewModels
             {
                 _messageDialogService.ShowMessage(result.Message);
             }
+
         }
 
         public async Task UpdateProductAsync()
         {
-            var result = await _productService.UpdateProductAsync(product);
+            var result =
+            await _productService.UpdateProductAsync(product);
             if (result.Success)
             {
                 await _productsViewModel.GetProductsAsync();
