@@ -26,8 +26,8 @@
 
                                 <!-- Przycisk Edytuj -->
                                 <Button Grid.Column="1" Grid.Row="0" Text="Edit" 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
-                                        CommandParameter="{Binding .}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditProductCommand}"
+                                        CommandParameter="{Binding .}" 
                                         VerticalOptions="Center" 
                                         HeightRequest="40" />
 

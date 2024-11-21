@@ -1,87 +1,73 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using proj4.MessageBox;
+using Newtonsoft.Json;
 using proj4.Models;
 using proj4.Services;
-
+using proj4.MessageBox;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace proj4.ViewModels
 {
-    [QueryProperty(nameof(IProduct), nameof(IProduct))]
-    [QueryProperty(nameof(ProductsViewModel), nameof(ProductsViewModel))]
     public partial class EditProductViewModel : ObservableObject
     {
         private readonly IProductService _productService;
         private readonly IMessageDialogService _messageDialogService;
-        private readonly IGeolocation _geolocation;
-        private readonly IMap _map;
-        private ProductsViewModel _productsViewModel;
-        public EditProductViewModel(IProductService productService, IMessageDialogService messageDialogService, IGeolocation geolocation, IMap map)
+        private readonly string _filePath = "path_to_your_json_file";  // Zaktualizuj ścieżkę do pliku JSON
+
+        [ObservableProperty]
+        private IProduct _selectedProduct;
+
+        public EditProductViewModel(IProductService productService, IMessageDialogService messageDialogService)
         {
             _productService = productService;
             _messageDialogService = messageDialogService;
-            _geolocation = geolocation;
-            _map = map;
-            product = new Book();
         }
 
-        [ObservableProperty]
-        private IProduct product;
-
-        public ProductsViewModel ProductsViewModel
+        // Załaduj produkt na podstawie przekazanego Id
+        public async Task LoadProductAsync(int productId)
         {
-            get { return _productsViewModel; }
-            set { _productsViewModel = value; }
+            try
+            {
+                var json = await File.ReadAllTextAsync(_filePath);
+                var products = JsonConvert.DeserializeObject<List<Book>>(json) ?? new List<Book>();
+
+                var productToEdit = products.FirstOrDefault(p => p.Id == productId);
+
+                if (productToEdit != null)
+                {
+                    SelectedProduct = productToEdit;
+                }
+                else
+                {
+                    _messageDialogService.ShowMessage("Product not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _messageDialogService.ShowMessage($"Error loading product: {ex.Message}");
+            }
         }
 
         [RelayCommand]
-        public async Task Save()
+        public async Task SaveProductAsync()
         {
-            if (Product == null)
-            {
-                _messageDialogService.ShowMessage("Product is null. Unable to save.");
-                return;
-            }
-
-            if (product.Id == 0)
-            {
-                await CreateProductAsync();
-            }
-            else
-            {
-                await UpdateProductAsync();
-            }
-
-            await Shell.Current.GoToAsync("../", true);
-        }
-
-        public async Task CreateProductAsync()
-        {
-            var result =
-            await _productService.AddProductAsync(product);
+            var result = await _productService.UpdateProductAsync(SelectedProduct);
             if (result.Success)
             {
-                await _productsViewModel.GetProductsAsync();
+                _messageDialogService.ShowMessage("Product updated successfully!");
+                await Shell.Current.GoToAsync("..");
             }
             else
             {
                 _messageDialogService.ShowMessage(result.Message);
             }
-
         }
 
-        public async Task UpdateProductAsync()
+        [RelayCommand]
+        public async Task CancelAsync()
         {
-            var result =
-            await _productService.UpdateProductAsync(product);
-            if (result.Success)
-            {
-                await _productsViewModel.GetProductsAsync();
-            }
-            else
-            {
-                _messageDialogService.ShowMessage(result.Message);
-            }
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

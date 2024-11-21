@@ -53,14 +53,16 @@ public static class MauiProgram
 	
 		services.AddSingleton<ProductsViewModel>();
 		services.AddSingleton<ProductDetailsViewModel>();
-	}
+        services.AddSingleton<EditProductViewModel>();
+    }
 
 	private static void ConfigureViews(IServiceCollection services)
 	{
 		// tutaj konfigurujemy widoki
 		services.AddSingleton<MainPage>();
 		services.AddTransient<ProductDetailsView>();
-	}
+        services.AddTransient<EditProductView>();
+    }
 
 	// private static void ConfigureHttpClients(IServiceCollection services, AppSettings appSettings)
 	// {

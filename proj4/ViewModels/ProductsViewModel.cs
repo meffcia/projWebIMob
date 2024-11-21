@@ -115,7 +115,7 @@ namespace proj4.ViewModels
         }
 
         [RelayCommand]
-        public async Task Edit(IProduct product)
+        public async Task EditProduct(IProduct product)
         {
             if (_connectivity.NetworkAccess != NetworkAccess.Internet)
             {
@@ -123,16 +123,17 @@ namespace proj4.ViewModels
                 return;
             }
 
-            // Przekazujemy produkt do edycji
-            SelectedProduct = product;
+            // Zamiast przekazywać cały obiekt, przekazujemy tylko Id produktu
+            var productId = product?.Id ?? 0;
 
-            // Przekierowanie do widoku edycji produktu
-            await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
-            {
-                {"Product", SelectedProduct },  // Przekazanie wybranego produktu
-                {nameof(ProductsViewModel), this }  // Przekazanie ViewModelu
-            });
+            // Przechodzimy do widoku edycji
+            await Shell.Current.GoToAsync(nameof(EditProductView), true, new Dictionary<string, object>
+    {
+        { "ProductId", productId },
+        { nameof(ProductsViewModel), this }
+    });
         }
+
 
 
     }
