@@ -53,7 +53,33 @@ namespace proj4.ViewModels
             }
         }
 
-       
+        [RelayCommand]
+        public async Task Delete()
+        {
+            await DeleteProduct();
+            await Shell.Current.GoToAsync("../", true);
+        }
+
+        public async Task DeleteProduct()
+        {
+            await _productService.DeleteProductAsync(_selectedProduct.Id);
+
+            await GetProductsAsync();
+        }
+        
+        public async Task UpdateProductAsync()
+        {
+            var result = 
+            await _productService.UpdateProductAsync(_selectedProduct);
+            if (result.Success)
+            {
+                await GetProductsAsync();
+            }
+            else
+            {
+                _messageDialogService.ShowMessage(result.Message);
+            }
+        }
 
         [RelayCommand]
         public async Task ShowDetails(IProduct product)
@@ -93,7 +119,25 @@ namespace proj4.ViewModels
             });
         }
 
-      
+        [RelayCommand]
+        public async Task Edit(IProduct product)
+        {
+            if (_connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                _messageDialogService.ShowMessage("Internet not available!");
+                return;
+            }
+
+            // Przekazujemy produkt do edycji
+            SelectedProduct = product;
+
+            // Przekierowanie do widoku edycji produktu
+            await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
+            {
+                {"Product", SelectedProduct },  // Przekazanie wybranego produktu
+                {nameof(ProductsViewModel), this }  // Przekazanie ViewModelu
+            });
+        }
     }
 }
 

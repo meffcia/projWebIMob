@@ -38,41 +38,9 @@ namespace proj4.ViewModels
             set { _productsViewModel = value; }
         }
 
-        // [RelayCommand]
-        // public async Task Delete()
-        // {
-        //     await DeleteProduct();
-        //     await Shell.Current.GoToAsync("../", true);
-        // }
-
-        // public async Task DeleteProduct()
-        // {
-        //     // var result = 
-        //     await _productService.DeleteProductAsync(product.Id);
-        //     // if (result.Success)
-        //     // {
-        //         await _productsViewModel.GetProductsAsync();
-        //     // }
-        //     // else
-        //     // {
-        //     //     _messageDialogService.ShowMessage(result.Message);
-        //     // }
-            
-        // }
-
-
         [RelayCommand]
         public async Task Save()
         {
-            // product = new Book
-            // {
-            //     Title = "Default Title",
-            //     Author = "Default Author",
-            //     Price = 0.0m,
-            //     Genre = "Default Genre",
-            //     PageCount = 0
-            // };
-
             if (Product == null)
             {
                 _messageDialogService.ShowMessage("Product is null. Unable to save.");
@@ -105,7 +73,6 @@ namespace proj4.ViewModels
             }
 
         }
-
 
         public async Task UpdateProductAsync()
         {

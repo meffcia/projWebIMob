@@ -24,12 +24,12 @@ namespace proj4.Services
             return result;
         }
 
-        // public async Task DeleteProductAsync(int id)
-        // {
-        //     var response = await _httpClient.DeleteAsync($"{id}");
-        //     var result = await response.Content.ReadFromJsonAsync<ServiceReponse<bool>>();
-        //     return result;
-        // }
+        public async Task<ServiceReponse<IProduct>> DeleteProductAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"{id}");
+            var result = await response.Content.ReadFromJsonAsync<ServiceReponse<IProduct>>();
+            return result;
+        }
 
         public async Task<ServiceReponse<List<IProduct>>> GetAllProductAsync()
         {

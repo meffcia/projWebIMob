@@ -111,5 +111,41 @@ namespace proj4.Services
                 };
             }
         }
+
+        public async Task<ServiceReponse<IProduct>> DeleteProductAsync(int productId)
+        {
+            try
+            {
+                var json = await File.ReadAllTextAsync(_filePath);
+                var products = JsonConvert.DeserializeObject<List<Book>>(json) ?? new List<Book>();
+
+                var productToDelete = products.FirstOrDefault(p => p.Id == productId);
+                if (productToDelete == null)
+                {
+                    return new ServiceReponse<IProduct>
+                    {
+                        Message = "Product not found.",
+                        Success = false
+                    };
+                }
+
+                products.Remove(productToDelete);
+                await File.WriteAllTextAsync(_filePath, JsonConvert.SerializeObject(products));
+
+                return new ServiceReponse<IProduct>
+                {
+                    Data = productToDelete,
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceReponse<IProduct>
+                {
+                    Message = $"Error deleting product: {ex.Message}",
+                    Success = false
+                };
+            }
+        }
     }
 }

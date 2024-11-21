@@ -62,18 +62,18 @@ public static class MauiProgram
 		services.AddTransient<ProductDetailsView>();
 	}
 
-	private static void ConfigureHttpClients(IServiceCollection services, AppSettings appSettings)
-	{
-		// tutaj konfigurujemy HttpClient
+	// private static void ConfigureHttpClients(IServiceCollection services, AppSettings appSettings)
+	// {
+	// 	// tutaj konfigurujemy HttpClient
 
-		var urliBulder = new UriBuilder(appSettings.BaseApiUrl)
-		{
-			Path = appSettings.ProductEndpoint.BaseUrl
-		};
+	// 	var urliBulder = new UriBuilder(appSettings.BaseApiUrl)
+	// 	{
+	// 		Path = appSettings.ProductEndpoint.BaseUrl
+	// 	};
 
-		//żeby skonfigurować HttpClienta, musimy dodać pakiet Microsoft.Extensions.Http
-		services.AddHttpClient<IProductService, LibraryService>(client => client.BaseAddress = urliBulder.Uri);
-	}
+	// 	//żeby skonfigurować HttpClienta, musimy dodać pakiet Microsoft.Extensions.Http
+	// 	services.AddHttpClient<IProductService, LibraryService>(client => client.BaseAddress = urliBulder.Uri);
+	// }
 
 	private static AppSettings ConfigureAppSettings(IServiceCollection services)
 	{
