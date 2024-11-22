@@ -22,6 +22,39 @@ namespace proj4.Services
             }
         }
 
+        public async Task<ServiceReponse<IProduct>> GetProductByIdAsync(int productId)
+        {
+            try
+            {
+                var json = await File.ReadAllTextAsync(_filePath);
+                var products = JsonConvert.DeserializeObject<List<Book>>(json) ?? new List<Book>();
+
+                var product = products.FirstOrDefault(p => p.Id == productId);
+                if (product == null)
+                {
+                    return new ServiceReponse<IProduct>
+                    {
+                        Message = "Product not found.",
+                        Success = false
+                    };
+                }
+
+                return new ServiceReponse<IProduct>
+                {
+                    Data = product,
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceReponse<IProduct>
+                {
+                    Message = $"Error retrieving product: {ex.Message}",
+                    Success = false
+                };
+            }
+        }
+
         public async Task<ServiceReponse<List<IProduct>>> GetAllProductAsync()
         {
             try

@@ -17,22 +17,15 @@ namespace proj4.ViewModels
     {
         private readonly IProductService _productService;
         private readonly IMessageDialogService _messageDialogService;
-        private readonly IGeolocation _geolocation;
-        private readonly IMap _map;
         private ProductsViewModel _productsViewModel;
 
         public ProductDetailsViewModel(
             IProductService productService,
-            IMessageDialogService messageDialogService,
-            IGeolocation geolocation,
-            IMap map)
+            IMessageDialogService messageDialogService)
         {
             _productService = productService;
             _messageDialogService = messageDialogService;
-            _geolocation = geolocation;
-            _map = map;
 
-            // Inicjalizacja z domyślnymi wartościami
             ResetForm();
         }
 
@@ -82,7 +75,6 @@ namespace proj4.ViewModels
 
         public void ResetForm()
         {
-            // Tworzenie nowego obiektu produktu z domyślnymi wartościami
             Product = new Book
             {
                 Title = null,

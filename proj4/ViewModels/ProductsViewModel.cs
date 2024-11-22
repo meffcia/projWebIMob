@@ -61,40 +61,6 @@ namespace proj4.ViewModels
             await _productService.DeleteProductAsync(product.Id);
             await GetProductsAsync();
         }
-        
-        public async Task UpdateProductAsync()
-        {
-            var result = 
-            await _productService.UpdateProductAsync(_selectedProduct);
-            if (result.Success)
-            {
-                await GetProductsAsync();
-            }
-            else
-            {
-                _messageDialogService.ShowMessage(result.Message);
-            }
-        }
-
-        [RelayCommand]
-        public async Task ShowDetails(IProduct product)
-        {
-            if (_connectivity.NetworkAccess != NetworkAccess.Internet)
-            {
-                _messageDialogService.ShowMessage("Internet not avaible!");
-                return;
-            }
-
-            SelectedProduct = product;
-      
-
-
-            await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
-            {
-                {"Product",product },
-                {nameof(ProductsViewModel), this }
-            });
-        }
 
         [RelayCommand]
         public async Task New()
@@ -123,19 +89,14 @@ namespace proj4.ViewModels
                 return;
             }
 
-            // Zamiast przekazywać cały obiekt, przekazujemy tylko Id produktu
             var productId = product?.Id ?? 0;
 
-            // Przechodzimy do widoku edycji
             await Shell.Current.GoToAsync(nameof(EditProductView), true, new Dictionary<string, object>
-    {
-        { "ProductId", productId },
-        { nameof(ProductsViewModel), this }
-    });
+            {
+                { "ProductId", productId },
+                { nameof(ProductsViewModel), this }
+            });
         }
-
-
-
     }
 }
 

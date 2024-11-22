@@ -9,14 +9,35 @@ using System.Threading.Tasks;
 
 namespace proj4.ViewModels
 {
+    [QueryProperty(nameof(ProductId), "ProductId")]
+    [QueryProperty(nameof(ProductsViewModel), nameof(ProductsViewModel))]
     public partial class EditProductViewModel : ObservableObject
     {
         private readonly IProductService _productService;
         private readonly IMessageDialogService _messageDialogService;
-        private readonly string _filePath = "path_to_your_json_file";  // Zaktualizuj ścieżkę do pliku JSON
+        private ProductsViewModel _productsViewModel;
 
         [ObservableProperty]
         private IProduct _selectedProduct;
+
+        public ProductsViewModel ProductsViewModel
+        {
+            get { return _productsViewModel; }
+            set { _productsViewModel = value; }
+        }
+
+        private int _productId;
+        public int ProductId
+        {
+            get => _productId;
+            set
+            {
+                SetProperty(ref _productId, value);
+
+                // Wczytanie produktu po ustawieniu ID
+                Task.Run(async () => await LoadProductAsync(_productId));
+            }
+        }
 
         public EditProductViewModel(IProductService productService, IMessageDialogService messageDialogService)
         {
@@ -24,23 +45,19 @@ namespace proj4.ViewModels
             _messageDialogService = messageDialogService;
         }
 
-        // Załaduj produkt na podstawie przekazanego Id
         public async Task LoadProductAsync(int productId)
         {
             try
             {
-                var json = await File.ReadAllTextAsync(_filePath);
-                var products = JsonConvert.DeserializeObject<List<Book>>(json) ?? new List<Book>();
+                var response = await _productService.GetProductByIdAsync(productId);
 
-                var productToEdit = products.FirstOrDefault(p => p.Id == productId);
-
-                if (productToEdit != null)
+                if (response.Success && response.Data != null)
                 {
-                    SelectedProduct = productToEdit;
+                    SelectedProduct = response.Data;
                 }
                 else
                 {
-                    _messageDialogService.ShowMessage("Product not found!");
+                    _messageDialogService.ShowMessage(response.Message ?? "Product not found!");
                 }
             }
             catch (Exception ex)
@@ -50,24 +67,45 @@ namespace proj4.ViewModels
         }
 
         [RelayCommand]
-        public async Task SaveProductAsync()
+        public async Task Save()
         {
-            var result = await _productService.UpdateProductAsync(SelectedProduct);
-            if (result.Success)
+            if (_selectedProduct == null)
             {
-                _messageDialogService.ShowMessage("Product updated successfully!");
-                await Shell.Current.GoToAsync("..");
+                _messageDialogService.ShowMessage("Product is null. Unable to save.");
+                return;
+            }
+
+            if (_selectedProduct.Id == 0)
+            {
+                // await CreateProductAsync();
             }
             else
             {
-                _messageDialogService.ShowMessage(result.Message);
+                await UpdateProductAsync();
             }
+
+            // Nawigacja wstecz, jeśli to konieczne
+            await Shell.Current.GoToAsync("../", true);
         }
 
         [RelayCommand]
         public async Task CancelAsync()
         {
             await Shell.Current.GoToAsync("..");
+        }
+
+        public async Task UpdateProductAsync()
+        {
+            var result = 
+            await _productService.UpdateProductAsync(_selectedProduct);
+            if (result.Success)
+            {
+                await _productsViewModel.GetProductsAsync();
+            }
+            else
+            {
+                _messageDialogService.ShowMessage(result.Message);
+            }
         }
     }
 }
