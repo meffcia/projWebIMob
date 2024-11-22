@@ -75,7 +75,7 @@ namespace proj4.ViewModels
 
             await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
             {
-                {"Product",SelectedProduct },
+                {"Product", SelectedProduct },
                 {nameof(ProductsViewModel), this }
             });
         }
@@ -91,10 +91,13 @@ namespace proj4.ViewModels
 
             var productId = product?.Id ?? 0;
 
-            await Shell.Current.GoToAsync(nameof(EditProductView), true, new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
             {
+                {"Product", product ?? new Book()},
                 { "ProductId", productId },
-                { nameof(ProductsViewModel), this }
+                {nameof(ProductsViewModel), this }
+                // { "ProductId", productId },
+                // { nameof(ProductsViewModel), this }
             });
         }
     }

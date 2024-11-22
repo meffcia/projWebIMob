@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace proj4.ViewModels
 {
+    [QueryProperty(nameof(ProductId), "ProductId")]
     [QueryProperty(nameof(IProduct), nameof(IProduct))]
     [QueryProperty(nameof(ProductsViewModel), nameof(ProductsViewModel))]
     public partial class ProductDetailsViewModel : ObservableObject
@@ -31,6 +32,38 @@ namespace proj4.ViewModels
 
         [ObservableProperty]
         private IProduct product;
+        private int _productId;
+        public int ProductId
+        {
+            get => _productId;
+            set
+            {
+                SetProperty(ref _productId, value);
+
+                Task.Run(async () => await LoadProductAsync(_productId));
+            }
+        }
+
+        public async Task LoadProductAsync(int productId)
+        {
+            try
+            {
+                var response = await _productService.GetProductByIdAsync(productId);
+
+                if (response.Success && response.Data != null)
+                {
+                    Product = response.Data;
+                }
+                else
+                {
+                    _messageDialogService.ShowMessage(response.Message ?? "Product not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _messageDialogService.ShowMessage($"Error loading product: {ex.Message}");
+            }
+        }
 
         public ProductsViewModel ProductsViewModel
         {
@@ -56,20 +89,16 @@ namespace proj4.ViewModels
                 await UpdateProductAsync();
             }
 
-            // Resetowanie formularza po zapisaniu
             ResetForm();
 
-            // Nawigacja wstecz, jeśli to konieczne
             await Shell.Current.GoToAsync("../", true);
         }
 
         [RelayCommand]
         public void Cancel()
         {
-            // Resetowanie formularza
             ResetForm();
 
-            // Nawigacja wstecz, jeśli to konieczne
             Shell.Current.GoToAsync("../", true);
         }
 

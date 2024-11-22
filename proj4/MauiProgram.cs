@@ -29,84 +29,30 @@ public static class MauiProgram
 
 	private static void ConfigureServices(IServiceCollection services)
 	{
-		var appSettings = ConfigureAppSettings(services);
-		ConfigureAppServices(services, appSettings);
+		ConfigureAppServices(services);
 		ConfigureViewModels(services);
 		ConfigureViews(services);
-		// ConfigureHttpClients(services, appSettings);
 	}
 
-	private static void ConfigureAppServices(IServiceCollection services, AppSettings appSettings)
+	private static void ConfigureAppServices(IServiceCollection services)
 	{
 		services.AddSingleton<IConnectivity>(Connectivity.Current);
 		services.AddSingleton<IGeolocation>(Geolocation.Default);
 		services.AddSingleton<IMap>(Map.Default);
 
-		services.AddSingleton<IProductService, FileProductService>();
+		services.AddSingleton<IProductService, BookService>();
 		services.AddSingleton<IMessageDialogService, MauiMessageDialogService>();
-		
 	}
 
 	private static void ConfigureViewModels(IServiceCollection services)
 	{
-		// tutaj konfigurujemy viewmodele
-	
 		services.AddSingleton<ProductsViewModel>();
 		services.AddSingleton<ProductDetailsViewModel>();
-        services.AddSingleton<EditProductViewModel>();
     }
 
 	private static void ConfigureViews(IServiceCollection services)
 	{
-		// tutaj konfigurujemy widoki
 		services.AddSingleton<MainPage>();
 		services.AddTransient<ProductDetailsView>();
-        services.AddTransient<EditProductView>();
     }
-
-	// private static void ConfigureHttpClients(IServiceCollection services, AppSettings appSettings)
-	// {
-	// 	// tutaj konfigurujemy HttpClient
-
-	// 	var urliBulder = new UriBuilder(appSettings.BaseApiUrl)
-	// 	{
-	// 		Path = appSettings.ProductEndpoint.BaseUrl
-	// 	};
-
-	// 	//żeby skonfigurować HttpClienta, musimy dodać pakiet Microsoft.Extensions.Http
-	// 	services.AddHttpClient<IProductService, LibraryService>(client => client.BaseAddress = urliBulder.Uri);
-	// }
-
-	private static AppSettings ConfigureAppSettings(IServiceCollection services)
-	{
-		//pobranie ustawień z pliku konfiguracyjnego
-		// i zmapowanie ich na obiekt AppSettings
-		//potrzebujemy pakietu Microsoft.Extensions.Options.ConfigurationExtensions
-
-		//var appSettingsSection = _configuration.GetSection(nameof(AppSettings));
-		//var settings = appSettingsSection.Get<AppSettings>();
-		//services.Configure<AppSettings>(appSettingsSection); // zarejestrowanie AppSettings w kontenerze DI
-		//return settings;
-
-		var appSettingsSection = new AppSettings()
-		{
-			BaseApiUrl = "http://localhost:5237",
-			ProductEndpoint = new ProductEndpoint()
-			{
-				BaseUrl = "api/product/",
-				GetProducts = "getAll",
-				CreateProduct = "create",
-				UpdateProduct = "update",
-				SearchProducts = "search",
-			}
-		};
-
-		services.Configure<AppSettings>(options =>
-		{
-			options.BaseApiUrl = appSettingsSection.BaseApiUrl;
-			options.ProductEndpoint = appSettingsSection.ProductEndpoint;
-		});
-		return appSettingsSection;
-
-	}
 }

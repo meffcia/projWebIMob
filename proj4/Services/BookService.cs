@@ -4,18 +4,15 @@ using System.IO;
 
 namespace proj4.Services
 {
-    public class FileProductService : IProductService
+    public class BookService : IProductService
     {
-        // Określamy pełną ścieżkę do pliku w katalogu głównym projektu
         private readonly string _filePath;
 
-        public FileProductService()
+        public BookService()
         {
-            // Używamy katalogu głównego projektu
             var projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
             _filePath = Path.Combine(projectDirectory, "products.json");
 
-            // Jeśli plik nie istnieje, tworzysz go z pustą listą produktów
             if (!File.Exists(_filePath))
             {
                 File.WriteAllText(_filePath, JsonConvert.SerializeObject(new List<IProduct>()));
@@ -125,11 +122,9 @@ namespace proj4.Services
                     };
                 }
 
-                // Wczytanie istniejących produktów z pliku
                 var json = await File.ReadAllTextAsync(_filePath);
                 var products = JsonConvert.DeserializeObject<List<Book>>(json) ?? new List<Book>();
 
-                // Szukamy produktu, który chcemy zaktualizować
                 var existingProduct = products.FirstOrDefault(p => p.Id == updatedProduct.Id);
                 if (existingProduct == null)
                 {
@@ -140,7 +135,6 @@ namespace proj4.Services
                     };
                 }
 
-                // Możemy rozważyć walidację danych produktu
                 if (string.IsNullOrEmpty(updatedProduct.Title) || string.IsNullOrEmpty(updatedProduct.Author) || updatedProduct.Price <= 0)
                 {
                     return new ServiceReponse<IProduct>
@@ -150,12 +144,10 @@ namespace proj4.Services
                     };
                 }
 
-                // Aktualizujemy właściwości produktu
                 existingProduct.Title = updatedProduct.Title;
                 existingProduct.Author = updatedProduct.Author;
                 existingProduct.Price = updatedProduct.Price;
 
-                // Zapisujemy zmienione dane do pliku
                 await File.WriteAllTextAsync(_filePath, JsonConvert.SerializeObject(products));
 
                 return new ServiceReponse<IProduct>
