@@ -7,7 +7,7 @@
     <ContentPage.Content>
         <!-- ScrollView zapewni przewijanie całości zawartości -->
         <ScrollView VerticalScrollBarVisibility="Always">
-            <VerticalStackLayout Padding="20">
+            <VerticalStackLayout>
                 <!-- Przycisk dodania nowego produktu -->
                 <Button Text="Add New Product" Command="{Binding NewCommand}" HorizontalOptions="Center" />
 

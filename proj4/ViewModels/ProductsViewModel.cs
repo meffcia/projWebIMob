@@ -96,8 +96,6 @@ namespace proj4.ViewModels
                 {"Product", product ?? new Book()},
                 { "ProductId", productId },
                 {nameof(ProductsViewModel), this }
-                // { "ProductId", productId },
-                // { nameof(ProductsViewModel), this }
             });
         }
     }

@@ -10,8 +10,9 @@ namespace proj4.Services
 
         public BookService()
         {
-            var projectDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var projectDirectory = FileSystem.AppDataDirectory;
             _filePath = Path.Combine(projectDirectory, "products.json");
+
 
             if (!File.Exists(_filePath))
             {
