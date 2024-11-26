@@ -34,7 +34,7 @@ namespace proj4.ViewModels
             _messageDialogService = messageDialogService;
             _connectivity = connectivity;
 
-            // GetProductsAsync();
+            GetProductsAsync();
         }
 
         public async Task GetProductsAsync()
@@ -53,27 +53,14 @@ namespace proj4.ViewModels
             }
         }
 
-       
+        [RelayCommand]
+        public async Task Delete(IProduct product)
+        {
+            if (product == null) return;
 
-        // [RelayCommand]
-        // public async Task ShowDetails(IProduct product)
-        // {
-        //     if (_connectivity.NetworkAccess != NetworkAccess.Internet)
-        //     {
-        //         _messageDialogService.ShowMessage("Internet not avaible!");
-        //         return;
-        //     }
-
-        //     SelectedProduct = product;
-      
-
-
-        //     await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
-        //     {
-        //         {"Product",product },
-        //         {nameof(ProductsViewModel), this }
-        //     });
-        // }
+            await _productService.DeleteProductAsync(product.Id);
+            await GetProductsAsync();
+        }
 
         [RelayCommand]
         public async Task New()
@@ -88,12 +75,29 @@ namespace proj4.ViewModels
 
             await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
             {
-                {"Product",SelectedProduct },
+                {"Product", SelectedProduct },
                 {nameof(ProductsViewModel), this }
             });
         }
 
-      
+        [RelayCommand]
+        public async Task EditProduct(IProduct product)
+        {
+            if (_connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                _messageDialogService.ShowMessage("Internet not available!");
+                return;
+            }
+
+            var productId = product?.Id ?? 0;
+
+            await Shell.Current.GoToAsync(nameof(ProductDetailsView), true, new Dictionary<string, object>
+            {
+                {"Product", product ?? new Book()},
+                { "ProductId", productId },
+                {nameof(ProductsViewModel), this }
+            });
+        }
     }
 }
 

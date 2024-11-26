@@ -11,102 +11,131 @@ using System.Threading.Tasks;
 
 namespace proj4.ViewModels
 {
-    [QueryProperty(nameof(IProduct),nameof(IProduct))]
-    [QueryProperty(nameof(ProductsViewModel),nameof(ProductsViewModel))]
+    [QueryProperty(nameof(ProductId), "ProductId")]
+    [QueryProperty(nameof(IProduct), nameof(IProduct))]
+    [QueryProperty(nameof(ProductsViewModel), nameof(ProductsViewModel))]
     public partial class ProductDetailsViewModel : ObservableObject
     {
         private readonly IProductService _productService;
         private readonly IMessageDialogService _messageDialogService;
-        private readonly IGeolocation _geolocation;
-        private readonly IMap _map;
         private ProductsViewModel _productsViewModel;
-        public ProductDetailsViewModel(IProductService productService, IMessageDialogService messageDialogService, IGeolocation geolocation, IMap map)
+
+        public ProductDetailsViewModel(
+            IProductService productService,
+            IMessageDialogService messageDialogService)
         {
             _productService = productService;
             _messageDialogService = messageDialogService;
-            _geolocation = geolocation;
-            _map = map; 
+
+            ResetForm();
         }
 
         [ObservableProperty]
         private IProduct product;
+        private int _productId;
+        public int ProductId
+        {
+            get => _productId;
+            set
+            {
+                SetProperty(ref _productId, value);
+
+                Task.Run(async () => await LoadProductAsync(_productId));
+            }
+        }
+
+        public async Task LoadProductAsync(int productId)
+        {
+            try
+            {
+                var response = await _productService.GetProductByIdAsync(productId);
+
+                if (response.Success && response.Data != null)
+                {
+                    Product = response.Data;
+                }
+                else
+                {
+                    _messageDialogService.ShowMessage(response.Message ?? "Product not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _messageDialogService.ShowMessage($"Error loading product: {ex.Message}");
+            }
+        }
 
         public ProductsViewModel ProductsViewModel
         {
-            get { return _productsViewModel;}
+            get { return _productsViewModel; }
             set { _productsViewModel = value; }
         }
 
-        // [RelayCommand]
-        // public async Task Delete()
-        // {
-        //     await DeleteProduct();
-        //     await Shell.Current.GoToAsync("../", true);
-        // }
+        [RelayCommand]
+        public async Task Save()
+        {
+            if (Product == null)
+            {
+                _messageDialogService.ShowMessage("Product is null. Unable to save.");
+                return;
+            }
 
-        // public async Task DeleteProduct()
-        // {
-        //     // var result = 
-        //     await _productService.DeleteProductAsync(product.Id);
-        //     // if (result.Success)
-        //     // {
-        //         await _productsViewModel.GetProductsAsync();
-        //     // }
-        //     // else
-        //     // {
-        //     //     _messageDialogService.ShowMessage(result.Message);
-        //     // }
-            
-        // }
+            if (product.Id == 0)
+            {
+                await CreateProductAsync();
+            }
+            else
+            {
+                await UpdateProductAsync();
+            }
 
+            ResetForm();
 
-        // [RelayCommand]
-        // public async Task Save()
-        // {
-        //     if (product.Id == 0)
-        //     {
-        //         // tworzymy nowy produkt 
-        //         await CreateProductAsync();
-                
-        //     }
-        //     else
-        //     {
-        //         // aktualizujemy produkt
-        //         // await UpdateProductAsync();
-        //     }
+            await Shell.Current.GoToAsync("../", true);
+        }
 
-        //     await Shell.Current.GoToAsync("../", true);
-        // }
+        [RelayCommand]
+        public void Cancel()
+        {
+            ResetForm();
 
-        // public async Task CreateProductAsync()
-        // {
-            // var result = 
-            // await _productService.AddProductAsync(product);
-            // if (result.Success)
-            // {
-                // await _productsViewModel.GetProductsAsync();
-            // }
-            // else
-            // {
-            //     _messageDialogService.ShowMessage(result.Message);
-            // }
+            Shell.Current.GoToAsync("../", true);
+        }
 
-        // }
+        public void ResetForm()
+        {
+            Product = new Book
+            {
+                Title = null,
+                Author = null,
+                Price = 0
+            };
+        }
 
+        public async Task CreateProductAsync()
+        {
+            var result = await _productService.AddProductAsync(product);
+            if (result.Success)
+            {
+                await _productsViewModel.GetProductsAsync();
+            }
+            else
+            {
+                _messageDialogService.ShowMessage(result.Message);
+            }
+        }
 
-
-        // public async Task UpdateProductAsync()
-        // {
-        //     // var result = 
-        //     await _productService.UpdateProductAsync(product);
-        //     // if (result.Success)
-        //     // {
-        //         await _productsViewModel.GetProductsAsync();
-        //     // }
-        //     // else
-        //     // {
-        //     //     _messageDialogService.ShowMessage(result.Message);
-        //     // }
-        // }
+        public async Task UpdateProductAsync()
+        {
+            var result = await _productService.UpdateProductAsync(product);
+            if (result.Success)
+            {
+                await _productsViewModel.GetProductsAsync();
+            }
+            else
+            {
+                _messageDialogService.ShowMessage(result.Message);
+            }
+        }
     }
 }
