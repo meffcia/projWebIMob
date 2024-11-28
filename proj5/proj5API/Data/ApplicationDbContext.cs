@@ -18,36 +18,65 @@ namespace proj5API.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Konfiguracja tabeli AuthorWriter
             modelBuilder.Entity<AuthorWriter>(entity =>
             {
                 entity.HasKey(aw => new { aw.AuthorId, aw.WriterId }); // Klucz złożony
-
-                // Relacja AuthorWriter -> Author
-                entity.HasOne(aw => aw.Author)
-                    .WithMany(a => a.AuthorWriters)
-                    .HasForeignKey(aw => aw.AuthorId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                // Relacja AuthorWriter -> Writer
-                entity.HasOne(aw => aw.Writer)
-                    .WithMany(w => w.AuthorWriters)
-                    .HasForeignKey(aw => aw.WriterId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                // Opcjonalnie: nazwa tabeli w bazie danych
                 entity.ToTable("AuthorWriters");
             });
 
-            // Inne konfiguracje (opcjonalnie)
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.Book)
-                .WithOne(b => b.Review)
-                .HasForeignKey<Review>(r => r.BookId)
-                .OnDelete(DeleteBehavior.Cascade);
+            // Konfiguracja relacji między Book i Review
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasKey(r => r.Id);
 
-            modelBuilder.Entity<Book>()
-                .Property(b => b.Price)
-                .HasColumnType("decimal(18,2)");
+                entity.Property(w => w.Content)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
+            // Konfiguracja dla encji Book
+            modelBuilder.Entity<Book>(entity =>
+            {
+                entity.HasKey(b => b.Id);
+
+                entity.HasOne<Author>()
+                    .WithMany()
+                    .HasForeignKey(b => b.AuthorId)
+                    .OnDelete(DeleteBehavior.Restrict); // Brak automatycznego kasowania autora
+
+                entity.Property(b => b.Price)
+                    .HasColumnType("decimal(18,2)"); // Precyzyjny typ dla ceny
+
+                    
+                entity.HasOne(b => b.Review)
+                    .WithOne()
+                    .HasForeignKey<Review>(r => r.BookId) // Klucz obcy w tabeli Review
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Konfiguracja dla encji Writer (opcjonalnie, jeśli potrzebujesz)
+            modelBuilder.Entity<Writer>(entity =>
+            {
+                entity.HasKey(w => w.Id);
+
+                entity.Property(w => w.Name)
+                    .IsRequired()
+                    .HasMaxLength(100); // Maksymalna długość imienia
+
+                entity.Property(w => w.Surname)
+                    .IsRequired()
+                    .HasMaxLength(100); // Maksymalna długość nazwiska
+            });
+
+            modelBuilder.Entity<Author>(entity =>
+            {
+                entity.HasKey(w => w.Id);
+
+                entity.Property(w => w.Name)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
         }
     }
 }

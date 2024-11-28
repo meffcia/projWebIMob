@@ -31,7 +31,8 @@ namespace proj5API.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -91,7 +92,8 @@ namespace proj5API.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -103,64 +105,58 @@ namespace proj5API.Migrations
 
             modelBuilder.Entity("proj5API.Models.Writer", b =>
                 {
-                    b.Property<int>("WriterId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WriterId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("WriterId");
+                    b.HasKey("Id");
 
                     b.ToTable("Writers");
                 });
 
             modelBuilder.Entity("proj5API.Models.AuthorWriter", b =>
                 {
-                    b.HasOne("proj5API.Models.Author", "Author")
+                    b.HasOne("proj5API.Models.Author", null)
                         .WithMany("AuthorWriters")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("proj5API.Models.Writer", "Writer")
+                    b.HasOne("proj5API.Models.Writer", null)
                         .WithMany("AuthorWriters")
                         .HasForeignKey("WriterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Writer");
                 });
 
             modelBuilder.Entity("proj5API.Models.Book", b =>
                 {
-                    b.HasOne("proj5API.Models.Author", "Author")
+                    b.HasOne("proj5API.Models.Author", null)
                         .WithMany()
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("proj5API.Models.Review", b =>
                 {
-                    b.HasOne("proj5API.Models.Book", "Book")
+                    b.HasOne("proj5API.Models.Book", null)
                         .WithOne("Review")
                         .HasForeignKey("proj5API.Models.Review", "BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("proj5API.Models.Author", b =>

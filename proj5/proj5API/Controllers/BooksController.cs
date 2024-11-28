@@ -19,7 +19,10 @@ public class BooksController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
     {
-        return await _context.Books.ToListAsync();
+        var books = await _context.Books
+            .Include(b => b.Review) // Wczytanie powiązanej recenzji
+            .ToListAsync();
+        return books;
     }
 
     [HttpGet("{id}")]
@@ -33,10 +36,28 @@ public class BooksController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Book>> PostBook(Book book)
     {
+        // Sprawdzanie czy autor istnieje
+        if (!_context.Authors.Any(a => a.Id == book.AuthorId))
+        {
+            return BadRequest("The specified author does not exist.");
+        }
+
+        // Tworzymy książkę
         _context.Books.Add(book);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(); // Zapisujemy książkę, aby mieć przypisany jej Id
+
+        // Tworzymy recenzję i przypisujemy BookId
+        if (book.Review != null)
+        {
+            book.Review.BookId = book.Id; // Teraz BookId jest ustawione po zapisaniu książki
+            _context.Reviews.Add(book.Review); // Dodajemy recenzję do kontekstu
+            await _context.SaveChangesAsync(); // Zapisujemy recenzję
+        }
+
+        // Zwracamy utworzoną książkę z przypisaną recenzją
         return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
     }
+
 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutBook(int id, Book book)

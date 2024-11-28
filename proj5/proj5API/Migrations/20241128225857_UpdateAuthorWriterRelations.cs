@@ -27,7 +27,7 @@ namespace proj5API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace proj5API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -58,14 +58,14 @@ namespace proj5API.Migrations
                 name: "Writers",
                 columns: table => new
                 {
-                    WriterId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Writers", x => x.WriterId);
+                    table.PrimaryKey("PK_Writers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,7 +88,7 @@ namespace proj5API.Migrations
                         name: "FK_AuthorWriters_Writers_WriterId",
                         column: x => x.WriterId,
                         principalTable: "Writers",
-                        principalColumn: "WriterId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -114,7 +114,7 @@ namespace proj5API.Migrations
                 column: "AuthorId",
                 principalTable: "Authors",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
