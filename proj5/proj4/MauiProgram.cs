@@ -47,6 +47,18 @@ public static class MauiProgram
             client.DefaultRequestHeaders.Add("Accept", "application/json"); 
         });
 
+		services.AddHttpClient<IWriterService, WriterService>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:5062/api/Writer"); 
+            client.DefaultRequestHeaders.Add("Accept", "application/json"); 
+        });
+
+		services.AddHttpClient<IAuthorService, AuthorService>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:5062/api/Author"); 
+            client.DefaultRequestHeaders.Add("Accept", "application/json"); 
+        });
+
         services.AddSingleton<IMessageDialogService, MauiMessageDialogService>();
     }
 
@@ -54,6 +66,10 @@ public static class MauiProgram
     private static void ConfigureViewModels(IServiceCollection services)
 	{
 		services.AddSingleton<MainViewModel>();
+		services.AddSingleton<WritersViewModel>();
+		services.AddSingleton<WriterDetailsViewModel>();
+		services.AddSingleton<AuthorsViewModel>();
+		services.AddSingleton<AuthorDetailsViewModel>();
 		services.AddSingleton<ProductsViewModel>();
 		services.AddSingleton<ProductDetailsViewModel>();
     }
@@ -61,6 +77,10 @@ public static class MauiProgram
 	private static void ConfigureViews(IServiceCollection services)
 	{
 		services.AddSingleton<MainPage>();
+		services.AddSingleton<WriterMainPage>();
+		services.AddTransient<WriterDetailsView>();
+		services.AddSingleton<AuthorMainPage>();
+		services.AddTransient<AuthorDetailsView>();
 		services.AddSingleton<BookMainPage>();
 		services.AddTransient<ProductDetailsView>();
     }

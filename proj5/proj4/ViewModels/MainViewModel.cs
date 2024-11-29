@@ -34,7 +34,7 @@ namespace proj4.ViewModels
         [RelayCommand]
         public async Task ShowAuthors()
         {
-            await Shell.Current.GoToAsync(nameof(BookMainPage), true, new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(AuthorMainPage), true, new Dictionary<string, object>
             {
             });
         }
@@ -42,7 +42,7 @@ namespace proj4.ViewModels
         [RelayCommand]
         public async Task ShowWriters()
         {
-            await Shell.Current.GoToAsync(nameof(BookMainPage), true, new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(WriterMainPage), true, new Dictionary<string, object>
             {
             });
         }
