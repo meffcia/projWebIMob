@@ -1,18 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using proj4.MessageBox;
-using proj4.Models;
 using proj4.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using proj5.Domain.Models;
 
 namespace proj4.ViewModels
 {
     [QueryProperty(nameof(ProductId), "ProductId")]
-    [QueryProperty(nameof(IProduct), nameof(IProduct))]
+    [QueryProperty(nameof(Book), nameof(Book))]
     [QueryProperty(nameof(ProductsViewModel), nameof(ProductsViewModel))]
     public partial class ProductDetailsViewModel : ObservableObject
     {
@@ -31,7 +31,7 @@ namespace proj4.ViewModels
         }
 
         [ObservableProperty]
-        private IProduct product;
+        private Book product;
         private int _productId;
         public int ProductId
         {
@@ -106,8 +106,8 @@ namespace proj4.ViewModels
         {
             Product = new Book
             {
-                Title = null,
-                Author = null,
+                Title = "default",
+                AuthorId = 0,
                 Price = 0
             };
         }

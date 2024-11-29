@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using proj5API.Models;
+using proj5.Domain.Models;
 
 namespace proj5API.Data
 {

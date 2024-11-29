@@ -1,4 +1,4 @@
-﻿namespace proj5API.Models
+﻿namespace proj5.Domain.Models
 {
     public class Book
     {

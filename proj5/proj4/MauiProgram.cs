@@ -53,6 +53,7 @@ public static class MauiProgram
 
     private static void ConfigureViewModels(IServiceCollection services)
 	{
+		services.AddSingleton<MainViewModel>();
 		services.AddSingleton<ProductsViewModel>();
 		services.AddSingleton<ProductDetailsViewModel>();
     }
@@ -60,6 +61,7 @@ public static class MauiProgram
 	private static void ConfigureViews(IServiceCollection services)
 	{
 		services.AddSingleton<MainPage>();
+		services.AddSingleton<BookMainPage>();
 		services.AddTransient<ProductDetailsView>();
     }
 }

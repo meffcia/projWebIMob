@@ -1,154 +1,158 @@
 using Newtonsoft.Json;
-using proj4.Models;
-using proj4.Services;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using proj5.Domain.Models;
 
 namespace proj4.Services
 {
     public class BookService : IProductService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "http://localhost:5062/api/books"; 
+        private readonly string _apiBaseUrl = "http://localhost:5062/api/books";
 
         public BookService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<ServiceReponse<IProduct>> GetProductByIdAsync(int productId)
+        // Pobierz książkę na podstawie ID
+        public async Task<ServiceReponse<Book>> GetProductByIdAsync(int bookId)
         {
             try
             {
-                var response = await _httpClient.GetStringAsync($"{_apiBaseUrl}/{productId}");
-                var product = JsonConvert.DeserializeObject<Book>(response);
-                return new ServiceReponse<IProduct>
+                var response = await _httpClient.GetStringAsync($"{_apiBaseUrl}/{bookId}");
+                var book = JsonConvert.DeserializeObject<Book>(response);
+                return new ServiceReponse<Book>
                 {
-                    Data = product,
+                    Data = book,
                     Success = true
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceReponse<IProduct>
+                return new ServiceReponse<Book>
                 {
-                    Message = $"Error retrieving product: {ex.Message}",
+                    Message = $"Error retrieving book: {ex.Message}",
                     Success = false
                 };
             }
         }
 
-        public async Task<ServiceReponse<List<IProduct>>> GetAllProductAsync()
+        // Pobierz wszystkie książki
+        public async Task<ServiceReponse<List<Book>>> GetAllProductAsync()
         {
             try
             {
                 var response = await _httpClient.GetStringAsync(_apiBaseUrl);
-                var products = JsonConvert.DeserializeObject<List<Book>>(response);
-                return new ServiceReponse<List<IProduct>>
+                var books = JsonConvert.DeserializeObject<List<Book>>(response);
+                return new ServiceReponse<List<Book>>
                 {
-                    Data = products.Cast<IProduct>().ToList(),
+                    Data = books,
                     Success = true
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceReponse<List<IProduct>>
+                return new ServiceReponse<List<Book>>
                 {
-                    Message = $"Error loading products: {ex.Message}",
+                    Message = $"Error loading books: {ex.Message}",
                     Success = false
                 };
             }
         }
 
-        public async Task<ServiceReponse<IProduct>> AddProductAsync(IProduct product)
+        // Dodaj nową książkę
+        public async Task<ServiceReponse<Book>> AddProductAsync(Book book)
         {
             try
             {
-                var content = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");
+                var content = new StringContent(JsonConvert.SerializeObject(book), Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(_apiBaseUrl, content);
                 if (response.IsSuccessStatusCode)
                 {
-                    var newProduct = JsonConvert.DeserializeObject<Book>(await response.Content.ReadAsStringAsync());
-                    return new ServiceReponse<IProduct>
+                    var newBook = JsonConvert.DeserializeObject<Book>(await response.Content.ReadAsStringAsync());
+                    return new ServiceReponse<Book>
                     {
-                        Data = newProduct,
+                        Data = newBook,
                         Success = true
                     };
                 }
 
-                return new ServiceReponse<IProduct>
+                return new ServiceReponse<Book>
                 {
-                    Message = "Failed to add product.",
+                    Message = "Failed to add book.",
                     Success = false
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceReponse<IProduct>
+                return new ServiceReponse<Book>
                 {
-                    Message = $"Error adding product: {ex.Message}",
+                    Message = $"Error adding book: {ex.Message}",
                     Success = false
                 };
             }
         }
 
-        public async Task<ServiceReponse<IProduct>> UpdateProductAsync(IProduct product)
+        // Aktualizuj książkę
+        public async Task<ServiceReponse<Book>> UpdateProductAsync(Book book)
         {
             try
             {
-                var content = new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PutAsync($"{_apiBaseUrl}/{product.Id}", content);
+                var content = new StringContent(JsonConvert.SerializeObject(book), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PutAsync($"{_apiBaseUrl}/{book.Id}", content);
                 if (response.IsSuccessStatusCode)
                 {
-                    var updatedProduct = JsonConvert.DeserializeObject<Book>(await response.Content.ReadAsStringAsync());
-                    return new ServiceReponse<IProduct>
+                    var updatedBook = JsonConvert.DeserializeObject<Book>(await response.Content.ReadAsStringAsync());
+                    return new ServiceReponse<Book>
                     {
-                        Data = updatedProduct,
+                        Data = updatedBook,
                         Success = true
                     };
                 }
 
-                return new ServiceReponse<IProduct>
+                return new ServiceReponse<Book>
                 {
-                    Message = "Failed to update product.",
+                    Message = "Failed to update book.",
                     Success = false
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceReponse<IProduct>
+                return new ServiceReponse<Book>
                 {
-                    Message = $"Error updating product: {ex.Message}",
+                    Message = $"Error updating book: {ex.Message}",
                     Success = false
                 };
             }
         }
 
-        public async Task<ServiceReponse<IProduct>> DeleteProductAsync(int productId)
+        // Usuń książkę
+        public async Task<ServiceReponse<Book>> DeleteProductAsync(int bookId)
         {
             try
             {
-                var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}/{productId}");
+                var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}/{bookId}");
                 if (response.IsSuccessStatusCode)
                 {
-                    return new ServiceReponse<IProduct>
+                    return new ServiceReponse<Book>
                     {
                         Success = true
                     };
                 }
 
-                return new ServiceReponse<IProduct>
+                return new ServiceReponse<Book>
                 {
-                    Message = "Failed to delete product.",
+                    Message = "Failed to delete book.",
                     Success = false
                 };
             }
             catch (Exception ex)
             {
-                return new ServiceReponse<IProduct>
+                return new ServiceReponse<Book>
                 {
-                    Message = $"Error deleting product: {ex.Message}",
+                    Message = $"Error deleting book: {ex.Message}",
                     Success = false
                 };
             }

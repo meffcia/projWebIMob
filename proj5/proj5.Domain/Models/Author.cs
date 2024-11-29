@@ -1,10 +1,9 @@
-namespace proj5API.Models
+namespace proj5.Domain.Models
 {
-    public class Writer
+    public class Author
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Surname { get; set; }
         public ICollection<AuthorWriter> AuthorWriters { get; set; } = new List<AuthorWriter>();
     }
 }

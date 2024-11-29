@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using proj4.MessageBox;
-using proj4.Models;
 using proj4.Services;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using proj5.Domain.Models;
 
 namespace proj4.ViewModels
 {
@@ -20,11 +20,11 @@ namespace proj4.ViewModels
     
 
         [ObservableProperty]
-        private ObservableCollection<IProduct> _products;
+        private ObservableCollection<Book> _products;
 
 
         [ObservableProperty]
-        private IProduct _selectedProduct;
+        private Book _selectedProduct;
 
    
 
@@ -49,12 +49,12 @@ namespace proj4.ViewModels
             var result = await _productService.GetAllProductAsync();
             if (result.Success)
             {
-                Products = new ObservableCollection<IProduct>(result.Data);
+                Products = new ObservableCollection<Book>(result.Data);
             }
         }
 
         [RelayCommand]
-        public async Task Delete(IProduct product)
+        public async Task Delete(Book product)
         {
             if (product == null) return;
 
@@ -81,7 +81,7 @@ namespace proj4.ViewModels
         }
 
         [RelayCommand]
-        public async Task EditProduct(IProduct product)
+        public async Task EditProduct(Book product)
         {
             if (_connectivity.NetworkAccess != NetworkAccess.Internet)
             {

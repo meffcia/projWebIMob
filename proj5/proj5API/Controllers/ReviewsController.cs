@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using proj5API.Data;
-using proj5API.Models;
+using proj5.Domain.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
