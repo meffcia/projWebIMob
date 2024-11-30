@@ -15,12 +15,16 @@ namespace proj4.ViewModels
     public partial class ProductsViewModel : ObservableObject
     {
         private readonly IProductService _productService;
+        private readonly IAuthorService _authorService;
+        private readonly IReviewService _reviewService;
         private readonly IMessageDialogService _messageDialogService;
         private readonly IConnectivity _connectivity;
     
 
         [ObservableProperty]
         private ObservableCollection<Book> _products;
+        [ObservableProperty]
+        private ObservableCollection<Author> _authors;
 
 
         [ObservableProperty]
@@ -28,9 +32,11 @@ namespace proj4.ViewModels
 
    
 
-        public ProductsViewModel(IProductService productService, IMessageDialogService messageDialogService, IConnectivity connectivity)
+        public ProductsViewModel(IProductService productService, IAuthorService authorService, IReviewService reviewService, IMessageDialogService messageDialogService, IConnectivity connectivity)
         {
             _productService = productService;
+            _reviewService = reviewService;
+            _authorService = authorService;
             _messageDialogService = messageDialogService;
             _connectivity = connectivity;
 

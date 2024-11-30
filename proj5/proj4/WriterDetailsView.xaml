@@ -17,12 +17,12 @@
             </Grid.ColumnDefinitions>
 
             <!-- First Name Field -->
-            <Label Text="First Name:" Grid.Row="0" Grid.Column="0" />
+            <Label Text="Name:" Grid.Row="0" Grid.Column="0" />
             <Entry Text="{Binding Name, Mode=TwoWay, TargetNullValue=''}" 
                    Grid.Row="0" Grid.Column="1" Margin="0,5,0,10" />
 
             <!-- Last Name Field -->
-            <Label Text="Last Name:" Grid.Row="1" Grid.Column="0" />
+            <Label Text="Surname:" Grid.Row="1" Grid.Column="0" />
             <Entry Text="{Binding Surname, Mode=TwoWay, TargetNullValue=''}" 
                    Grid.Row="1" Grid.Column="1" Margin="0,5,0,10" />
         </Grid>

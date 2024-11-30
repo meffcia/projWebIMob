@@ -23,7 +23,7 @@
                    Grid.Row="0" Grid.Column="1" Margin="0,5,0,10" />
 
             <Label Text="Author:" Grid.Row="1" Grid.Column="0" />
-            <Entry Text="{Binding Author, Mode=TwoWay, TargetNullValue=''}" 
+            <Entry Text="{Binding AuthorId, Mode=TwoWay, TargetNullValue=''}" 
                    Grid.Row="1" Grid.Column="1" Margin="0,5,0,10" />
 
             <Label Text="Price:" Grid.Row="3" Grid.Column="0" />

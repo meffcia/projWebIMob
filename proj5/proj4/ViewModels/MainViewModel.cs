@@ -17,7 +17,6 @@ namespace proj4.ViewModels
         private MainViewModel _mainViewModel;
 
         public MainViewModel(
-            IProductService productService,
             IMessageDialogService messageDialogService)
         {
             _messageDialogService = messageDialogService;

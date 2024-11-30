@@ -3,6 +3,7 @@ using proj5.Domain.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace proj4.Services
@@ -67,25 +68,35 @@ namespace proj4.Services
         // Dodaj nowego pisarza
         public async Task<ServiceReponse<Writer>> AddWriterAsync(Writer writer)
         {
-            var response = await _httpClient.PostAsJsonAsync("Writers", writer);
+            try
+            {
+                var content = new StringContent(JsonConvert.SerializeObject(writer), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(_apiBaseUrl, content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var createdWriter = JsonConvert.DeserializeObject<Writer>(await response.Content.ReadAsStringAsync());
+                    return new ServiceReponse<Writer>
+                    {
+                        Data = createdWriter,
+                        Success = true,
+                        Message = "Writer added successfully"
+                    };
+                }
 
-            if (!response.IsSuccessStatusCode)
+                return new ServiceReponse<Writer>
+                {
+                    Message = "Failed to add writer.",
+                    Success = false
+                };
+            }
+            catch (Exception ex)
             {
                 return new ServiceReponse<Writer>
                 {
-                    Success = false,
-                    Message = "Failed to add writer"
+                    Message = $"Error adding writer: {ex.Message}",
+                    Success = false
                 };
             }
-
-            var createdWriter = await response.Content.ReadFromJsonAsync<Writer>();
-
-            return new ServiceReponse<Writer>
-            {
-                Data = createdWriter,
-                Success = true,
-                Message = "Writer added successfully"
-            };
         }
 
         // Zaktualizuj pisarza
@@ -115,22 +126,32 @@ namespace proj4.Services
         // Usuń pisarza
         public async Task<ServiceReponse<Writer>> DeleteWriterAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"Writers/{id}");
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
+                var response = await _httpClient.DeleteAsync($"Writers/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ServiceReponse<Writer>
+                    {
+                        Success = true,
+                        Message = "Writer deleted successfully"
+                    };
+                }
+
                 return new ServiceReponse<Writer>
                 {
                     Success = false,
                     Message = "Failed to delete writer"
                 };
             }
-
-            return new ServiceReponse<Writer>
+            catch (Exception ex)
             {
-                Success = true,
-                Message = "Writer deleted successfully"
-            };
+                return new ServiceReponse<Writer>
+                {
+                    Message = $"Error deleting book: {ex.Message}",
+                    Success = false
+                };
+            }
         }
     }
 }

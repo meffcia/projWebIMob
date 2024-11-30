@@ -18,6 +18,7 @@ namespace proj4.ViewModels
     {
         private readonly IProductService _productService;
         private readonly IMessageDialogService _messageDialogService;
+        private readonly IAuthorService _authorService;
         private ProductsViewModel _productsViewModel;
 
         public ProductDetailsViewModel(
@@ -29,6 +30,8 @@ namespace proj4.ViewModels
 
             ResetForm();
         }
+        [ObservableProperty]
+        private List<Author> authors;
 
         [ObservableProperty]
         private Book product;
@@ -53,6 +56,7 @@ namespace proj4.ViewModels
                 if (response.Success && response.Data != null)
                 {
                     Product = response.Data;
+                    await LoadAuthorsAsync();
                 }
                 else
                 {
@@ -62,6 +66,26 @@ namespace proj4.ViewModels
             catch (Exception ex)
             {
                 _messageDialogService.ShowMessage($"Error loading product: {ex.Message}");
+            }
+        }
+
+        private async Task LoadAuthorsAsync()
+        {
+            try
+            {
+                var response = await _authorService.GetAllAuthorAsync(); // Pobieramy listę autorów
+                if (response.Success && response.Data != null)
+                {
+                    Authors = response.Data.ToList(); // Przypisujemy autorów do właściwości
+                }
+                else
+                {
+                    _messageDialogService.ShowMessage(response.Message ?? "Authors not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                _messageDialogService.ShowMessage($"Error loading authors: {ex.Message}");
             }
         }
 

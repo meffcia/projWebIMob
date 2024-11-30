@@ -59,6 +59,12 @@ public static class MauiProgram
             client.DefaultRequestHeaders.Add("Accept", "application/json"); 
         });
 
+		services.AddHttpClient<IReviewService, ReviewService>(client =>
+        {
+            client.BaseAddress = new Uri("https://localhost:5062/api/Review"); 
+            client.DefaultRequestHeaders.Add("Accept", "application/json"); 
+        });
+
         services.AddSingleton<IMessageDialogService, MauiMessageDialogService>();
     }
 

@@ -5,7 +5,7 @@
              Title="Formularz danych książki">
 
     <VerticalStackLayout Padding="20" Spacing="15">
-        <Grid BindingContext="{Binding Product}">
+        <Grid BindingContext="{Binding Author}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -18,17 +18,9 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Text="Title:" Grid.Row="0" Grid.Column="0" />
-            <Entry Text="{Binding Title, Mode=TwoWay, TargetNullValue=''}" 
+            <Label Text="Name:" Grid.Row="0" Grid.Column="0" />
+            <Entry Text="{Binding Name, Mode=TwoWay, TargetNullValue=''}" 
                    Grid.Row="0" Grid.Column="1" Margin="0,5,0,10" />
-
-            <Label Text="Author:" Grid.Row="1" Grid.Column="0" />
-            <Entry Text="{Binding Author, Mode=TwoWay, TargetNullValue=''}" 
-                   Grid.Row="1" Grid.Column="1" Margin="0,5,0,10" />
-
-            <Label Text="Price:" Grid.Row="3" Grid.Column="0" />
-            <Entry Text="{Binding Price, Mode=TwoWay, TargetNullValue='0', StringFormat='{}{0:F2}'}" 
-                   Grid.Row="3" Grid.Column="1" Keyboard="Numeric" Margin="0,5,0,10" />
         </Grid>
 
         <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">

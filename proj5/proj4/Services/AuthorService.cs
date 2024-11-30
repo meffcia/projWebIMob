@@ -9,7 +9,7 @@ namespace proj4.Services
     public class AuthorService : IAuthorService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "http://localhost:5062/api/authors"; // Zmieniamy endpoint na /authors
+        private readonly string _apiBaseUrl = "http://localhost:5062/api/Authors"; // Zmieniamy endpoint na /authors
 
         public AuthorService(HttpClient httpClient)
         {
