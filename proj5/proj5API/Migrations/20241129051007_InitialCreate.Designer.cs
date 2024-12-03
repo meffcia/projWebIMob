@@ -11,8 +11,8 @@ using proj5API.Data;
 namespace proj5API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241128225857_UpdateAuthorWriterRelations")]
-    partial class UpdateAuthorWriterRelations
+    [Migration("20241129051007_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace proj5API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("proj5API.Models.Author", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace proj5API.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("proj5API.Models.AuthorWriter", b =>
+            modelBuilder.Entity("proj5.Domain.Models.AuthorWriter", b =>
                 {
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
@@ -57,7 +57,7 @@ namespace proj5API.Migrations
                     b.ToTable("AuthorWriters", (string)null);
                 });
 
-            modelBuilder.Entity("proj5API.Models.Book", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace proj5API.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("proj5API.Models.Review", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Review", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,7 +106,7 @@ namespace proj5API.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("proj5API.Models.Writer", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Writer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,51 +129,51 @@ namespace proj5API.Migrations
                     b.ToTable("Writers");
                 });
 
-            modelBuilder.Entity("proj5API.Models.AuthorWriter", b =>
+            modelBuilder.Entity("proj5.Domain.Models.AuthorWriter", b =>
                 {
-                    b.HasOne("proj5API.Models.Author", null)
+                    b.HasOne("proj5.Domain.Models.Author", null)
                         .WithMany("AuthorWriters")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("proj5API.Models.Writer", null)
+                    b.HasOne("proj5.Domain.Models.Writer", null)
                         .WithMany("AuthorWriters")
                         .HasForeignKey("WriterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("proj5API.Models.Book", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Book", b =>
                 {
-                    b.HasOne("proj5API.Models.Author", null)
+                    b.HasOne("proj5.Domain.Models.Author", null)
                         .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("proj5API.Models.Review", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Review", b =>
                 {
-                    b.HasOne("proj5API.Models.Book", null)
+                    b.HasOne("proj5.Domain.Models.Book", null)
                         .WithOne("Review")
-                        .HasForeignKey("proj5API.Models.Review", "BookId")
+                        .HasForeignKey("proj5.Domain.Models.Review", "BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("proj5API.Models.Author", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Author", b =>
                 {
                     b.Navigation("AuthorWriters");
                 });
 
-            modelBuilder.Entity("proj5API.Models.Book", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Book", b =>
                 {
                     b.Navigation("Review")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("proj5API.Models.Writer", b =>
+            modelBuilder.Entity("proj5.Domain.Models.Writer", b =>
                 {
                     b.Navigation("AuthorWriters");
                 });

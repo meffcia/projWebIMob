@@ -1,4 +1,6 @@
-﻿namespace proj5.Domain.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace proj5.Domain.Models
 {
     public class Book
     {

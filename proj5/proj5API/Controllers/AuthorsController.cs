@@ -44,10 +44,8 @@ namespace proj5API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAuthor(int id, Author author)
         {
-            if (id != author.Id)
-            {
-                return BadRequest();
-            }
+            // Ustaw `Id` na podstawie wartości z parametru URL
+            author.Id = id;
 
             _context.Entry(author).State = EntityState.Modified;
 
@@ -100,5 +98,26 @@ namespace proj5API.Controllers
         {
             return _context.Authors.Any(e => e.Id == id);
         }
+
+        [HttpPost("{authorId}/writers/{writerId}")]
+        public async Task<IActionResult> AddWriterToAuthor(int authorId, int writerId)
+        {
+            var author = await _context.Authors.FindAsync(authorId);
+            var writer = await _context.Writers.FindAsync(writerId);
+
+            if (author == null || writer == null) return NotFound();
+
+            var authorWriter = new AuthorWriter
+            {
+                AuthorId = authorId,
+                WriterId = writerId
+            };
+
+            _context.Add(authorWriter);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }

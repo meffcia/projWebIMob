@@ -43,10 +43,7 @@ namespace proj5API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutWriter(int id, Writer writer)
         {
-            if (id != writer.Id)
-            {
-                return BadRequest();
-            }
+            writer.Id = id;
 
             _context.Entry(writer).State = EntityState.Modified;
 

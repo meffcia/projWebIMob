@@ -28,9 +28,12 @@ public class BooksController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Book>> GetBook(int id)
     {
-        var book = await _context.Books.FindAsync(id);
+        var book = await _context.Books
+            .Include(b => b.Review)
+            .FirstOrDefaultAsync(b => b.Id == id);
+
         if (book == null) return NotFound();
-        return book;
+        return Ok(book);
     }
 
     [HttpPost]
@@ -45,14 +48,6 @@ public class BooksController : ControllerBase
         // Tworzymy książkę
         _context.Books.Add(book);
         await _context.SaveChangesAsync(); // Zapisujemy książkę, aby mieć przypisany jej Id
-
-        // Tworzymy recenzję i przypisujemy BookId
-        if (book.Review != null)
-        {
-            book.Review.BookId = book.Id; // Teraz BookId jest ustawione po zapisaniu książki
-            _context.Reviews.Add(book.Review); // Dodajemy recenzję do kontekstu
-            await _context.SaveChangesAsync(); // Zapisujemy recenzję
-        }
 
         // Zwracamy utworzoną książkę z przypisaną recenzją
         return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
