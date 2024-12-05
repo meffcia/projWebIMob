@@ -45,7 +45,7 @@ app.UseStaticFiles();
 
 
 // Enable CORS policy globally
-// app.UseCors();//"AllowAll");
+//app.UseCors("AllowAll");
 app.UseCors("AllowSpecificOrigin");
 
 app.UseRouting();

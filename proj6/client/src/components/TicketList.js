@@ -32,9 +32,6 @@ function TicketList() {//}= ({ connection }) => {
 
     // Pobieranie początkowych ticketów z API
     const fetchTickets = async () => {
-        const response = await fetch('/api/ticket'); // Upewnij się, że port jest poprawny
-        const data = await response.json();
-        setTickets(data);
     };
         
     fetchTickets();
@@ -45,35 +42,8 @@ function TicketList() {//}= ({ connection }) => {
   }, []);
 
   const updateTicketStatus = async (id, newStatus) => {
-    try {
-      // Znajdź aktualny ticket
-      const ticketToUpdate = tickets.find(ticket => ticket.id === id);
-      if (!ticketToUpdate) {
-        console.error("Ticket not found in state");
-        return;
-      }
-  
-      // Utwórz obiekt z zaktualizowanym statusem
-      const updatedTicket = { ...ticketToUpdate, status: newStatus };
-  
-      // Wyślij żądanie do API
-      const response = await fetch(`/api/ticket/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedTicket),
-      });
-  
-      if (response.ok) {
-        console.log("Ticket updated successfully");
-      } else {
-        console.error("Failed to update ticket status:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error updating ticket status:", error);
-    }
   };
+
 
   return (
     <div>
@@ -100,4 +70,3 @@ function TicketList() {//}= ({ connection }) => {
 }
 
 export default TicketList;
-
