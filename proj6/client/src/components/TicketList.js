@@ -9,7 +9,7 @@ const TicketList = ({ /*connection,*/ isAdmin }) => {
   useEffect(() => {
 
     const connection = new signalR.HubConnectionBuilder()
-  .withUrl("/ticketHub") // URL backendu
+  .withUrl("/ticketHub", {transport: signalR.HttpTransportType.LongPolling}) // URL backendu
   // // .withAutomaticReconnect()
   // // .configureLogging(signalR.LogLevel.Information)
   .build();
