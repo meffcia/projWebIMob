@@ -44,6 +44,37 @@ function TicketList() {//}= ({ connection }) => {
     };
   }, []);
 
+  const updateTicketStatus = async (id, newStatus) => {
+    try {
+      // Znajdź aktualny ticket
+      const ticketToUpdate = tickets.find(ticket => ticket.id === id);
+      if (!ticketToUpdate) {
+        console.error("Ticket not found in state");
+        return;
+      }
+  
+      // Utwórz obiekt z zaktualizowanym statusem
+      const updatedTicket = { ...ticketToUpdate, status: newStatus };
+  
+      // Wyślij żądanie do API
+      const response = await fetch(`/api/ticket/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedTicket),
+      });
+  
+      if (response.ok) {
+        console.log("Ticket updated successfully");
+      } else {
+        console.error("Failed to update ticket status:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating ticket status:", error);
+    }
+  };
+
   return (
     <div>
       <h1>Tickets</h1>
@@ -52,6 +83,15 @@ function TicketList() {//}= ({ connection }) => {
           <li key={ticket.id}>
             <strong>{ticket.title}</strong> - {ticket.status}
             <p>{ticket.description}</p>
+            {/* Przyciski do zmiany statusu */}
+            <div>
+              <button onClick={() => updateTicketStatus(ticket.id, "In Progress")}>
+                Set In Progress
+              </button>
+              <button onClick={() => updateTicketStatus(ticket.id, "Resolved")}>
+                Resolve
+              </button>
+            </div>
           </li>
         ))}
       </ul>

@@ -63,7 +63,7 @@ namespace proj6.Controllers
             await _context.SaveChangesAsync();
 
             // Powiadomienie przez SignalR
-            await _hubContext.Clients.All.SendAsync("ReceiveTicketUpdate", $"Ticket updated: {ticket.Title}");
+            await _hubContext.Clients.All.SendAsync("ReceiveTicketUpdate", ticket);
 
             return NoContent(); // Successful update with no content returned
         }
