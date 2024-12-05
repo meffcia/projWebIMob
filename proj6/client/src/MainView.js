@@ -14,7 +14,7 @@ const MainView = () => {
             <h1>Real-Time Ticket Management</h1>
             <Notification connection={connection} />
             <TicketForm onTicketCreated={(ticket) => console.log('Ticket created:', ticket)} />
-            <TicketList connection={connection} />
+            <TicketList /*connection={connection} */isAdmin={false} />
         </div>
     );
 };
