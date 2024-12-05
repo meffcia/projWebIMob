@@ -9,8 +9,8 @@ function TicketList() {//}= ({ connection }) => {
 
     const connection = new signalR.HubConnectionBuilder()
   .withUrl("/ticketHub") // URL backendu
-  // .withAutomaticReconnect()
-  // .configureLogging(signalR.LogLevel.Information)
+  .withAutomaticReconnect()
+  .configureLogging(signalR.LogLevel.Information)
   .build();
 
   connection.start()
@@ -32,7 +32,7 @@ function TicketList() {//}= ({ connection }) => {
 
     // Pobieranie początkowych ticketów z API
     const fetchTickets = async () => {
-        const response = await fetch('http://localhost:5224/api/ticket'); // Upewnij się, że port jest poprawny
+        const response = await fetch('api/ticket'); // Upewnij się, że port jest poprawny
         const data = await response.json();
         setTickets(data);
     };
