@@ -7,17 +7,14 @@ import * as signalR from '@microsoft/signalr';
 
 
 const connection = new signalR.HubConnectionBuilder()
-  .withUrl("http://localhost:5224/ticketHub", {
-    transport: signalR.HttpTransportType.WebSockets, // Upewnij się, że WebSocket jest obsługiwany
-    withCredentials: true,
-  }) // URL backendu
-  .withAutomaticReconnect()
-  .configureLogging(signalR.LogLevel.Information)
+  .withUrl("/ticketHub") // URL backendu
+  // .withAutomaticReconnect()
+  // .configureLogging(signalR.LogLevel.Information)
   .build();
 
-connection.start()
-  .then(() => console.log("SignalR Connected"))
-  .catch(err => console.error("SignalR Connection Error: ", err));
+// connection.start()
+//   .then(() => console.log("SignalR Connected"))
+//   .catch(err => console.error("SignalR Connection Error: ", err));
 
 
 const App = () => {

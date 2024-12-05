@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
+import * as signalR from '@microsoft/signalr';
 
 
-const TicketList = ({ connection }) => {
+function TicketList() {//}= ({ connection }) => {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
 
-    connection.start()
-      .then(() => console.log("SignalR connected"))
-      .catch(err => console.log("SignalR connection error: ", err));
+    const connection = new signalR.HubConnectionBuilder()
+  .withUrl("/ticketHub") // URL backendu
+  // .withAutomaticReconnect()
+  // .configureLogging(signalR.LogLevel.Information)
+  .build();
 
+  connection.start()
+  .then(() => console.log("SignalR Connected"))
+  .catch(err => console.error("SignalR Connection Error: ", err));
+  
     connection.on("ReceiveTicketUpdate", (ticket) => {
       // Po odebraniu nowego lub zaktualizowanego ticketu, dodaj go do stanu
       console.log("Received ticket update:", ticket);
