@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace proj6.Models
 {
@@ -32,8 +33,12 @@ namespace proj6.Models
         [Required]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        // Relacja z komentarzami
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Comment> Comments { get; set; }
+
+        public Ticket()
+        {
+            Comments = new List<Comment>();  // Inicjalizacja w konstruktorze
+        }
     }
 
     public class Comment
@@ -56,7 +61,8 @@ namespace proj6.Models
         [ForeignKey("Ticket")]
         public Guid TicketId { get; set; }
 
-        // Nawigacja do zgłoszenia
-        public Ticket Ticket { get; set; }
+        // Nawigacja do zgłoszenia - ignorowane w JSON-ie
+        [JsonIgnore] // Ignoruje to pole w przesyłanym i zwracanym JSON-ie
+        public Ticket? Ticket { get; set; }
     }
 }
