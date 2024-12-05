@@ -6,7 +6,7 @@ import * as signalR from '@microsoft/signalr';
 
 // Tworzymy po³¹czenie SignalR tylko raz w komponencie MainView
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/ticketHub")
+    .withUrl("http://localhost:5224/ticketHub")
     .build();
 
 const MainView = () => {
