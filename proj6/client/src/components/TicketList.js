@@ -1,24 +1,11 @@
 import { useEffect, useState } from "react";
-import * as signalR from '@microsoft/signalr';
 
-
-function TicketList() {//}= ({ connection }) => {
+function TicketList({ connection }) { // Teraz otrzymujemy connection przez props
     const [tickets, setTickets] = useState([]);
 
     useEffect(() => {
-
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/ticketHub") // URL backendu
-            //.withAutomaticReconnect()
-            //.configureLogging(signalR.LogLevel.Information)
-            .build();
-
-        connection.start()
-            .then(() => console.log("SignalR Connected"))
-            .catch(err => console.error("SignalR Connection Error: ", err));
-
+        // Nasłuchujemy na zdarzenie 'ReceiveTicketUpdate' z serwera SignalR
         connection.on("ReceiveTicketUpdate", (ticket) => {
-            // Po odebraniu nowego lub zaktualizowanego ticketu, dodaj go do stanu
             console.log("Received ticket update:", ticket);
             setTickets((prevTickets) => {
                 const existingTicket = prevTickets.find((t) => t.id === ticket.id);
@@ -40,9 +27,10 @@ function TicketList() {//}= ({ connection }) => {
         fetchTickets();
 
         return () => {
-            connection.stop(); // Zamknięcie połączenia SignalR po zakończeniu komponentu
+            // Zamknięcie połączenia SignalR po zakończeniu komponentu
+            connection.off("ReceiveTicketUpdate"); // Usunięcie nasłuchiwania przy unmount
         };
-    }, []);
+    }, [connection]); // Dodajemy connection jako zależność, by upewnić się, że jest używane odpowiednio
 
     return (
         <div>

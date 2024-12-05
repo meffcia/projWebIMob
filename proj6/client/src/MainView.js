@@ -4,6 +4,7 @@ import TicketList from './components/TicketList';
 import Notification from './components/Notification';
 import * as signalR from '@microsoft/signalr';
 
+// Tworzymy po³¹czenie SignalR tylko raz w komponencie MainView
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/ticketHub")
     .build();
