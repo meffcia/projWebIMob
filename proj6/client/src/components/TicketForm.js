@@ -14,7 +14,7 @@ const TicketForm = ({ onTicketCreated }) => {
             priority: 'Medium',
         };
 
-        const response = await fetch('http://localhost:5224/api/ticket', {
+        const response = await fetch('http://localhost:5000/api/ticket', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newTicket),

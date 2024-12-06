@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import * as signalR from '@microsoft/signalr';
 
 
-const TicketList = ({ /*connection,*/ isAdmin }) => {
+const TicketList = ({ isAdmin }) => {
   const [tickets, setTickets] = useState([]);
   const [resolvedTickets, setResolvedTickets] = useState([]);
 
   useEffect(() => {
 
     const connection = new signalR.HubConnectionBuilder()
-  .withUrl("/ticketHub", {transport: signalR.HttpTransportType.LongPolling}) // URL backendu
-  // // .withAutomaticReconnect()
+  .withUrl("http://localhost:5000/ticketHub") // URL backendu
+  .withAutomaticReconnect()
   // // .configureLogging(signalR.LogLevel.Information)
   .build();
 
@@ -40,7 +40,7 @@ const TicketList = ({ /*connection,*/ isAdmin }) => {
 
     // Pobieranie początkowych ticketów z API
     const fetchTickets = async () => {
-      const response = await fetch('/api/ticket'); // Upewnij się, że port jest poprawny
+      const response = await fetch('http://localhost:5000/api/ticket', {transport: signalR.HttpTransportType.WebSockets}); // Upewnij się, że port jest poprawny
       const data = await response.json();
       setTickets(data.filter((ticket) => ticket.status !== "Resolved"));
       setResolvedTickets(data.filter((ticket) => ticket.status === "Resolved"));
@@ -66,7 +66,7 @@ const TicketList = ({ /*connection,*/ isAdmin }) => {
       const updatedTicket = { ...ticketToUpdate, status: newStatus };
   
       // Wyślij żądanie do API
-      const response = await fetch(`/api/ticket/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/ticket/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

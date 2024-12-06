@@ -18,15 +18,5 @@ namespace proj6.Hubs
 
             await Clients.All.SendAsync("ReceiveTicketUpdate", ticket);
         }
-
-        // public async Task NotifyNewTicket(string message)
-        // {
-        //     await Clients.All.SendAsync("ReceiveTicketUpdate", message);
-        // }
-
-        // public async Task UpdateTicketStatus(Guid ticketId, string status)
-        // {
-        //     await Clients.All.SendAsync("TicketStatusUpdated", ticketId, status);
-        // }
     }
 }
