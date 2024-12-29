@@ -8,10 +8,10 @@ public partial class App : Application
 		MainPage = new MainPage();
 	}
 
-	// protected override Window CreateWindow(IActivationState? activationState)
-	// {
-	// 	return new Window(new AppShell());
+	protected override Window CreateWindow(IActivationState? activationState)
+	{
+		return new Window(new AppShell());
 
-	// 	MainPage = new NavigationPage(new MainPage());
-	// }
+		MainPage = new NavigationPage(new MainPage());
+	}
 }
