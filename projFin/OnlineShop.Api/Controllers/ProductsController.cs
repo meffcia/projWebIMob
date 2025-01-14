@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OnlineShop.Domain.Models;
-using OnlineShop.Api.Data;
-using OnlineShop.Domain.DTOs;
+using OnlineShop.Shared;
+using OnlineShop.Shared.DTOs;
+using OnlineShop.Shared.Models;
+using OnlineShop.Shared.Services.ProductService;
 
 namespace OnlineShop.Api.Controllers
 {
@@ -10,116 +11,70 @@ namespace OnlineShop.Api.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IProductService _productService;
 
-        public ProductsController(AppDbContext context)
+        public ProductsController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
-        // GET: api/Products
+        // GET: api/products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<ServiceResponse<ProductsListDto>>> GetAllProducts(
+            [FromQuery] string? search,
+            [FromQuery] int? categoryId,
+            [FromQuery] string? sortBy, 
+            [FromQuery] int? pageNumber,
+            [FromQuery] int? pageSize,
+            [FromQuery] bool descending = false)
+            
         {
-            return await _context.Products.ToListAsync();
+            var response = await _productService.GetAllProductsAsync(search, categoryId, sortBy, descending, pageNumber, pageSize);
+            return Ok(response);
         }
 
-        // GET: api/Products/5
+        // GET: api/products/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ServiceResponse<ProductDto>>> GetProductById(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var response = await _productService.GetProductByIdAsync(id);
+            if (!response.Success)
+                return NotFound(response);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return product;
+            return Ok(response);
         }
 
-        // POST: api/Products
+        // POST: api/products
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
+        public async Task<ActionResult<ServiceResponse<Product>>> AddProduct(CreateProductDto productDto)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            var response = await _productService.AddProductAsync(productDto);
+            return CreatedAtAction(nameof(GetProductById), new { id = response.Data.Id }, response);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/products/{id}
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, UpdateProductDto updateProductDto)
+        public async Task<ActionResult<ServiceResponse<Product>>> UpdateProduct(int id, UpdateProductDto updateDto)
         {
-            var product = await _context.Products.FindAsync(id);
+            var response = await _productService.UpdateProductAsync(id, updateDto);
+            if (!response.Success)
+                return NotFound(response);
 
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            if (updateProductDto.Name != null)
-            {
-                product.Name = updateProductDto.Name;
-            }
-
-            if (updateProductDto.Description != null)
-            {
-                product.Description = updateProductDto.Description;
-            }
-
-            if (updateProductDto.Price.HasValue)
-            {
-                product.Price = updateProductDto.Price.Value;
-            }
-
-            if (updateProductDto.Stock.HasValue)
-            {
-                product.Stock = updateProductDto.Stock.Value;
-            }
-
-            if (updateProductDto.CategoryId.HasValue)
-            {
-                product.CategoryId = updateProductDto.CategoryId.Value;
-            }
-            _context.Entry(product).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                throw;
-            }
-
-            return NoContent();
+            return Ok(response);
         }
 
-        // DELETE: api/Products/5
+        // DELETE: api/products/{id}
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            var response = await _productService.DeleteProductAsync(id);
+            if (!response.Success)
+                return NotFound(response);
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ProductExists(int id)
-        {
-            return _context.Products.Any(e => e.Id == id);
+            return Ok(response);
         }
     }
 }

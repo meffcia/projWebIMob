@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Domain.Models;
+using OnlineShop.Shared.Auth;
+using OnlineShop.Shared.Models;
 
 namespace OnlineShop.Api.Data
 {
@@ -15,7 +16,6 @@ namespace OnlineShop.Api.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -36,17 +36,26 @@ namespace OnlineShop.Api.Data
                 .WithMany()
                 .HasForeignKey(oi => oi.ProductId);
 
-            // Relacja między User i Cart
-            modelBuilder.Entity<Cart>()
-                .HasOne(c => c.User)
-                .WithOne()
-                .HasForeignKey<Cart>(c => c.UserId);
-
-            // Relacja między Cart i CartItem
+            // Relacja między User i CartItem
             modelBuilder.Entity<CartItem>()
-                .HasOne(ci => ci.Cart)
-                .WithMany(c => c.CartItems)
-                .HasForeignKey(ci => ci.CartId);
+                .HasOne(ci => ci.User)
+                .WithMany(u => u.CartItems)
+                .HasForeignKey(ci => ci.UserId);
+
+            // Relacja między CartItem i Product
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Product)
+                .WithMany()
+                .HasForeignKey(ci => ci.ProductId);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.PasswordHash)
+                .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.PasswordSalt)
+                .IsRequired();
+
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using OnlineShop.Domain.DTOs;
+using OnlineShop.Shared.DTOs;
 
 namespace OnlineShop.MauiApp.ViewModels
 {

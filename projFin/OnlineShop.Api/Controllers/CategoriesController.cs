@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using OnlineShop.Domain.DTOs;
-using OnlineShop.Domain.Models;
-using OnlineShop.Api.Data;
+using OnlineShop.Shared;
+using OnlineShop.Shared.DTOs;
+using OnlineShop.Shared.Models;
+using OnlineShop.Shared.Services.CategoryService;
 
 namespace OnlineShop.Api.Controllers
 {
@@ -10,108 +10,81 @@ namespace OnlineShop.Api.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ICategoryService _categoryService;
 
-        public CategoriesController(AppDbContext context)
+        public CategoriesController(ICategoryService categoryService)
         {
-            _context = context;
+            _categoryService = categoryService;
         }
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<ServiceResponse<List<CategoryDto>>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var response = await _categoryService.GetAllCategoriesAsync();
+
+            if (response.Success)
+            {
+                return Ok(response);  // Zwracamy dane jeśli sukces
+            }
+
+            return BadRequest(response);  // W przypadku błędu, zwracamy BadRequest
         }
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult<ServiceResponse<CategoryDto>>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var response = await _categoryService.GetCategoryByIdAsync(id);
 
-            if (category == null)
+            if (response.Success)
             {
-                return NotFound();
+                return Ok(response);  // Zwracamy dane jeśli sukces
             }
 
-            return category;
+            return NotFound(response);  // Kategoria nie została znaleziona
         }
 
         // POST: api/Categories
         [HttpPost]
-        public async Task<ActionResult<Category>> CreateCategory(CreateCategoryDto createCategoryDto)
+        public async Task<ActionResult<ServiceResponse<Category>>> CreateCategory(CreateCategoryDto createCategoryDto)
         {
-            var category = new Category
-            {
-                Name = createCategoryDto.Name,
-                Description = createCategoryDto.Description
-            };
-            
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            var response = await _categoryService.AddCategoryAsync(createCategoryDto);
 
-            return CreatedAtAction(nameof(GetCategory), new { id = category.Id }, category);
+            if (response.Success)
+            {
+                return CreatedAtAction(nameof(GetCategory), new { id = response.Data.Id }, response);  // Zwracamy CreatedAt z ID nowej kategorii
+            }
+
+            return BadRequest(response);  // Jeśli wystąpił błąd, zwracamy BadRequest
         }
 
         // PUT: api/Categories/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
+        public async Task<ActionResult<ServiceResponse<Category>>> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var response = await _categoryService.UpdateCategoryAsync(id, updateCategoryDto);
 
-            if (category == null)
+            if (response.Success)
             {
-                return NotFound();
+                return NoContent();  // Zwracamy NoContent po pomyślnej aktualizacji
             }
 
-            if (updateCategoryDto.Name != null)
-            {
-                category.Name = updateCategoryDto.Name;
-            }
-
-            if (updateCategoryDto.Description != null)
-            {
-                category.Description = updateCategoryDto.Description;
-            }
-            
-            _context.Entry(category).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
-                {
-                    return NotFound();
-                }
-                throw;
-            }
-
-            return NoContent();
+            return NotFound(response);  // Kategoria nie została znaleziona
         }
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var response = await _categoryService.DeleteCategoryAsync(id);
+
+            if (response.Success)
             {
-                return NotFound();
+                return NoContent();  // Zwracamy NoContent po pomyślnym usunięciu
             }
 
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CategoryExists(int id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
+            return NotFound(response);  // Kategoria nie została znaleziona
         }
     }
 }

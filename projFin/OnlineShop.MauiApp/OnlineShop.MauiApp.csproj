@@ -65,7 +65,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="../OnlineShop.Domain/OnlineShop.Domain.csproj" />
+		<ProjectReference Include="../OnlineShop.Shared/OnlineShop.Shared.csproj" />
 	</ItemGroup>
 
 </Project>
