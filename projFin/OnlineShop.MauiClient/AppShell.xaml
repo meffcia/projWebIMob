@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="OnlineShop.MauiApp.AppShell"
+    x:Class="OnlineShop.MauiClient.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:OnlineShop.MauiApp"
+    xmlns:local="clr-namespace:OnlineShop.MauiClient"
     Shell.FlyoutBehavior="Flyout"
-    Title="OnlineShop.MauiApp">
+    Title="OnlineShop.MauiClient">
 
     <ShellContent
         Title="Home"

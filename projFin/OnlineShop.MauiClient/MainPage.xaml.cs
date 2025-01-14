@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
-using OnlineShop.MauiApp.ViewModels;
+using OnlineShop.MauiClient.ViewModels;
 
-namespace OnlineShop.MauiApp
+namespace OnlineShop.MauiClient
 {
     public partial class MainPage : ContentPage
     {

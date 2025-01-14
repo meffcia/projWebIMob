@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace OnlineShop.MauiApp;
+namespace OnlineShop.MauiClient;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

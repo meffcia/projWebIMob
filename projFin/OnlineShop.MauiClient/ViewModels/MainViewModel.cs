@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using OnlineShop.Shared.DTOs;
 
-namespace OnlineShop.MauiApp.ViewModels
+namespace OnlineShop.MauiClient.ViewModels
 {
     public class MainViewModel
     {

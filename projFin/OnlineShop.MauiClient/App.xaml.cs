@@ -1,4 +1,8 @@
-﻿namespace OnlineShop.MauiApp;
+﻿using Microsoft.Maui;
+using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Controls.Hosting;
+
+namespace OnlineShop.MauiClient;
 
 public partial class App : Application
 {

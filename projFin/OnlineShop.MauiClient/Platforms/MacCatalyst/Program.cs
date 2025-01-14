@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace OnlineShop.MauiApp;
+namespace OnlineShop.MauiClient;
 
 public class Program
 {
