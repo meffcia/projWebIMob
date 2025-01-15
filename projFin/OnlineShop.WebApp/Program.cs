@@ -18,12 +18,13 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Map static assets (optional)
 app.MapStaticAssets();
 
+// Zmieniamy domyœlny route, aby kierowaæ na stronê logowania
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Account}/{action=Login}/{id?}")
+    .WithStaticAssets(); // Zachowuje mapowanie zasobów statycznych
 
 app.Run();

@@ -1,0 +1,162 @@
+@model OnlineShop.Shared.Auth.UserLoginDto
+
+@{
+    Layout = null;  // Wyłącza użycie domyślnego layoutu
+    ViewData["Title"] = "Logowanie";
+}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f7;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            gap: 50px;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Wyśrodkowanie w pionie */
+            align-items: center; /* Wyśrodkowanie w poziomie */
+        }
+
+
+        h2 {
+            color: #00448c;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            width: 100%;
+        }
+
+            .form-group label {
+                color: #333;
+                font-size: 14px;
+            }
+
+        .form-control {
+            width: 90%;
+            padding: 12px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+            .form-control:focus {
+                border-color: #00448c;
+                box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
+            }
+
+        /* Przyciski */
+        .btn {
+            background-color: #00448c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 90%;
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 20px; /* Zwiększono margines dolny dla większego odstępu */
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+            .btn:hover {
+                background-color: #003366;
+            }
+
+        .register-btn {
+            background-color: #58a4f5;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            width: 90%;
+            margin-top: 20px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+            .register-btn:hover {
+                background-color: #0066B3;
+            }
+
+
+        .shop-info {
+            text-align: center;
+            color: #00448c;
+            max-width: 500px;
+        }
+
+            .shop-info h1 {
+                font-size: 50px;
+                margin-bottom: 20px;
+            }
+
+            .shop-info p {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="login-container">
+            <h2>Logowanie do sklepu</h2>
+            <form method="post" action="/Account/Login">
+                <div class="form-group">
+                    <label for="Email">Email:</label>
+                    <input type="email" id="Email" name="Email" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="Password">Hasło:</label>
+                    <input type="password" id="Password" name="Password" class="form-control" required />
+                </div>
+
+                <button type="submit" class="btn">Zaloguj się</button>
+                <a href="/Account/Register" class="register-btn">Nie masz konta? Zarejestruj się!</a>
+            </form>
+        </div>
+
+        <div class="shop-info">
+            <h1>OnlineShop</h1>
+            <p>Witaj w naszym sklepie internetowym! Znajdź najlepsze oferty na produkty, które pokochasz.</p>
+        </div>
+    </div>
+
+</body>
+</html>

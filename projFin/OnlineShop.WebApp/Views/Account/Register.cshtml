@@ -1,0 +1,135 @@
+@model OnlineShop.Shared.Auth.UserRegisterDto
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Rejestracja";
+}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <!-- Upewnij się, że używasz kodowania UTF-8 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f7;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: #00448c;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%; /* Szerokość całej grupy formularza */
+            display: flex;
+            flex-direction: column; /* Ustawiamy etykietę nad polem tekstowym */
+            align-items: flex-start; /* Wszystkie elementy w grupie wyrównane do lewej */
+            padding-left: 10%; /* Punkt początkowy rubryk i etykiet */
+        }
+
+            .form-group label {
+                color: #333;
+                font-size: 14px;
+                margin-bottom: 5px; /* Odstęp między etykietą a rubryką */
+            }
+
+        .form-control {
+            width: 82%; /* Wyśrodkowanie rubryk w grupie */
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            text-align: left; /* Tekst w rubrykach wyrównany do lewej */
+        }
+
+            .form-control:focus {
+                border-color: #00448c;
+                box-shadow: 0 0 5px rgba(111, 66, 193, 0.5);
+            }
+
+        .btn {
+            background-color: #00448c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 80%;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background-color: #003366;
+            }
+
+        .back-to-login {
+            margin-top: 20px;
+        }
+
+            .back-to-login a {
+                text-decoration: none;
+                color: #00448c;
+                font-size: 14px;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <h2>Rejestracja</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="UserName">Nazwa użytkownika:</label>
+                <input type="text" id="UserName" name="UserName" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email:</label>
+                <input type="email" id="Email" name="Email" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="Password">Hasło:</label>
+                <input type="password" id="Password" name="Password" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="ConfirmPassword">Potwierdź hasło:</label>
+                <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn">Zarejestruj się</button>
+        </form>
+
+        <div class="back-to-login">
+            <a href="/Account/Login">Powrót do logowania</a>
+        </div>
+    </div>
+
+</body>
+</html>
