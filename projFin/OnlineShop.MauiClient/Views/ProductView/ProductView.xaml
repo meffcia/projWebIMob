@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:OnlineShop.MauiClient.ViewModels"
+             x:Class="OnlineShop.MauiClient.Views.ProductView.ProductView"
+             Title="Lista produktów">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <!-- Tytuł -->
+            <Label Text="Lista produktów"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Sekcja wyszukiwania -->
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Szukaj:" VerticalOptions="Center" />
+                <Entry Text="{Binding SearchQuery}" Placeholder="Wprowadź frazę" />
+                <Button Text="Szukaj"
+                        Command="{Binding SearchCommand}" />
+            </HorizontalStackLayout>
+
+            <!-- Sortowanie -->
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Sortuj po nazwie"
+                        Command="{Binding SortByNameCommand}" />
+                <Button Text="Sortuj po cenie"
+                        Command="{Binding SortByCategoryCommand}" />
+            </HorizontalStackLayout>
+
+            <!-- Lista produktów -->
+            <CollectionView ItemsSource="{Binding Products}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="LightGray" StrokeThickness="1" Padding="10" Margin="5">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Product.Name}" FontAttributes="Bold" FontSize="16" />
+                                <Label Text="{Binding Product.Description}" FontSize="14" />
+                                <Label Text="{Binding Product.Stock, StringFormat='Liczba dostępnych sztuk: {0}'}" FontSize="12" />
+
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="Ilość:" VerticalOptions="Center" />
+                                    <Entry Text="{Binding Quantity}" WidthRequest="50" Keyboard="Numeric" />
+                                    <Button Text="Dodaj do koszyka"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductViewModel}}, Path=AddToCartCommand}"
+                                            CommandParameter="{Binding}" />
+                                </HorizontalStackLayout>
+
+                                <HorizontalStackLayout Spacing="10">
+                                    <Button Text="Edytuj"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductViewModel}}, Path=EditCommand}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Text="Usuń"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductViewModel}}, Path=DeleteCommand}"
+                                            CommandParameter="{Binding}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Paginacja -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                <Button Text="Poprzednia" Command="{Binding GoToPreviousPageCommand}" />
+                <Label Text="{Binding CurrentPage, StringFormat='Strona {0} z {Binding TotalPages}'}"
+                       VerticalOptions="Center" />
+                <Button Text="Następna" Command="{Binding GoToNextPageCommand}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+
+<!-- <Label Content="Kategoria:" />
+                    <ComboBox ItemsSource="{Binding Categories}" 
+                            SelectedValue="{Binding SelectedCategoryId}" 
+                            SelectedValuePath="Id" 
+                            DisplayMemberPath="Name" 
+                            Width="150"
+                            MinHeight="30" 
+                            MaxHeight="30">
+                    </ComboBox>
+                    <Label Content="Rozmiar strony:" />
+                    <ComboBox ItemsSource="{Binding SortOptions}" 
+                            SelectedValue="{Binding SortBy}" 
+                            Width="150"
+                            MinHeight="30" 
+                            MaxHeight="30">
+                        <ComboBoxItem Content="5 per page" Tag="5" />
+                        <ComboBoxItem Content="10 per page" Tag="10" />
+                        <ComboBoxItem Content="20 per page" Tag="20" />
+                    </ComboBox> -->

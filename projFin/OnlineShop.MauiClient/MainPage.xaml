@@ -1,26 +1,22 @@
-﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:OnlineShop"
              x:Class="OnlineShop.MauiClient.MainPage"
-             Title="Product List">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" IconImageSource="add.png" Order="Primary" Priority="0" Command="{Binding AddProductCommand}" />
-        <ToolbarItem Text="Refresh" IconImageSource="refresh.png" Order="Secondary" Priority="1" Command="{Binding RefreshCommand}" />
-    </ContentPage.ToolbarItems>
+             Title="Home">
+    <!-- <StackLayout Padding="20">
+        <Label Text="Welcome to the Online Shop!" 
+               FontSize="24"
+               HorizontalOptions="Center" 
+               VerticalOptions="CenterAndExpand" />
+        <Button Text="Go to Products" 
+                Command="{Binding NavigateToHomeCommand}" />
+    </StackLayout> -->
+
     <ContentPage.Content>
-        <CollectionView ItemsSource="{Binding Products}" SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Margin="10" Padding="10" BorderColor="Gray" CornerRadius="10">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" />
-                            <Label Text="{Binding Description}" FontSize="14" TextColor="Gray" />
-                            <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" FontSize="16" TextColor="Green" />
-                            <Label Text="{Binding Stock, StringFormat='In Stock: {0}'}" FontSize="14" />
-                        </VerticalStackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <ScrollView VerticalScrollBarVisibility="Always">
+            <VerticalStackLayout Padding="20">
+                <Button Text="Add New Writer" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

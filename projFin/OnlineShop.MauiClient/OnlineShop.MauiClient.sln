@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.MauiClient", "OnlineShop.MauiClient.csproj", "{11E59B49-CFA4-B6CB-F60A-EBC0B0AE6871}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11E59B49-CFA4-B6CB-F60A-EBC0B0AE6871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E59B49-CFA4-B6CB-F60A-EBC0B0AE6871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E59B49-CFA4-B6CB-F60A-EBC0B0AE6871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E59B49-CFA4-B6CB-F60A-EBC0B0AE6871}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5358537E-2E40-4116-966D-1BCBE6BBAF77}
+	EndGlobalSection
+EndGlobal

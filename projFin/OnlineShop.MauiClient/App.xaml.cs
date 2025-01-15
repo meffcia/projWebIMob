@@ -1,21 +1,20 @@
 ﻿using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
-using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Xaml;
 
-namespace OnlineShop.MauiClient;
-
-public partial class App : Application
+namespace OnlineShop.MauiClient
 {
-	public App()
+	public partial class App : Application
 	{
-		InitializeComponent();
-		MainPage = new MainPage();
-	}
+		public App()
+		{
+			InitializeComponent();
+			MainPage = new AppShell();
+		}
 
-	protected override Window CreateWindow(IActivationState? activationState)
-	{
-		return new Window(new AppShell());
-
-		MainPage = new NavigationPage(new MainPage());
+		// protected override Window CreateWindow(IActivationState? activationState)
+		// {
+		// 	return new Window(new AppShell());
+		// }
 	}
 }

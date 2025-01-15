@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
@@ -24,7 +24,7 @@
 		<ApplicationTitle>OnlineShop.MauiClient</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.OnlineShop.MauiClient</ApplicationId>
+		<ApplicationId>com.companyname.onlineshop.mauiclient</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -60,15 +60,26 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.30" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.30" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="../OnlineShop.Shared/OnlineShop.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- <MauiXaml Include="App.xaml">
+			<Generator>MSBuild:Compile</Generator>
+			<LastGenOutput>App.xaml.g.cs</LastGenOutput>
+		</MauiXaml>
+		<MauiXaml Include="Views\LoginView\LoginView.xaml" />
+		<MauiXaml Include="Views\LoginView\RegisterView.xaml" />
+		<MauiXaml Include="Views\productView\ProductView.xaml" /> -->
+		<!-- <MauiXaml Include="Views\productView\EditProductWindow.xaml" /> -->
 	</ItemGroup>
 
 </Project>

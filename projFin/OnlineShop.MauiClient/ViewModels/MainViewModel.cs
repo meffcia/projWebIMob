@@ -1,47 +1,117 @@
-using System.Collections.ObjectModel;
+using System;
+using System.Windows;
 using System.Windows.Input;
-using OnlineShop.Shared.DTOs;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.Shared.Services.AuthService;
+using OnlineShop.MauiClient.Services;
+using OnlineShop.MauiClient.Views;
+using OnlineShop.MauiClient.Views.LoginView;
+// using OnlineShop.MauiClient.Views.CartView;
+using OnlineShop.MauiClient.Views.ProductView;
+// using OnlineShop.MauiClient.Views.OrderView;
 
 namespace OnlineShop.MauiClient.ViewModels
 {
-    public class MainViewModel
+    public partial class MainViewModel : ObservableObject, IMainViewModel, IAuthStateObserver
     {
-        public ObservableCollection<ProductDto> Products { get; set; }
+        [ObservableProperty]
+        private bool isLoading;
 
-        public ICommand AddProductCommand { get; }
-        public ICommand RefreshCommand { get; }
+        [ObservableProperty]
+        private bool hasError;
 
-        public MainViewModel()
+        [ObservableProperty]
+        private bool isLoggedIn;
+        
+        [ObservableProperty]
+        private ContentPage homeView;
+
+        [ObservableProperty]
+        private ContentPage myAccountView;
+
+        [ObservableProperty]
+        private ContentPage myCartView;
+
+        [ObservableProperty]
+        private ContentPage productListView;
+
+        [ObservableProperty]
+        private double loadingRotation;
+
+        private readonly IServiceProvider _serviceProvider;
+        private readonly AuthStateProvider _authStateProvider;
+
+        private ContentPage _selectedTab;
+        public ContentPage SelectedTab
         {
-            // Sample data
-            Products = new ObservableCollection<ProductDto>
+            get => _selectedTab;
+            set
             {
-                new ProductDto { Id = 1, Name = "Laptop", Description = "Powerful laptop", Price = 1200.99m, Stock = 10, CategoryId = 1 },
-                new ProductDto { Id = 2, Name = "Smartphone", Description = "Latest model smartphone", Price = 799.99m, Stock = 25, CategoryId = 2 },
-                new ProductDto { Id = 3, Name = "Headphones", Description = "Noise-cancelling headphones", Price = 199.99m, Stock = 50, CategoryId = 3 }
-            };
+                if (_selectedTab != value)
+                {
+                    _selectedTab = value;
+                    OnPropertyChanged(nameof(SelectedTab));
 
-            AddProductCommand = new Command(AddProduct);
-            RefreshCommand = new Command(RefreshProducts);
+                    // if (_selectedTab?.DataContext is IInitializableViewModel initializableViewModel)
+                    // {
+                    //     initializableViewModel.OnViewShown();
+                    // }
+                }
+            }
         }
 
-        private void AddProduct()
+        public MainViewModel(IServiceProvider serviceProvider, AuthStateProvider authStateProvider)
         {
-            // Logic for adding a new product
-            Products.Add(new ProductDto
-            {
-                Id = Products.Count + 1,
-                Name = "New Product",
-                Description = "Description of the new product",
-                Price = 100.00m,
-                Stock = 5,
-                CategoryId = 4
-            });
+            _serviceProvider = serviceProvider;
+            _authStateProvider = authStateProvider;
+
+            _authStateProvider.RegisterObserver(this);
+
+            HomeView = _serviceProvider.GetRequiredService<ProductView>();
+            MyAccountView = _serviceProvider.GetRequiredService<LoginView>();
+            // MyCartView = _serviceProvider.GetRequiredService<CartView>();
+
+            IsLoggedIn = true;//_authStateProvider.IsUserAuthenticatedAsync();
+            SelectedTab = HomeView;
         }
 
-        private void RefreshProducts()
+        public void NavigateToRegisterView()
         {
-            // Logic for refreshing the product list
+            MyAccountView = _serviceProvider.GetRequiredService<RegisterView>();
+        }
+
+        [RelayCommand]
+        public async Task NavigateToHome()
+        {
+            await Shell.Current.GoToAsync("//Home");
+        }
+
+        [RelayCommand]
+        public async Task NavigateToMyAccount()
+        {
+            await Shell.Current.GoToAsync("//MyAccount");
+        }
+
+        [RelayCommand]
+        public async Task NavigateToCart()
+        {
+            // await Shell.Current.GoToAsync("//Cart");
+        }
+        
+        public void OnAuthenticationStateChanged()
+        {
+            // IsLoggedIn = _authStateProvider.IsUserAuthenticated();
+            // if (isLoggedIn)
+            // {
+            //     MyAccountView = _serviceProvider.GetRequiredService<OrderView>();
+            // }
+            // else
+            // {
+            //     MyAccountView = _serviceProvider.GetRequiredService<LoginView>();
+            // }
         }
     }
 }
