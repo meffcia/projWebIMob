@@ -16,7 +16,11 @@ namespace OnlineShop.WebApp.Controllers
             {
                 new Product { Id = 1, Name = "Laptop", Description = "Nowoczesny laptop", Price = 3000, Stock = 10, CategoryId = 1 },
                 new Product { Id = 2, Name = "Smartphone", Description = "Smartfon z najlepszymi funkcjami", Price = 2000, Stock = 15, CategoryId = 2 },
-                new Product { Id = 3, Name = "Headphones", Description = "Słuchawki bezprzewodowe", Price = 500, Stock = 30, CategoryId = 3 }
+                new Product { Id = 3, Name = "Headphones", Description = "Słuchawki bezprzewodowe", Price = 500, Stock = 30, CategoryId = 3 },
+                new Product { Id = 4, Name = "Laptop", Description = "Nowoczesny laptop", Price = 3000, Stock = 10, CategoryId = 1 },
+                new Product { Id = 5, Name = "Smartphone", Description = "Smartfon z najlepszymi funkcjami", Price = 2000, Stock = 15, CategoryId = 2 },
+                new Product { Id = 6, Name = "Headphones", Description = "Słuchawki bezprzewodowe", Price = 500, Stock = 30, CategoryId = 3 }
+
             };
         }
 

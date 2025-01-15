@@ -55,16 +55,21 @@
         }
 
         .cart-badge {
+            display: none; /* Ukryj badge domyślnie */
             position: absolute;
             top: 0;
             right: 0;
             transform: translate(30%, -30%);
-            font-size: 0.8rem;
-            background-color: red;
+            font-size: 0.6rem; /* Zmniejszona czcionka */
+            background-color: dodgerblue;
             color: white;
-            border-radius: 50%;
-            padding: 0.2rem 0.5rem;
+            border-radius: 70%;
+            padding: 0.1rem 0.3rem; /* Zmniejszone padding */
         }
+
+            .cart-badge.show {
+                display: inline-block; /* Pokaż badge tylko, gdy ma klasę 'show' */
+            }
 
         /* Styl stopki */
         .footer-links a {
@@ -96,14 +101,15 @@
                     <li class="nav-item position-relative">
                         <a class="nav-link" href="/cart/index">
                             Koszyk
-                            <span class="cart-badge">0</span> <!-- Liczba przedmiotów w koszyku, może być dynamiczna -->
+                            <!-- Tylko pokazuj badge, jeśli liczba jest większa niż 0 -->
+                            <span class="cart-badge @(ViewData["CartItemCount"] != null && (int)ViewData["CartItemCount"] > 0 ? "show" : "")">
+                                @ViewData["CartItemCount"]
+                            </span>
                         </a>
                     </li>
                     <!-- Profil użytkownika -->
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Profil
-                        </a>
+                        <a class="nav-link" href="/userprofile/index">Profil</a>
                     </li>
                 </ul>
             </div>

@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Produkt</th>
-                        <th scope="col">IloúÊ</th>
+                        <th scope="col">Ilo≈õƒá</th>
                         <th scope="col">Cena</th>
                         <th scope="col">Razem</th>
                     </tr>
@@ -35,8 +35,14 @@
                     </tr>
                 }
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end"><strong>Ca≈Çkowita kwota:</strong></td>
+                        <td><strong>@Model.Sum(item => item.Quantity * item.Product.Price) PLN</strong></td>
+                    </tr>
+                </tfoot>
             </table>
-            <a href="/Checkout" class="btn btn-primary">Przejdü do kasy</a>
+            <a href="/payment/index" class="btn btn-primary">Przejd≈∫ do kasy</a>
         </div>
     </body>
 </html>
