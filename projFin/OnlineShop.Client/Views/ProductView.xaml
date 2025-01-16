@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:OnlineShop.Client.ViewModels"
+             x:Class="OnlineShop.Client.Views.ProductView"
+             Title="ProductView">
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Title -->
+            <Label Text="Produkty w sklepie" 
+                   FontSize="24" 
+                   TextColor="#0A2C5C" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center" />
+
+            <!-- Products List -->
+            <CollectionView ItemsSource="{Binding Products}" 
+                            Margin="0,20,0,0">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" 
+                                     Span="2" 
+                                     HorizontalItemSpacing="10" 
+                                     VerticalItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="#D3D3D3" 
+                                StrokeThickness="1" 
+                                Background="#F0F0F0" 
+                                Padding="10" >
+                            <VerticalStackLayout Spacing="10">
+                                <!-- Product Name -->
+                                <Label Text="{Binding Name}" 
+                                       FontSize="18" 
+                                       TextColor="Black" 
+                                       HorizontalOptions="Center" />
+
+                                <!-- Product Description -->
+                                <Label Text="{Binding Description}" 
+                                       FontSize="14" 
+                                       TextColor="#555555" 
+                                       HorizontalOptions="Center" 
+                                       HorizontalTextAlignment="Center" />
+
+                                <!-- Product Price -->
+                                <Label Text="{Binding Price, StringFormat='Cena: {0:C}'}" 
+                                       FontSize="16" 
+                                       TextColor="#0A2C5C" 
+                                       HorizontalOptions="Center" />
+
+                                <!-- Buttons -->
+                                <HorizontalStackLayout Spacing="10">
+                                    <Button Text="Dodaj do koszyka" 
+                                            BackgroundColor="#7DB8E2" 
+                                            TextColor="White" 
+                                            HorizontalOptions="FillAndExpand"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductViewModel}}, Path=AddToCartCommand}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Text="Szczegóły" 
+                                            BackgroundColor="#0A2C5C" 
+                                            TextColor="White" 
+                                            HorizontalOptions="FillAndExpand" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

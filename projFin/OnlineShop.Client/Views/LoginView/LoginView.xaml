@@ -5,36 +5,42 @@
              x:Class="OnlineShop.Client.Views.LoginView.LoginView"
              Title="Logowanie">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="Logowanie" 
+    <ContentPage.Content>
+        <StackLayout Padding="20">
+            <!-- Title -->
+            <Label Text="Rejestracja" 
                    FontSize="24" 
-                   FontAttributes="Bold" 
+                   TextColor="#0A2C5C"
                    HorizontalOptions="Center" />
 
-            <Entry Placeholder="Email" 
-                   Text="{Binding Email}" 
-                   Keyboard="Email" />
+            <!-- Email -->
+            <Label Text="Email:" 
+                   FontSize="18" 
+                   Margin="0,20,0,0"/>
 
-            <Entry Placeholder="Hasło" 
-                   Text="{Binding Password}" 
-                   IsPassword="True" />
+            <Entry Placeholder="Wprowadź swój email"
+                   Text="{Binding Email}" />
 
-            <Button Text="Zaloguj" 
+            <!-- Password -->
+            <Label Text="Hasło:" 
+                   FontSize="18" 
+                   Margin="0,20,0,0" />
+
+            <Entry Placeholder="Wprowadź swoje hasło" IsPassword="True"
+                   Text="{Binding Password}" />
+
+            <!-- Buttons -->
+            <Button Text="Zaloguj się" 
+                    BackgroundColor="#0A2C5C" 
+                    TextColor="White" 
+                    Margin="0,20,0,0"
                     Command="{Binding LogInCommand}" />
 
-            <Label Text="{Binding ErrorMessage}" 
-                   TextColor="Red" 
-                   HorizontalTextAlignment="Center" />
+            <Button Text="Nie masz konta? Zarejestruj się" 
+                    BackgroundColor="#7DB8E2" 
+                    TextColor="White" 
+                    Margin="0,10,0,0" />
 
-            <HorizontalStackLayout HorizontalOptions="Center">
-                <Label Text="Nie masz konta?" />
-                <!-- <Label Text="Zarejestruj się" 
-                       TextColor="Blue" 
-                       FontAttributes="Bold" 
-                       GestureRecognizers="{StaticResource TapGesture}"
-                       Margin="5,0,0,0" /> -->
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

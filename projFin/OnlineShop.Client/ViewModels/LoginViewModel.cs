@@ -1,7 +1,10 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OnlineShop.Shared.Auth;
+using OnlineShop.Shared.Models;
 using OnlineShop.Shared.Services.AuthService;
+using OnlineShop.Shared.Services.ProductService;
 //using OnlineShop.Client.Services;
 
 namespace OnlineShop.Client.ViewModels
@@ -11,7 +14,6 @@ namespace OnlineShop.Client.ViewModels
         private readonly IAuthService _authenticationService;
         //private readonly AuthStateProvider _authStateProvider;
         //private readonly LocalStorageService _localStorageService;
-
         [ObservableProperty]
         private string email;
 
@@ -33,7 +35,7 @@ namespace OnlineShop.Client.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                ErrorMessage = "Wprowadź email i hasło.";
+                //ErrorMessage = "Wprowadź email i hasło.";
                 return;
             }
 
@@ -46,13 +48,14 @@ namespace OnlineShop.Client.ViewModels
             var response = await _authenticationService.Login(userLoginDto);
             if (response.Success)
             {
+                var jwt = response.Data;
                 //await _localStorageService.SetItemAsync("authToken", response.Data);
                 //_ = await _authStateProvider.GetAuthenticationStateAsync();
-                ErrorMessage = "Logowanie pomyślne.";
+                //ErrorMessage = "Logowanie pomyślne.";
             }
             else
             {
-                ErrorMessage = "Niepowodzenie: " + response.Message;
+                //ErrorMessage = "Niepowodzenie: " + response.Message;
             }
         }
     }

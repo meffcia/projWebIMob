@@ -4,9 +4,10 @@ using OnlineShop.Shared.Services.ProductService;
 using OnlineShop.Shared.Services.CategoryService;
 using OnlineShop.Shared.Services.OrderService;
 using OnlineShop.Shared.Services.CartService;
+using OnlineShop.Client.Services;
 using OnlineShop.Client.ViewModels;
-using CommunityToolkit.Maui;
 using OnlineShop.Client.Views.LoginView;
+using OnlineShop.Client.Views;
 
 namespace OnlineShop.Client
 {
@@ -17,7 +18,6 @@ namespace OnlineShop.Client
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -50,16 +50,17 @@ namespace OnlineShop.Client
             //services.AddSingleton<ICategoryService, CategoryService>();
             services.AddHttpClient<IProductService, ProductService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:5020/");
+                client.BaseAddress = new Uri("http://localhost:5020/");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
             services.AddHttpClient<IAuthService, AuthService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:5020/");
+                client.BaseAddress = new Uri("http://localhost:5020/");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
             //services.AddHttpClient<IOrderService, OrderService>("ApiClient");
-            //services.AddHttpClient<ICartService, CartService>("ApiClient");
+            services.AddHttpClient<ICartService, CartService>("ApiClient");
+            services.AddHttpClient<AuthStateProvider>();
         }
         private static void ConfigureViewModels(IServiceCollection services)
         {
@@ -67,24 +68,26 @@ namespace OnlineShop.Client
             // services.AddSingleton<MainViewModel>();
             // // services.AddSingleton<EditProductViewModel>();
             // services.AddSingleton<CategoryViewModel>();
-            // services.AddSingleton<ProductViewModel>();
             // // services.AddTransient<OrderViewModel>();
             // // services.AddSingleton<CartViewModel>();
             // // services.AddSingleton<CartNotAvailableViewModel>();
-             services.AddSingleton<LoginViewModel>();
-            // services.AddSingleton<RegisterViewModel>();
+            services.AddSingleton<LoginViewModel>();
+            services.AddSingleton<RegisterViewModel>();
+            services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<ProductViewModel>();
         }
         private static void ConfigureViews(IServiceCollection services)
         {
             services.AddSingleton<MainPage>();
             // // services.AddSingleton<EditProductWindow>();
             // // services.AddSingleton<CategoryView>();
-            // services.AddTransient<ProductView>();
             // // services.AddTransient<OrderView>();
             // // services.AddTransient<CartView>();
             // // services.AddTransient<CartNotAvailableView>();
-             services.AddTransient<LoginView>();
-            // services.AddTransient<RegisterView>();
+            services.AddSingleton<LoginView>();
+            services.AddSingleton<RegisterView>();
+            services.AddSingleton<HomeView>();
+            services.AddSingleton<ProductView>();
         }
     }
 }

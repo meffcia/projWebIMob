@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:OnlineShop.Client.ViewModels"
+             x:Class="OnlineShop.Client.Views.HomeView"
+             Title="HomeView">
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="20">
+            <!-- Main Banner -->
+            <Border Stroke="#B0B0B0" 
+                    StrokeThickness="2" 
+                    Background="#B0B0B0" 
+                    Padding="20" 
+                    HorizontalOptions="Fill" 
+                    VerticalOptions="Center">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Witamy w naszym sklepie internetowym!" 
+                           TextColor="White" 
+                           FontSize="24" 
+                           HorizontalOptions="Center" />
+
+                    <Label Text="Oferujemy szeroką gamę produktów w najlepszych cenach!" 
+                           TextColor="White" 
+                           FontSize="18" 
+                           HorizontalOptions="Center" />
+
+                    <Button Text="Zobacz naszą ofertę"
+                            BackgroundColor="#7DB8E2" 
+                            TextColor="White" 
+                            FontSize="18" 
+                            HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Why Shop With Us -->
+            <Label Text="Dlaczego warto kupować u nas?" 
+                   FontSize="20" 
+                   TextColor="Black" 
+                   HorizontalOptions="Center" />
+
+            <!-- Features Section -->
+            <Grid ColumnSpacing="10" RowSpacing="10">
+                <!-- Define columns for responsive layout -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Feature 1 -->
+                <Border Stroke="#D3D3D3" 
+                        StrokeThickness="2" 
+                        Background="#D3D3D3" 
+                        Padding="10" 
+                        Grid.Column="0" 
+                        Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="Szybka wysyłka" 
+                               FontSize="18" 
+                               TextColor="Black" 
+                               HorizontalOptions="Center" />
+
+                        <Label Text="Zamówienia realizujemy błyskawicznie, abyś mógł..." 
+                               FontSize="14" 
+                               TextColor="Black" 
+                               HorizontalOptions="Center" 
+                               HorizontalTextAlignment="Center" />
+                    </StackLayout>
+                </Border>
+
+                <!-- Feature 2 -->
+                <Border Stroke="#D3D3D3" 
+                        StrokeThickness="2" 
+                        Background="#D3D3D3" 
+                        Padding="10" 
+                        Grid.Column="1" 
+                        Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="Bezpieczeństwo" 
+                               FontSize="18" 
+                               TextColor="Black" 
+                               HorizontalOptions="Center" />
+
+                        <Label Text="TODO - jeszcze nie ma opisu" 
+                               FontSize="14" 
+                               TextColor="Black" 
+                               HorizontalOptions="Center" 
+                               HorizontalTextAlignment="Center" />
+                    </StackLayout>
+                </Border>
+
+                <!-- Feature 3 -->
+                <Border Stroke="#D3D3D3" 
+                        StrokeThickness="2" 
+                        Background="#D3D3D3" 
+                        Padding="10" 
+                        Grid.Column="2" 
+                        Grid.Row="0">
+                    <StackLayout>
+                        <Label Text="Obsługa klienta" 
+                               FontSize="18" 
+                               TextColor="Black" 
+                               HorizontalOptions="Center" />
+
+                        <Label Text="TODO" 
+                               FontSize="14" 
+                               TextColor="Black" 
+                               HorizontalOptions="Center" 
+                               HorizontalTextAlignment="Center" />
+                    </StackLayout>
+                </Border>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>
