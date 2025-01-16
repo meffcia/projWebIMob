@@ -48,7 +48,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorClient", policy =>
     {
-        policy.WithOrigins("http://localhost:5068") // Adres Blazor WebAssembly
+        policy.WithOrigins("http://localhost:5068") // Adres Maui
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

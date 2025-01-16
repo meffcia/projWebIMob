@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:OnlineShop.Client.ViewModels"
+             x:Class="OnlineShop.Client.Views.LoginView.RegisterView">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="10" VerticalOptions="Center">
+            <Label Text="Rejestracja" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   Margin="0,0,0,20" />
+
+            <!-- Email -->
+            <Label Text="Email" FontAttributes="Bold" />
+            <Entry Text="{Binding Email}" />
+
+            <!-- Username -->
+            <Label Text="Username" FontAttributes="Bold" />
+            <Entry Text="{Binding UserName}" />
+
+            <!-- Password -->
+            <Label Text="Password" FontAttributes="Bold" />
+            <Entry Text="{Binding Password}" IsPassword="True" />
+
+            <!-- Confirm Password -->
+            <Label Text="Confirm Password" FontAttributes="Bold" />
+            <Entry Text="{Binding ConfirmPassword}" IsPassword="True" />
+
+            <!-- Register Button -->
+            <Button Text="Zarejestruj" Command="{Binding RegisterCommand}" />
+
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red" 
+                   HorizontalOptions="Center" 
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

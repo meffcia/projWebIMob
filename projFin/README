@@ -1,0 +1,5 @@
+Odpalanie maui:
+dotnet build -f net9.0-windows10.0.19041.0
+dotnet run -f net9.0-windows10.0.19041.0
+dotnet build -t:Run -f net9.0-android -p _DeviceName=:v2:udid:zd7h69rgz5aycmwc
+dotnet build -t:Run -f net9.0-windows10.0.19041.0

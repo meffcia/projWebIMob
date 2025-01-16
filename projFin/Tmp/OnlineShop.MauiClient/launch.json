@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Windows",
+            "type": "windows",
+            "request": "launch",
+            "project": "${workspaceFolder}/OnlineShop.MauiClient/OnlineShop.MauiClient.csproj"
+        },
+        {
+            "name": "Launch Android",
+            "type": "android",
+            "request": "launch",
+            "project": "${workspaceFolder}/OnlineShop.MauiClient/OnlineShop.MauiClient.csproj",
+            "deviceId": "zd7h69rgz5aycmwc"
+        }
+    ]
+  }
+  
