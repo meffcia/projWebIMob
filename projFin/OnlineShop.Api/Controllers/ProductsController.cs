@@ -45,7 +45,7 @@ namespace OnlineShop.Api.Controllers
         }
 
         // POST: api/products
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<Product>>> AddProduct(CreateProductDto productDto)
         {
@@ -54,7 +54,7 @@ namespace OnlineShop.Api.Controllers
         }
 
         // PUT: api/products/{id}
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<ServiceResponse<Product>>> UpdateProduct(int id, UpdateProductDto updateDto)
         {
@@ -66,7 +66,7 @@ namespace OnlineShop.Api.Controllers
         }
 
         // DELETE: api/products/{id}
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<bool>>> DeleteProduct(int id)
         {

@@ -1,7 +1,7 @@
-@model OnlineShop.Shared.Models.Product
+@model OnlineShop.Shared.DTOs.ProductDto
 
 @{
-    ViewData["Title"] = "Szczeg�y produktu";
+    ViewData["Title"] = "Szczegóły produktu";
 }
 
 <!DOCTYPE html>
@@ -11,21 +11,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-details img {
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        /* Kolor przycisków */
+        .btn-custom {
+            background-color: #0066B3; /* Kolor powrotu do listy */
+            color: white;
+        }
+
+            .btn-custom:hover {
+                background-color: #00448c;
+                color: white;
+            }
+
+        .btn-back {
+            background-color: #003366; /* Kolor powrotu do listy */
+            color: white;
+        }
+
+            .btn-back:hover {
+                background-color: #00448c;
+                color: white;
+            }
+
+        /* Stylizacja formularzy */
+        .btn-primary {
+            background-color: #58a4f5; /* Kolor przycisku Dodaj do koszyka */
+            border-color: #58a4f5;
+        }
+
+            .btn-primary:hover {
+                background-color: #0066B3;
+                border-color: #0066B3;
+            }
+
+        /* Stylizacja dla przycisków obok siebie */
+        .btn-container {
+            display: flex;
+            gap: 10px; /* Odstęp między przyciskami */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2>@Model.Name</h2>
         <div class="row">
-            <div class="col-md-6">
-                <img src="https://via.placeholder.com/300" class="img-fluid" alt="@Model.Name">
+            <div class="col-md-6 product-details">
+                <!-- Tu może znajdować się obrazek produktu -->
             </div>
             <div class="col-md-6">
                 <p><strong>Cena:</strong> @Model.Price PLN</p>
                 <p><strong>Opis:</strong> @Model.Description</p>
                 <p><strong>Stan magazynowy:</strong> @Model.Stock</p>
-                <a href="#" class="btn btn-primary">Dodaj do koszyka</a>
+
+                <!-- Formularz dodawania do koszyka -->
+                <form id="addToCartForm" asp-controller="Cart" asp-action="AddToCart" method="post">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Ilość</label>
+                        <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" max="@Model.Stock" />
+                    </div>
+                    <div class="btn-container">
+                        <!-- Przycisk Dodaj do koszyka -->
+                        <button type="submit" class="btn btn-primary">Dodaj do koszyka</button>
+                        <!-- Przycisk Powrót do listy produktów -->
+                        <a href="/product/index" class="btn btn-back">Powrót do listy produktów</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Produkt dodany do koszyka</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Twój produkt został dodany do koszyka. Co chcesz zrobić teraz?
+                </div>
+                <div class="modal-footer">
+                    <a href="@Url.Action("Index", "Cart")" class="btn btn-primary">Przejdź do koszyka</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kontynuuj zakupy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Funkcja pokazująca modal po dodaniu do koszyka
+        document.getElementById("addToCartForm").addEventListener("submit", function(event) {
+            event.preventDefault();  // Zatrzymanie domyślnego działania formularza
+
+            // Wysłanie formularza, aby dodać produkt do koszyka
+            const formData = new FormData(this);
+            fetch(this.action, {
+                method: this.method,
+                body: formData
+            })
+            .then(response => {
+                // Pokaż modal po dodaniu do koszyka
+                var cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                cartModal.show();
+            })
+            .catch(error => {
+                console.error("Wystąpił błąd podczas dodawania do koszyka:", error);
+            });
+        });
+    </script>
 </body>
 </html>

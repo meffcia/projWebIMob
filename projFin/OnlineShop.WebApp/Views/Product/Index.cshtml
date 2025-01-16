@@ -1,36 +1,116 @@
-﻿@model IEnumerable<OnlineShop.Shared.Models.Product>
+﻿@model IEnumerable<OnlineShop.Shared.DTOs.ProductDto>
 
-    @{
+@{
     ViewData["Title"] = "Produkty";
-    }
+}
 
-    <!DOCTYPE html>
-    <html lang="pl">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@ViewData["Title"]</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container mt-5">
-            <h2 class="text-center mb-4">Produkty w sklepie</h2>
-            <div class="row">
-                @foreach (var product in Model)
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-card {
+            height: 100%;
+        }
+
+            .product-card .btn-add-to-cart {
+                background-color: #58a4f5; /* Stonowany odcień niebieskiego */
+                color: white;
+                border: none;
+            }
+
+                .product-card .btn-add-to-cart:hover {
+                    background-color: #0066B3; /* Ciemniejszy odcień niebieskiego na hover */
+                }
+
+            .product-card .btn-details {
+                background-color: #00448c; /* Kolor pomarańczowy dla przycisku Szczegóły */
+                color: white;
+                border: none;
+            }
+
+                .product-card .btn-details:hover {
+                    background-color: #003366; /* Ciemniejszy odcień pomarańczowego na hover */
+                }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Produkty w sklepie</h2>
+
+        <div class="row">
+            @foreach (var product in Model)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="@product.Name">
+                    <div class="card product-card">
                         <div class="card-body">
                             <h5 class="card-title">@product.Name</h5>
                             <p class="card-text">@product.Description</p>
-                            <p class="card-text"><strong>@product.Price PLN</strong></p>
-                            <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-primary">Szczegóły</a>
+                            <p class="card-text">
+                                <strong>@product.Price.ToString("0.00") PLN</strong>
+                            </p>
+
+                            <!-- Formularz dodawania do koszyka (domyślnie 1 sztuka) -->
+                            <form id="addToCartForm_@product.Id" asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" /> <!-- Domyślnie dodaje 1 sztukę -->
+                                <button type="submit" class="btn btn-add-to-cart btn-sm">Dodaj do koszyka</button>
+                            </form>
+
+                            <!-- Link do szczegółów produktu -->
+                            <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="btn btn-details btn-sm">Szczegóły</a>
                         </div>
                     </div>
                 </div>
             }
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Produkt dodany do koszyka</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Twój produkt został dodany do koszyka. Co chcesz zrobić teraz?
+                </div>
+                <div class="modal-footer">
+                    <a href="@Url.Action("Index", "Cart")" class="btn btn-primary">Przejdź do koszyka</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kontynuuj zakupy</button>
+                </div>
             </div>
         </div>
-    </body>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Funkcja pokazująca modal po dodaniu do koszyka
+        document.querySelectorAll("form").forEach(function (form) {
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();  // Zatrzymanie domyślnego działania formularza
+
+                // Wysłanie formularza, aby dodać produkt do koszyka
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                })
+                .then(response => {
+                    // Pokaż modal po dodaniu do koszyka
+                    var cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+                    cartModal.show();
+                })
+                .catch(error => {
+                    console.error("Wystąpił błąd podczas dodawania do koszyka:", error);
+                });
+            });
+        });
+    </script>
+</body>
 </html>

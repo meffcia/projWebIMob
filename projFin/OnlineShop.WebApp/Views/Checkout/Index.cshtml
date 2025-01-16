@@ -1,0 +1,164 @@
+﻿@model OnlineShop.Shared.Models.OrderSummary
+
+@{
+    ViewData["Title"] = "Checkout";
+    var totalAmount = Model.CartItems.Sum(item => item.Quantity * item.Product.Price);
+}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Kolor przycisków */
+        .btn-custom {
+            background-color: #0066B3; /* Kolor powrotu do listy */
+            color: white;
+            padding: 0.5rem 1rem; /* Mniejsze przyciski */
+            font-size: 1rem;
+        }
+
+            .btn-custom:hover {
+                background-color: #00448c;
+                color: white;
+            }
+
+        .btn-secondary-custom {
+            background-color: #003366; /* Kolor powrotu do listy */
+            color: white;
+            padding: 0.5rem 1rem; /* Mniejsze przyciski */
+            font-size: 1rem;
+        }
+
+            .btn-secondary-custom:hover {
+                background-color: #00448c;
+                color: white;
+            }
+
+        .btn-group-custom {
+            display: flex;
+            gap: 10px; /* Odstęp między przyciskami */
+            justify-content: center; /* Centrowanie przycisków */
+        }
+
+            /* Dostosowanie marginesów */
+            .btn-group-custom .btn {
+                margin: 0 5px; /* Margines między przyciskami */
+            }
+
+    </style>
+    <script>
+        // Funkcja do walidacji formularza
+        function validateForm(event) {
+            // Sprawdzanie wszystkich wymaganych pól
+            const requiredFields = [
+                document.getElementById('Street'),
+                document.getElementById('City'),
+                document.getElementById('PostalCode'),
+                document.getElementById('Country')
+            ];
+
+            let allFieldsFilled = true;
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    allFieldsFilled = false;
+                    break;
+                }
+            }
+
+            // Sprawdzamy, czy użytkownik wybrał metodę płatności
+            const paymentMethodSelected = document.querySelector('input[name="selectedPaymentMethod"]:checked');
+
+            if (!allFieldsFilled || !paymentMethodSelected) {
+                // Jeśli nie wszystkie wymagane pola są wypełnione lub nie wybrano metody płatności
+                alert('Proszę wypełnić wszystkie wymagane pola i wybrać metodę płatności.');
+                event.preventDefault();  // Zatrzymanie domyślnego działania (przejście do podsumowania)
+            }
+        }
+
+        // Przypisanie walidacji formularza do przycisku 'Przejdź do podsumowania'
+        window.onload = function() {
+            const submitButton = document.querySelector('a[href="/checkout/summary"]');
+            submitButton.addEventListener('click', validateForm);
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Podsumowanie zamówienia</h2>
+        <table class="table cart-table">
+            <thead>
+                <tr>
+                    <th scope="col">Produkt</th>
+                    <th scope="col">Ilość</th>
+                    <th scope="col">Cena jednostkowa (PLN)</th>
+                    <th scope="col">Razem (PLN)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Product.Price.ToString("0.00") PLN</td>
+                        <td>@(item.Quantity * item.Product.Price) PLN</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Całkowita kwota:</strong></td>
+                    <td><strong>@totalAmount.ToString("0.00") PLN</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <h3>Adres dostawy</h3>
+        <form asp-action="ConfirmCheckout" method="post">
+            <div class="form-group">
+                <label for="Street">Ulica</label>
+                <input type="text" class="form-control" id="Street" name="address.Street" required />
+            </div>
+            <div class="form-group">
+                <label for="City">Miasto</label>
+                <input type="text" class="form-control" id="City" name="address.City" required />
+            </div>
+            <div class="form-group">
+                <label for="State">Województwo</label>
+                <input type="text" class="form-control" id="State" name="address.State" />
+            </div>
+            <div class="form-group">
+                <label for="PostalCode">Kod pocztowy</label>
+                <input type="text" class="form-control" id="PostalCode" name="address.PostalCode" required />
+            </div>
+            <div class="form-group">
+                <label for="Country">Kraj</label>
+                <input type="text" class="form-control" id="Country" name="address.Country" required />
+            </div>
+
+            <h3>Metoda płatności</h3>
+            <div class="form-group">
+                @foreach (var method in Model.PaymentMethods)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="selectedPaymentMethod" value="@method" required />
+                        <label class="form-check-label">@method</label>
+                    </div>
+                }
+            </div>
+
+            <div class="btn-group-custom">
+                <!-- Przycisk 'Wróć do zakupów' -->
+                <a href="/product/index" class="btn btn-secondary-custom btn-lg">Wróć do zakupów</a>
+                <!-- Przycisk 'Przejdź do podsumowania' -->
+                <a href="/checkout/summary" class="btn btn-custom btn-lg">Przejdź do podsumowania</a>
+            </div>
+        </form>
+
+    </div>
+</body>
+</html>

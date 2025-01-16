@@ -1,44 +1,105 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Shared.Models;
-using OnlineShop.Shared.Auth;
+using Newtonsoft.Json;
+using OnlineShop.Shared;
+using OnlineShop.Shared.DTOs;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OnlineShop.WebApp.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly List<Product> _products;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiBaseUrl = "https://localhost:7077/api/products"; // Adres API
 
-        // Konstruktor, który inicjalizuje przykładową listę produktów
-        public ProductController()
+        // Konstruktor z dependency injection dla HttpClient
+        public ProductController(IHttpClientFactory httpClientFactory)
         {
-            // Przykładowa lista produktów
-            _products = new List<Product>
-            {
-                new Product { Id = 1, Name = "Laptop", Description = "Nowoczesny laptop", Price = 3000, Stock = 10, CategoryId = 1 },
-                new Product { Id = 2, Name = "Smartphone", Description = "Smartfon z najlepszymi funkcjami", Price = 2000, Stock = 15, CategoryId = 2 },
-                new Product { Id = 3, Name = "Headphones", Description = "Słuchawki bezprzewodowe", Price = 500, Stock = 30, CategoryId = 3 },
-                new Product { Id = 4, Name = "Laptop", Description = "Nowoczesny laptop", Price = 3000, Stock = 10, CategoryId = 1 },
-                new Product { Id = 5, Name = "Smartphone", Description = "Smartfon z najlepszymi funkcjami", Price = 2000, Stock = 15, CategoryId = 2 },
-                new Product { Id = 6, Name = "Headphones", Description = "Słuchawki bezprzewodowe", Price = 500, Stock = 30, CategoryId = 3 }
-
-            };
+            _httpClient = httpClientFactory.CreateClient();
         }
 
         // Widok wszystkich produktów
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_products); // Przekazujemy listę produktów do widoku
+            try
+            {
+                // Pobierz dane z API
+                var response = await _httpClient.GetStringAsync(_apiBaseUrl);
+                var productsResponse = JsonConvert.DeserializeObject<ServiceResponse<ProductsListDto>>(response);
+
+                if (productsResponse?.Data?.Products == null)
+                {
+                    ViewBag.ErrorMessage = "Brak produktów do wyświetlenia.";
+                    return View(Enumerable.Empty<ProductDto>());
+                }
+
+                return View(productsResponse.Data.Products);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
+                return View(Enumerable.Empty<ProductDto>());
+            }
         }
 
         // Widok szczegółów jednego produktu
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var product = _products.FirstOrDefault(p => p.Id == id);
-            if (product == null)
+            try
             {
-                return NotFound();
+                var response = await _httpClient.GetStringAsync($"{_apiBaseUrl}/{id}");
+                var productResponse = JsonConvert.DeserializeObject<ServiceResponse<ProductDto>>(response);
+
+                if (productResponse == null || !productResponse.Success)
+                {
+                    return NotFound("Nie znaleziono produktu.");
+                }
+
+                return View(productResponse.Data);
             }
-            return View(product);
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
+                return View();
+            }
+        }
+
+
+        // Widok formularza do dodania nowego produktu
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // Akcja do dodania nowego produktu
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ProductDto productDto)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var content = new StringContent(JsonConvert.SerializeObject(productDto), Encoding.UTF8, "application/json");
+                    var response = await _httpClient.PostAsync(_apiBaseUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction(nameof(Index)); // Po udanym dodaniu, przekierowanie do widoku listy
+                    }
+
+                    ViewBag.ErrorMessage = "Nie udało się dodać produktu.";
+                    return View(productDto);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
+                    return View(productDto);
+                }
+            }
+
+            return View(productDto); // W przypadku błędów walidacji formularza
         }
     }
 }

@@ -1,68 +1,147 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using OnlineShop.Shared;
+using OnlineShop.Shared.DTOs;
 using OnlineShop.Shared.Models;
-using OnlineShop.Shared.Auth;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OnlineShop.WebApp.Controllers
 {
     public class CartController : Controller
     {
-        private readonly List<CartItem> _cartItems;
-        private readonly List<Product> _products;
-        private readonly User _currentUser;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiBaseUrl = "https://localhost:7077/api/cart"; // Adres API koszyka
 
-        public CartController()
+        public CartController(IHttpClientFactory httpClientFactory)
         {
-            // Przyk³adowy zalogowany u¿ytkownik
-            _currentUser = new User { Id = 1, Username = "exampleUser" };
-
-            // Przyk³adowe produkty
-            _products = new List<Product>
-            {
-                new Product { Id = 1, Name = "Laptop Dell XPS 13", Price = 5499.99m },
-                new Product { Id = 2, Name = "Smartfon Samsung Galaxy S23", Price = 3999.50m },
-                new Product { Id = 3, Name = "S³uchawki Bose QC45", Price = 1349.99m }
-            };
-
-            // Przyk³adowe dane koszyka
-            _cartItems = new List<CartItem>
-            {
-                new CartItem { Id = 1, UserId = _currentUser.Id, User = _currentUser, ProductId = 1, Product = _products[0], Quantity = 1 },
-                new CartItem { Id = 2, UserId = _currentUser.Id, User = _currentUser, ProductId = 2, Product = _products[1], Quantity = 2 }
-            };
+            _httpClient = httpClientFactory.CreateClient();
         }
 
-        // Dodaj produkt do koszyka
-        public IActionResult AddToCart(int productId, int quantity)
+        // Wyœwietlenie zawartoœci koszyka u¿ytkownika
+        public async Task<IActionResult> Index()
         {
-            var product = _products.FirstOrDefault(p => p.Id == productId);
-            if (product == null) return NotFound();
-
-            var cartItem = _cartItems.FirstOrDefault(c => c.ProductId == productId && c.UserId == _currentUser.Id);
-            if (cartItem == null)
+            int userId = 1; // Przyk³adowe ID u¿ytkownika
+            try
             {
-                _cartItems.Add(new CartItem
+                var response = await _httpClient.GetStringAsync($"{_apiBaseUrl}/{userId}");
+                var cartResponse = JsonConvert.DeserializeObject<ServiceResponse<List<CartItem>>>(response);
+
+                if (cartResponse?.Data == null || !cartResponse.Success)
                 {
-                    Id = _cartItems.Count + 1,
-                    UserId = _currentUser.Id,
-                    User = _currentUser,
-                    ProductId = productId,
-                    Product = product,
-                    Quantity = quantity
-                });
-            }
-            else
-            {
-                cartItem.Quantity += quantity;
-            }
+                    ViewBag.ErrorMessage = "Koszyk jest pusty.";
+                    return View(Enumerable.Empty<CartItem>());
+                }
 
-            return RedirectToAction("Index");
+                return View(cartResponse.Data);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"Wyst¹pi³ b³¹d: {ex.Message}";
+                return View(Enumerable.Empty<CartItem>());
+            }
         }
 
-        // Wyœwietlenie zawartoœci koszyka
-        public IActionResult Index()
+        // Dodanie produktu do koszyka
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart(int productId, int quantity, string returnUrl = "/product/index")
         {
-            var userCartItems = _cartItems.Where(c => c.UserId == _currentUser.Id).ToList();
-            return View(userCartItems);
+            int userId = 1; // Przyk³adowe ID u¿ytkownika
+            var cartItemDto = new AddCartItemDto
+            {
+                ProductId = productId,
+                Quantity = quantity
+            };
+
+            try
+            {
+                var content = new StringContent(JsonConvert.SerializeObject(cartItemDto), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync($"{_apiBaseUrl}/{userId}", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Dodano do koszyka, teraz zdecydujemy, czy zostawiæ u¿ytkownika na stronie produktów, czy przekierowaæ do koszyka
+                    if (returnUrl.Contains("cart"))
+                    {
+                        // Przekierowanie do koszyka
+                        return RedirectToAction("Index", "Cart");
+                    }
+                    else
+                    {
+                        // Pozostajemy na stronie produktów
+                        TempData["SuccessMessage"] = "Produkt zosta³ dodany do koszyka!";
+                        return Redirect(returnUrl); // Wrócimy na stronê, z której przyszed³ u¿ytkownik
+                    }
+                }
+
+                TempData["ErrorMessage"] = "Nie uda³o siê dodaæ produktu do koszyka.";
+                return Redirect(returnUrl);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Wyst¹pi³ b³¹d: {ex.Message}";
+                return Redirect(returnUrl);
+            }
+        }
+
+        // Usuniêcie produktu z koszyka (przekazywanie iloœci do usuniêcia)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveFromCart(int productId, int quantity)
+        {
+            int userId = 1; // Przyk³adowe ID u¿ytkownika
+
+            try
+            {
+                // Wysy³amy zapytanie o usuniêcie odpowiedniej iloœci produktu z koszyka
+                var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}/{userId}/{productId}?quantity={quantity}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Message"] = "Koszyk zaktualizowany.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Nie uda³o siê zaktualizowaæ koszyka.";
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Wyst¹pi³ b³¹d: {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        // Opró¿nienie koszyka
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClearCart()
+        {
+            int userId = 1; // Przyk³adowe ID u¿ytkownika
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}/{userId}/clear");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Message"] = "Koszyk zosta³ opró¿niony.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Nie uda³o siê opró¿niæ koszyka.";
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Wyst¹pi³ b³¹d: {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

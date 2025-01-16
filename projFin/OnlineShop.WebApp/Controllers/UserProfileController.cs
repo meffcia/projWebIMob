@@ -1,55 +1,102 @@
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Shared.Models; // Przyk³adowy namespace, zmieñ w zale¿noœci od swojego projektu
+using OnlineShop.Shared.Auth; // Model User
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace OnlineShop.WebApp.Controllers
 {
     public class UserProfileController : Controller
     {
-        // Akcja do wyœwietlania profilu u¿ytkownika
-        public IActionResult Index()
-        {
-            // Przyk³ad pobrania danych u¿ytkownika (tutaj przekazujemy mockowe dane)
-            var userProfile = new UserProfile
-            {
-                FirstName = "Jan",
-                LastName = "Kowalski",
-                Email = "jan.kowalski@example.com",
-                Phone = "123-456-789"
-            };
+        private readonly HttpClient _httpClient;
+        private const string ApiBaseUrl = "https://localhost:7077/api/Auth"; // Bazowy URL API
 
-            return View(userProfile);
+        public UserProfileController(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
+        // Pobierz profil u¿ytkownika na podstawie ID
+        private async Task<User> GetUserProfileAsync(string userId)
+        {
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{ApiBaseUrl}/User/{userId}");
+            requestMessage.Headers.Add("Authorization", $"Bearer {HttpContext.Session.GetString("token")}");
+
+            var response = await _httpClient.SendAsync(requestMessage);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<User>();
+            }
+            else
+            {
+                HttpContext.Session.Remove("token");
+                HttpContext.Session.Remove("userId");
+                return null;
+            }
+        }
+
+        // Akcja do wyœwietlania profilu u¿ytkownika
+        public async Task<IActionResult> Index()
+        {
+            var userId = HttpContext.Session.GetString("userId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userProfile = await GetUserProfileAsync(userId);
+            if (userProfile == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View(userProfile); // Przekazanie danych u¿ytkownika do widoku
         }
 
         // Akcja do edytowania danych u¿ytkownika
         [HttpGet]
         public IActionResult Edit()
         {
-            // Pobieranie danych u¿ytkownika do edycji
-            var userProfile = new UserProfile
+            var userId = HttpContext.Session.GetString("userId");
+            if (userId == null)
             {
-                FirstName = "Jan",
-                LastName = "Kowalski",
-                Email = "jan.kowalski@example.com",
-                Phone = "123-456-789"
-            };
+                return RedirectToAction("Login", "Account");
+            }
 
-            return View(userProfile);
+            // Tutaj mo¿na zaimplementowaæ pobieranie danych do edycji
+            return View();
         }
 
         // Akcja do zapisania zaktualizowanych danych u¿ytkownika
         [HttpPost]
-        public IActionResult Edit(UserProfile model)
+        public async Task<IActionResult> Edit(User model)
         {
             if (ModelState.IsValid)
             {
-                // Logika zapisu danych do bazy
-                // Za³ó¿my, ¿e zapisaliœmy dane poprawnie
+                var userId = HttpContext.Session.GetString("userId");
+                if (userId == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
 
-                // Po zapisaniu przekierowujemy u¿ytkownika na stronê z jego profilem
-                return RedirectToAction("Index");
+                // Logika zapisu danych u¿ytkownika (PUT request do API)
+                var requestMessage = new HttpRequestMessage(HttpMethod.Put, $"{ApiBaseUrl}/User/{userId}");
+                requestMessage.Headers.Add("Authorization", $"Bearer {HttpContext.Session.GetString("token")}");
+                requestMessage.Content = JsonContent.Create(model);
+
+                var response = await _httpClient.SendAsync(requestMessage);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Nie uda³o siê zaktualizowaæ danych.");
+                }
             }
 
-            // Jeœli model jest nieprawid³owy, wracamy do widoku edytowania
             return View(model);
         }
     }

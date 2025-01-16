@@ -23,6 +23,24 @@ public class HomeController : Controller
         return View();
     }
 
+    // Warunki u¿ytkowania
+    public IActionResult Terms()
+    {
+        return View();
+    }
+
+    // O nas
+    public IActionResult AboutUs()
+    {
+        return View();
+    }
+
+    // Kontakt
+    public IActionResult Contact()
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
