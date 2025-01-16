@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Shared.Auth; // Model User
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
+
 
 namespace OnlineShop.WebApp.Controllers
 {

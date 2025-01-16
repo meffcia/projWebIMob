@@ -8,7 +8,6 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <!-- Upewnij się, że używasz kodowania UTF-8 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
@@ -47,26 +46,25 @@
 
         .form-group {
             margin-bottom: 20px;
-            width: 100%; /* Szerokość całej grupy formularza */
+            width: 100%;
             display: flex;
-            flex-direction: column; /* Ustawiamy etykietę nad polem tekstowym */
-            align-items: flex-start; /* Wszystkie elementy w grupie wyrównane do lewej */
-            padding-left: 10%; /* Punkt początkowy rubryk i etykiet */
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 10%;
         }
 
             .form-group label {
                 color: #333;
                 font-size: 14px;
-                margin-bottom: 5px; /* Odstęp między etykietą a rubryką */
+                margin-bottom: 5px;
             }
 
         .form-control {
-            width: 82%; /* Wyśrodkowanie rubryk w grupie */
+            width: 82%;
             padding: 12px;
             border-radius: 5px;
             border: 1px solid #ccc;
             font-size: 14px;
-            text-align: left; /* Tekst w rubrykach wyrównany do lewej */
         }
 
             .form-control:focus {
@@ -99,28 +97,55 @@
                 color: #00448c;
                 font-size: 14px;
             }
+
+        .alert {
+            color: green;
+            background-color: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .text-danger {
+            color: red;
+        }
     </style>
 </head>
 <body>
 
     <div class="register-container">
         <h2>Rejestracja</h2>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
         <form method="post">
             <div class="form-group">
                 <label for="UserName">Nazwa użytkownika:</label>
                 <input type="text" id="UserName" name="UserName" class="form-control" required />
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
             </div>
+
             <div class="form-group">
                 <label for="Email">Email:</label>
                 <input type="email" id="Email" name="Email" class="form-control" required />
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
+
             <div class="form-group">
                 <label for="Password">Hasło:</label>
                 <input type="password" id="Password" name="Password" class="form-control" required />
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
             </div>
+
             <div class="form-group">
                 <label for="ConfirmPassword">Potwierdź hasło:</label>
                 <input type="password" id="ConfirmPassword" name="ConfirmPassword" class="form-control" required />
+                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
             </div>
 
             <button type="submit" class="btn">Zarejestruj się</button>
@@ -131,5 +156,23 @@
         </div>
     </div>
 
+    <script>
+        document.querySelector("form").addEventListener("submit", function(event) {
+            const password = document.getElementById("Password").value;
+            const confirmPassword = document.getElementById("ConfirmPassword").value;
+
+            // Walidacja długości hasła
+            if (password.length < 7) {
+                alert("Hasło musi mieć co najmniej 7 znaków.");
+                event.preventDefault(); // Zatrzymaj wysyłanie formularza
+            }
+
+            // Walidacja, czy hasła są takie same
+            if (password !== confirmPassword) {
+                alert("Hasła muszą być identyczne.");
+                event.preventDefault(); // Zatrzymaj wysyłanie formularza
+            }
+        });
+    </script>
 </body>
 </html>

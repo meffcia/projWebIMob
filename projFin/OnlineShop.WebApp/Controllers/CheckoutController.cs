@@ -2,29 +2,25 @@
 using Newtonsoft.Json;
 using OnlineShop.Shared;
 using OnlineShop.Shared.Models;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace OnlineShop.WebApp.Controllers
 {
-    public class CheckoutController : Controller
+    public class CheckoutController : BaseController
     {
         private readonly HttpClient _httpClient;
-        private readonly string _cartApiBaseUrl = "https://localhost:7077/api/cart"; // Adres API koszyka
+        private readonly string _cartApiBaseUrl;
 
-        public CheckoutController(IHttpClientFactory httpClientFactory)
+        public CheckoutController(IHttpClientFactory httpClientFactory, string apiBaseUrl)
         {
             _httpClient = httpClientFactory.CreateClient();
+            _cartApiBaseUrl = $"{apiBaseUrl}/cart";
         }
 
-        // Wyświetlenie strony Checkout
         public async Task<IActionResult> Index()
         {
-            int userId = 1; // Przykładowe ID użytkownika
-
             try
             {
-                // Pobierz zawartość koszyka użytkownika
+                int userId = GetUserIdFromSession();
                 var cartResponse = await _httpClient.GetStringAsync($"{_cartApiBaseUrl}/{userId}");
                 var cartData = JsonConvert.DeserializeObject<ServiceResponse<List<CartItem>>>(cartResponse);
 
@@ -34,30 +30,25 @@ namespace OnlineShop.WebApp.Controllers
                     return RedirectToAction("Index", "Cart");
                 }
 
-                // Utwórz model na podstawie istniejących danych
                 var orderSummary = new OrderSummary
                 {
                     CartItems = cartData.Data,
-                    PaymentMethods = new List<string> { "CreditCard", "PayPal", "BankTransfer" } // Możesz dostosować
+                    PaymentMethods = new List<string> { "CreditCard", "PayPal", "BankTransfer" }
                 };
 
                 return View(orderSummary);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ViewBag.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
                 return RedirectToAction("Index", "Cart");
             }
         }
 
-        // Strona podsumowania
         public async Task<IActionResult> Summary()
         {
-            int userId = 1; // Przykładowe ID użytkownika
-
             try
             {
-                // Pobierz zawartość koszyka użytkownika z API
+                int userId = GetUserIdFromSession();
                 var cartResponse = await _httpClient.GetStringAsync($"{_cartApiBaseUrl}/{userId}");
                 var cartData = JsonConvert.DeserializeObject<ServiceResponse<List<CartItem>>>(cartResponse);
 
@@ -72,17 +63,12 @@ namespace OnlineShop.WebApp.Controllers
                     CartItems = cartData.Data
                 };
 
-                // Oblicz całkowitą kwotę
-                var totalAmount = orderSummary.CartItems.Sum(item => item.Quantity * item.Product.Price);
-
-                // Wstawiamy dane do widoku
-                ViewBag.TotalAmount = totalAmount;
+                ViewBag.TotalAmount = orderSummary.CartItems.Sum(item => item.Quantity * item.Product.Price);
 
                 return View(orderSummary);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ViewBag.ErrorMessage = $"Wystąpił błąd: {ex.Message}";
                 return RedirectToAction("Index", "Cart");
             }
         }

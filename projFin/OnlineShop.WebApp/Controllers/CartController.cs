@@ -1,30 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging; // Dodaj to
 using Newtonsoft.Json;
 using OnlineShop.Shared;
 using OnlineShop.Shared.DTOs;
 using OnlineShop.Shared.Models;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineShop.WebApp.Controllers
 {
-    public class CartController : Controller
+    public class CartController : BaseController
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "https://localhost:7077/api/cart"; // Adres API koszyka
+        private readonly string _apiBaseUrl;
 
-        public CartController(IHttpClientFactory httpClientFactory)
+        public CartController(HttpClient httpClient, string apiBaseUrl, ILogger<CartController> logger)
         {
-            _httpClient = httpClientFactory.CreateClient();
+            _httpClient = httpClient;
+            _apiBaseUrl = $"{apiBaseUrl}/cart";
         }
 
-        // Wyœwietlenie zawartoœci koszyka u¿ytkownika
         public async Task<IActionResult> Index()
         {
-            int userId = 1; // Przyk³adowe ID u¿ytkownika
             try
             {
+                int userId = GetUserIdFromSession();
+
                 var response = await _httpClient.GetStringAsync($"{_apiBaseUrl}/{userId}");
                 var cartResponse = JsonConvert.DeserializeObject<ServiceResponse<List<CartItem>>>(response);
 
@@ -43,37 +43,27 @@ namespace OnlineShop.WebApp.Controllers
             }
         }
 
-        // Dodanie produktu do koszyka
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int productId, int quantity, string returnUrl = "/product/index")
         {
-            int userId = 1; // Przyk³adowe ID u¿ytkownika
-            var cartItemDto = new AddCartItemDto
-            {
-                ProductId = productId,
-                Quantity = quantity
-            };
-
             try
             {
+                int userId = GetUserIdFromSession();
+
+                var cartItemDto = new AddCartItemDto
+                {
+                    ProductId = productId,
+                    Quantity = quantity
+                };
+
                 var content = new StringContent(JsonConvert.SerializeObject(cartItemDto), Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync($"{_apiBaseUrl}/{userId}", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Dodano do koszyka, teraz zdecydujemy, czy zostawiæ u¿ytkownika na stronie produktów, czy przekierowaæ do koszyka
-                    if (returnUrl.Contains("cart"))
-                    {
-                        // Przekierowanie do koszyka
-                        return RedirectToAction("Index", "Cart");
-                    }
-                    else
-                    {
-                        // Pozostajemy na stronie produktów
-                        TempData["SuccessMessage"] = "Produkt zosta³ dodany do koszyka!";
-                        return Redirect(returnUrl); // Wrócimy na stronê, z której przyszed³ u¿ytkownik
-                    }
+                    TempData["SuccessMessage"] = "Produkt zosta³ dodany do koszyka!";
+                    return Redirect(returnUrl);
                 }
 
                 TempData["ErrorMessage"] = "Nie uda³o siê dodaæ produktu do koszyka.";
@@ -86,16 +76,14 @@ namespace OnlineShop.WebApp.Controllers
             }
         }
 
-        // Usuniêcie produktu z koszyka (przekazywanie iloœci do usuniêcia)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveFromCart(int productId, int quantity)
         {
-            int userId = 1; // Przyk³adowe ID u¿ytkownika
-
             try
             {
-                // Wysy³amy zapytanie o usuniêcie odpowiedniej iloœci produktu z koszyka
+                int userId = GetUserIdFromSession();
+
                 var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}/{userId}/{productId}?quantity={quantity}");
 
                 if (response.IsSuccessStatusCode)
@@ -116,14 +104,14 @@ namespace OnlineShop.WebApp.Controllers
             }
         }
 
-        // Opró¿nienie koszyka
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ClearCart()
         {
-            int userId = 1; // Przyk³adowe ID u¿ytkownika
             try
             {
+                int userId = GetUserIdFromSession();
+
                 var response = await _httpClient.DeleteAsync($"{_apiBaseUrl}/{userId}/clear");
 
                 if (response.IsSuccessStatusCode)

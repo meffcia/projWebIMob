@@ -11,12 +11,13 @@ namespace OnlineShop.WebApp.Controllers
     public class ProductController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl = "https://localhost:7077/api/products"; // Adres API
+        private readonly string _apiBaseUrl;
 
-        // Konstruktor z dependency injection dla HttpClient
-        public ProductController(IHttpClientFactory httpClientFactory)
+        // Konstruktor z dependency injection dla HttpClient i apiBaseUrl
+        public ProductController(HttpClient httpClient, string apiBaseUrl)
         {
-            _httpClient = httpClientFactory.CreateClient();
+            _httpClient = httpClient;
+            _apiBaseUrl = $"{apiBaseUrl}/products"; // Dodanie endpointu do baseUrl
         }
 
         // Widok wszystkich produktów
@@ -64,7 +65,6 @@ namespace OnlineShop.WebApp.Controllers
                 return View();
             }
         }
-
 
         // Widok formularza do dodania nowego produktu
         public IActionResult Create()

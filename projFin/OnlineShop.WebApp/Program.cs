@@ -1,23 +1,20 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Rejestracja IHttpClientFactory w DI
 builder.Services.AddHttpClient();
-
-// Rejestracja us³ug MVC
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
 
-// Rejestracja sesji (opcjonalnie, je¿eli jej jeszcze nie skonfigurowano)
-builder.Services.AddDistributedMemoryCache(); // Wymagane dla sesji
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Mo¿esz dostosowaæ czas trwania sesji
+    options.IdleTimeout = TimeSpan.FromMinutes(30); 
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSingleton(builder.Configuration.GetValue<string>("ApiSettings:BaseUrl"));
+
 var app = builder.Build();
 
-// Konfiguracja potoku HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -27,11 +24,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
-
-// Umo¿liwia u¿ywanie sesji
 app.UseSession();
 
-// Mapowanie domyœlnej trasy
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
