@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:vm="clr-namespace:OnlineShop.Client.ViewModels"
+            x:Class="OnlineShop.Client.Views.CartView"
+            Title="Logowanie">
+    <ContentPage.Content>
+        <VerticalStackLayout Spacing="10" Padding="10">
+
+            <!-- Wyczyść koszyk -->
+            <Button Text="Wyczyść koszyk" BackgroundColor="Red" TextColor="White"
+                    VerticalOptions="Start" />
+
+            <!-- Tytuł -->
+            <Label Text="Twoje produkty w koszyku" FontAttributes="Bold" FontSize="24" TextColor="Black"
+                   HorizontalOptions="Center" VerticalOptions="CenterAndExpand" />
+
+            <!-- Tabela -->
+            <ScrollView>
+                <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="*,*,*,*,*,*,*,*">
+                    <!-- Nagłówki kolumn -->
+                    <Label Text="Produkt" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="Ilość" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="Cena" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="Razem" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="Akcje" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    <!-- Linie poziome oddzielające -->
+                    <BoxView BackgroundColor="Gray" HeightRequest="1" Grid.Row="1" Grid.ColumnSpan="5" />
+
+                    <!-- Produkty -->
+                    <!-- Pierwszy produkt -->
+                    <Label Text="Produkt 1" Grid.Row="2" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" />
+                    <Entry Grid.Row="2" Grid.Column="1" Placeholder="Ilość" Keyboard="Numeric" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="$10.00" Grid.Row="2" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="$10.00" Grid.Row="2" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Button Text="Usuń" BackgroundColor="DarkBlue" TextColor="White" Grid.Row="2" Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    <!-- Kolejne produkty -->
+                    <!-- Drugi produkt -->
+                    <Label Text="Produkt 2" Grid.Row="3" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Center" />
+                    <Entry Grid.Row="3" Grid.Column="1" Placeholder="Ilość" Keyboard="Numeric" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="$15.00" Grid.Row="3" Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Label Text="$15.00" Grid.Row="3" Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Button Text="Usuń" BackgroundColor="DarkBlue" TextColor="White" Grid.Row="3" Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    <!-- Inne produkty... -->
+
+                    <!-- Puste miejsce dla łatwej rozbudowy -->
+                    <!-- Linia separatora końcowego -->
+                    <BoxView BackgroundColor="Gray" HeightRequest="1" Grid.ColumnSpan="5" />
+
+                </Grid>
+            </ScrollView>
+
+            <!-- Przycisk przejdź do kasy -->
+            <Button Text="Przejdź do kasy" BackgroundColor="DarkBlue" TextColor="White"
+                    HorizontalOptions="End" VerticalOptions="Center" />
+
+            <!-- Przycisk powrót do zakupów -->
+            <Button Text="Powrót do zakupów" BackgroundColor="DarkGray" TextColor="White"
+                    HorizontalOptions="Start" VerticalOptions="Center" />
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>

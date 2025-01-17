@@ -59,8 +59,13 @@ namespace OnlineShop.Client
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
             //services.AddHttpClient<IOrderService, OrderService>("ApiClient");
-            services.AddHttpClient<ICartService, CartService>("ApiClient");
+            services.AddHttpClient<ICartService, CartService>(client =>
+            {
+                client.BaseAddress = new Uri("http://localhost:5020/");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
             services.AddHttpClient<AuthStateProvider>();
+            services.AddHttpClient<SecureStorageService>();
         }
         private static void ConfigureViewModels(IServiceCollection services)
         {
@@ -69,7 +74,7 @@ namespace OnlineShop.Client
             // // services.AddSingleton<EditProductViewModel>();
             // services.AddSingleton<CategoryViewModel>();
             // // services.AddTransient<OrderViewModel>();
-            // // services.AddSingleton<CartViewModel>();
+            services.AddSingleton<CartViewModel>();
             // // services.AddSingleton<CartNotAvailableViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<RegisterViewModel>();
@@ -82,7 +87,7 @@ namespace OnlineShop.Client
             // // services.AddSingleton<EditProductWindow>();
             // // services.AddSingleton<CategoryView>();
             // // services.AddTransient<OrderView>();
-            // // services.AddTransient<CartView>();
+            services.AddSingleton<CartView>();
             // // services.AddTransient<CartNotAvailableView>();
             services.AddSingleton<LoginView>();
             services.AddSingleton<RegisterView>();
