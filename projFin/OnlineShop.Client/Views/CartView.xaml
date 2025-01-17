@@ -4,13 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
             xmlns:vm="clr-namespace:OnlineShop.Client.ViewModels"
             x:Class="OnlineShop.Client.Views.CartView"
-            Title="Logowanie">
+            Title="Koszyk">
+
     <ContentPage.Content>
         <VerticalStackLayout Spacing="10" Padding="10">
 
             <!-- Wyczyść koszyk -->
             <Button Text="Wyczyść koszyk" BackgroundColor="Red" TextColor="White"
-                    VerticalOptions="Start" />
+                    HorizontalOptions="End" VerticalOptions="Start" />
 
             <!-- Tytuł -->
             <Label Text="Twoje produkty w koszyku" FontAttributes="Bold" FontSize="24" TextColor="Black"
@@ -49,7 +50,6 @@
 
                     <!-- Puste miejsce dla łatwej rozbudowy -->
                     <!-- Linia separatora końcowego -->
-                    <BoxView BackgroundColor="Gray" HeightRequest="1" Grid.ColumnSpan="5" />
 
                 </Grid>
             </ScrollView>

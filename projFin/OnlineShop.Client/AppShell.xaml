@@ -8,29 +8,4 @@
     Shell.FlyoutBehavior="Flyout"
     Title="OnlineShop.Client">
 
-    <ShellContent
-        Title="MainPage"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
-    <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate local:Views.LoginView.LoginView}"
-        Route="LoginView" />
-
-    <ShellContent
-        Title="Rejestracja"
-        ContentTemplate="{DataTemplate local:Views.LoginView.RegisterView}"
-        Route="RegisterView" />
-
-    <ShellContent
-        Title="tmpNameHome"
-        ContentTemplate="{DataTemplate local:Views.HomeView}"
-        Route="tmpNameHome" />
-
-    <ShellContent
-        Title="Produkty"
-        ContentTemplate="{DataTemplate local:Views.ProductView}"
-        Route="Products" />
-
 </Shell>

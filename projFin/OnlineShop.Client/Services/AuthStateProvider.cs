@@ -161,6 +161,22 @@ namespace OnlineShop.Client.Services
 
             return usernameClaim?.Value;
         }
+        public async Task<bool> SaveJwtTokenAsync(string jwtToken)
+        {
+            try
+            {
+                await _secureStorageService.SetAsync("authToken", jwtToken);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+
+                NotifyObservers();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving JWT token: {ex.Message}");
+                return false;
+            }
+        }
     }
 
     public interface IAuthStateObserver

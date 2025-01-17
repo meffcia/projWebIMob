@@ -60,6 +60,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Services\Nowy folder\**" />
+	  <Compile Remove="Services\Nowy folder\**" />
+	  <EmbeddedResource Remove="Services\Nowy folder\**" />
+	  <MauiCss Remove="Services\Nowy folder\**" />
+	  <MauiXaml Remove="Services\Nowy folder\**" />
+	  <None Remove="Services\Nowy folder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.13.2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.0" />
@@ -79,13 +88,30 @@
 	  <MauiXaml Update="Views\HomeView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\NewPage1.xaml">
+	  <MauiXaml Update="Views\CartView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CheckoutView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProductDetailsView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\ProductView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Services\Nowy folder\" />
+	  <Compile Update="ViewModels\ProductDetailsViewModel.xaml.cs">
+	    <DependentUpon>ProductDetailsViewModel.cs</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\CheckoutView.xaml.cs">
+	    <DependentUpon>CheckoutView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ProductDetailsView.xaml.cs">
+	    <DependentUpon>ProductDetailsView.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

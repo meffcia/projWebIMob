@@ -58,41 +58,38 @@ namespace OnlineShop.Client
                 client.BaseAddress = new Uri("http://localhost:5020/");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
-            //services.AddHttpClient<IOrderService, OrderService>("ApiClient");
+            services.AddHttpClient<IOrderService, OrderService>("ApiClient");
             services.AddHttpClient<ICartService, CartService>(client =>
             {
                 client.BaseAddress = new Uri("http://localhost:5020/");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
-            services.AddHttpClient<AuthStateProvider>();
-            services.AddHttpClient<SecureStorageService>();
+            services.AddSingleton<AuthStateProvider>();
+            services.AddSingleton<SecureStorageService>();
         }
         private static void ConfigureViewModels(IServiceCollection services)
         {
             services.AddSingleton<MainPageViewModel>();
-            // services.AddSingleton<MainViewModel>();
             // // services.AddSingleton<EditProductViewModel>();
-            // services.AddSingleton<CategoryViewModel>();
-            // // services.AddTransient<OrderViewModel>();
+            services.AddTransient<CheckoutViewModel>();
             services.AddSingleton<CartViewModel>();
-            // // services.AddSingleton<CartNotAvailableViewModel>();
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<RegisterViewModel>();
             services.AddSingleton<HomeViewModel>();
             services.AddSingleton<ProductViewModel>();
+            services.AddSingleton<ProductDetailsViewModel>();
         }
         private static void ConfigureViews(IServiceCollection services)
         {
             services.AddSingleton<MainPage>();
             // // services.AddSingleton<EditProductWindow>();
-            // // services.AddSingleton<CategoryView>();
-            // // services.AddTransient<OrderView>();
+            services.AddSingleton<CheckoutView>();
             services.AddSingleton<CartView>();
-            // // services.AddTransient<CartNotAvailableView>();
             services.AddSingleton<LoginView>();
             services.AddSingleton<RegisterView>();
             services.AddSingleton<HomeView>();
             services.AddSingleton<ProductView>();
+            services.AddSingleton<ProductDetailsView>();
         }
     }
 }

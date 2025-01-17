@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OnlineShop.Client.Views.ProductDetailsView">
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="15">
+            <!-- Username Label -->
+            <Label Text="{Binding UserName}" 
+                   FontSize="20" 
+                   TextColor="#0A2C5C"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start" />
+
+            <!-- Price -->
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Cena: " 
+                       FontSize="18" 
+                       TextColor="Black" />
+                <Label Text="{Binding Price}" 
+                       FontSize="18" 
+                       TextColor="Green"
+                       FontAttributes="Bold" />
+            </StackLayout>
+
+            <!-- Stock -->
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Stan magazynowy: " 
+                       FontSize="18" 
+                       TextColor="Black" />
+                <Label Text="{Binding Stock}" 
+                       FontSize="18" 
+                       TextColor="Blue" />
+            </StackLayout>
+
+            <!-- Quantity Input -->
+            <StackLayout Orientation="Horizontal" VerticalOptions="Start">
+                <Label Text="Ilość: " 
+                       FontSize="18" 
+                       TextColor="Black" />
+                <Entry Placeholder="Wprowadź ilość"
+                       Text="{Binding Quantity}"
+                       WidthRequest="100"
+                       Keyboard="Numeric" />
+            </StackLayout>
+
+            <!-- Buttons -->
+            <Grid ColumnDefinitions="*, *" Margin="0,20,0,0">
+                <!-- Left Button -->
+                <Button Text="Lewy Lewo Lewo"
+                        BackgroundColor="#D3D3D3"
+                        TextColor="Black"
+                        Command="{Binding LeftButtonCommand}"
+                        Grid.Column="0" />
+
+                <!-- Right Button -->
+                <Button Text="Dodaj do koszyka"
+                        BackgroundColor="#87CEEB"
+                        TextColor="White"
+                        Command="{Binding AddToCartCommand}"
+                        Grid.Column="1" />
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -29,7 +29,8 @@
                             BackgroundColor="#7DB8E2" 
                             TextColor="White" 
                             FontSize="18" 
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center"
+                            Command="{Binding NavigateToProductCommand}"/>
                 </VerticalStackLayout>
             </Border>
 

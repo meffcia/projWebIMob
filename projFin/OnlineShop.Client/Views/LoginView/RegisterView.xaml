@@ -10,42 +10,56 @@
             <Label Text="Logowanie do sklepu" 
                FontSize="24" 
                TextColor="#0A2C5C"
-               HorizontalOptions="Center" />
+               HorizontalOptions="Center"/>
 
             <!-- Username -->
             <Label Text="Nazwa użytkownika:" 
                 FontSize="18" 
                 Margin="0,20,0,0" />
+
+            <Entry Placeholder="Wprowadź swoją nazwę użytkownika"
+                   Text="{Binding UserName}"/>
             
             <!-- Email -->
             <Label Text="Email:" 
                FontSize="18" 
                Margin="0,20,0,0" />
 
-            <Entry Placeholder="Wprowadź swój email" />
+            <Entry Placeholder="Wprowadź swój email"
+                   Text="{Binding Email}"/>
 
             <!-- Password -->
             <Label Text="Hasło:" 
                FontSize="18" 
                Margin="0,20,0,0" />
 
+            <Entry Placeholder="Wprowadź swoje hasło" IsPassword="True"
+                   Text="{Binding Password}"/>
+
             <!-- Confirm Password -->
             <Label Text="Potwierdź hasło:" 
                FontSize="18" 
                Margin="0,20,0,0" />
 
-            <Entry Placeholder="Wprowadź swoje hasło" IsPassword="True" />
+            <Entry Placeholder="Wprowadź swoje hasło" IsPassword="True"
+                   Text="{Binding ConfirmPassword}" />
 
             <!-- Buttons -->
-            <Button Text="Zaloguj się" 
+            <Button Text="Zarejestruj się" 
                 BackgroundColor="#0A2C5C" 
                 TextColor="White" 
-                Margin="0,20,0,0" />
+                Margin="0,20,0,0"
+                Command="{Binding RegisterCommand}"/>
 
             <Label Text="Powrót do logowania" 
                FontSize="18" 
                TextColor="#0A2C5C"
-               HorizontalOptions="Center" />
+               HorizontalOptions="Center" >
+               <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}" />
+               </Label.GestureRecognizers>
+            </Label>
+
 
         </StackLayout>
     </ContentPage.Content>

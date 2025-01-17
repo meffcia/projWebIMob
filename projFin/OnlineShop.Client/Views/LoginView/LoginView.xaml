@@ -39,7 +39,8 @@
             <Button Text="Nie masz konta? Zarejestruj się" 
                     BackgroundColor="#7DB8E2" 
                     TextColor="White" 
-                    Margin="0,10,0,0" />
+                    Margin="0,10,0,0"
+                    Command="{Binding NavigateToRegisterCommand}"/>
 
         </StackLayout>
     </ContentPage.Content>

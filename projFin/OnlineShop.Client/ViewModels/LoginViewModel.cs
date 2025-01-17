@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OnlineShop.Client.Services;
+using OnlineShop.Client.Views.LoginView;
 using OnlineShop.Shared.Auth;
 using OnlineShop.Shared.Models;
 using OnlineShop.Shared.Services.AuthService;
@@ -11,8 +13,8 @@ namespace OnlineShop.Client.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
+        private readonly AuthStateProvider _authStateProvider;
         private readonly IAuthService _authenticationService;
-        //private readonly AuthStateProvider _authStateProvider;
         //private readonly LocalStorageService _localStorageService;
         [ObservableProperty]
         private string email;
@@ -23,11 +25,10 @@ namespace OnlineShop.Client.ViewModels
         [ObservableProperty]
         private string errorMessage;
 
-        public LoginViewModel(IAuthService authenticationService)//, AuthStateProvider authStateProvider, LocalStorageService localStorageService)
+        public LoginViewModel(AuthStateProvider authStateProvider, IAuthService authenticationService)//, AuthStateProvider authStateProvider, LocalStorageService localStorageService)
         {
+            _authStateProvider = authStateProvider;
             _authenticationService = authenticationService;
-            //_authStateProvider = authStateProvider;
-            //_localStorageService = localStorageService;
         }
 
         [RelayCommand]
@@ -49,14 +50,28 @@ namespace OnlineShop.Client.ViewModels
             if (response.Success)
             {
                 var jwt = response.Data;
-                //await _localStorageService.SetItemAsync("authToken", response.Data);
-                //_ = await _authStateProvider.GetAuthenticationStateAsync();
-                //ErrorMessage = "Logowanie pomyślne.";
+                var result = await _authStateProvider.SaveJwtTokenAsync(jwt);
+
+                if (result)
+                {
+                    var appShell = (AppShell)App.Current.MainPage;
+                    appShell.ShowMainTabs();
+                }
+                else
+                {
+                    // Obsłuż błąd logowania
+                }
             }
             else
             {
                 //ErrorMessage = "Niepowodzenie: " + response.Message;
             }
+        }
+
+        [RelayCommand]
+        private async Task NavigateToRegister()
+        {
+            await Shell.Current.GoToAsync(nameof(RegisterView));
         }
     }
 }

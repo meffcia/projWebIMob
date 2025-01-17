@@ -69,7 +69,22 @@ namespace OnlineShop.Client.ViewModels
             {
                 // TODO: Inform user 
             }
+        }
 
+        [RelayCommand]
+        public async void Details(ProductDto product)
+        {
+            var userId = await _authStateProvider.GetUserIdFromTokenAsync();
+
+            if (userId != null)
+            {
+                var addCartItemDto = new AddCartItemDto { ProductId = product.Id, Quantity = 1, UserId = userId.Value };
+                var response = await _cartService.AddToCartAsync(userId.Value, addCartItemDto);
+            }
+            else
+            {
+                // TODO: Inform user 
+            }
         }
     }
 }

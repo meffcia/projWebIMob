@@ -61,7 +61,9 @@
                                     <Button Text="Szczegóły" 
                                             BackgroundColor="#0A2C5C" 
                                             TextColor="White" 
-                                            HorizontalOptions="FillAndExpand" />
+                                            HorizontalOptions="FillAndExpand"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductViewModel}}, Path=DetailsCommand}"
+                                            CommandParameter="{Binding .}" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Border>

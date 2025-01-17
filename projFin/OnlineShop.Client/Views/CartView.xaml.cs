@@ -7,7 +7,8 @@ namespace OnlineShop.Client.Views
         public CartView(CartViewModel cartViewModel)
         {
             InitializeComponent();
-            BindingContext = cartViewModel;
+            BindingContext = cartViewModel
+;
         }
     }
 }

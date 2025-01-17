@@ -6,8 +6,8 @@ namespace OnlineShop.Client.Views.LoginView
     {
         public RegisterView(RegisterViewModel registerViewModel)
         {
-            BindingContext = registerViewModel;
             InitializeComponent();
+            BindingContext = registerViewModel;
         }
     }
 }
