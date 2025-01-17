@@ -6,5 +6,44 @@
              Title="Podsumowanie zamówienia">
 
     <ContentPage.Content>
+        <StackLayout Padding="20">
+            <Label Text="Ulica" 
+                FontSize="18" 
+                Margin="0,20,0,0" />
+
+            <Entry/>
+
+            <Label Text="Miasto" 
+                FontSize="18" 
+                Margin="0,20,0,0" />
+
+            <Entry/>
+
+            <Label Text="Wojwewództwo" 
+                FontSize="18" 
+                Margin="0,20,0,0" />
+
+            <Entry/>
+
+            <Label Text="Kod pocztowy:" 
+                FontSize="18" 
+                Margin="0,20,0,0" />
+
+            <Entry/>
+
+            <Label Text="Kraj" 
+                FontSize="18" 
+                Margin="0,20,0,0" />
+
+            <Entry/>
+            <!-- Przycisk przejdź do kasy -->
+            <Button Text="Wróć do zakupów" BackgroundColor="DarkBlue" TextColor="White"
+                    HorizontalOptions="End" VerticalOptions="Center"
+                    Command="{Binding NavigateToCheckoutCommand}"/>
+
+            <!-- Przycisk powrót do zakupów -->
+            <Button Text="Przejdź do podsumowania" BackgroundColor="DarkGray" TextColor="White"
+                    HorizontalOptions="Start" VerticalOptions="Center" />
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

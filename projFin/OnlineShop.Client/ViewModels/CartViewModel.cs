@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls.Internals;
 using OnlineShop.Client.Services;
+using OnlineShop.Client.Views;
 using OnlineShop.Shared.DTOs;
 using OnlineShop.Shared.Models;
 using OnlineShop.Shared.Services.AuthService;
@@ -104,6 +105,22 @@ namespace OnlineShop.Client.ViewModels
                 // Obsługa błędów
                 Console.WriteLine($"Error creating order: {ex.Message}");
             }
+        }
+
+        [RelayCommand]
+        public async void ClearCart()
+        {
+            var userId = await _authStateProvider.GetUserIdFromTokenAsync();
+            if (userId != null)
+            {
+                await _cartService.ClearCartAsync(userId.Value);
+            }
+        }
+
+        [RelayCommand]
+        public async void NavigateToCheckout()
+        {
+            await Shell.Current.GoToAsync(nameof(CheckoutView));
         }
     }
 }
